@@ -9,9 +9,9 @@ import { DistrictLandMap } from "@/components/DistrictLandMap";
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
-      { title: "Agronomist Dashboard — SowSmart Rwanda" },
+      { title: "Agronomist Dashboard — ImbutoSmart AI" },
       { name: "description", content: "Explore NISR agricultural statistics, Rwanda district land-use shares, and trained-model evaluation results." },
-      { property: "og:title", content: "Agronomist Dashboard — SowSmart Rwanda" },
+      { property: "og:title", content: "Agronomist Dashboard — ImbutoSmart AI" },
       { property: "og:description", content: "Explore crops, pasture and fallow across Rwanda’s 30 districts alongside NISR agricultural statistics." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
