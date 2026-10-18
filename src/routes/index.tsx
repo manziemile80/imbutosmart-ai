@@ -1,15 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { SiteShell } from "@/components/SiteShell";
+import { SeasonAssistant } from "@/components/SeasonAssistant";
 import { DISTRICTS, SOILS, predict, type Prediction } from "@/lib/api";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "SowSmart Rwanda — What should I plant this season?" },
-      { name: "description", content: "AI planting advice for Rwandan farmers, trained on NISR agricultural data." },
+      { name: "description", content: "Explore Rwanda’s farming seasons, typical rainfall, and crop recommendations with SowSmart’s AI season assistant." },
       { property: "og:title", content: "SowSmart Rwanda — Farmer Advisory" },
-      { property: "og:description", content: "Get a crop recommendation for your district, soil and forecast." },
+      { property: "og:description", content: "Learn Rwanda’s season names and typical rainfall, then get crop advice for your field." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -46,6 +47,7 @@ function Advisory() {
   return (
     <SiteShell>
       <section className="mx-auto max-w-xl px-5 py-10">
+        <SeasonAssistant key={district} district={district} />
         <p className="eyebrow">Farmer Advisory</p>
         <h1 className="mt-2 font-display text-4xl leading-tight text-foreground sm:text-5xl">
           What should I plant this season?
