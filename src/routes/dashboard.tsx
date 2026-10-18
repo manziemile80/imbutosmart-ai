@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Bar, BarChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { SiteShell } from "@/components/SiteShell";
-import { getStats } from "@/lib/api";
+import { API_URL, getStats } from "@/lib/api";
+import { NISR_2026B } from "@/lib/local-model";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -22,20 +23,62 @@ const ACTUAL = "var(--chart-2)";
 const PRED = "var(--chart-1)";
 
 function Dashboard() {
-  const { data, error, isLoading } = useQuery({ queryKey: ["stats"], queryFn: getStats, retry: false });
+  const { data, isLoading } = useQuery({ queryKey: ["stats"], queryFn: getStats, retry: false, enabled: !!API_URL });
+  const n = NISR_2026B;
 
   return (
     <SiteShell>
       <section className="mx-auto max-w-6xl px-5 py-10">
         <p className="eyebrow">Agronomist Dashboard</p>
-        <h1 className="mt-2 font-display text-4xl text-foreground">NISR yields vs. AI predictions</h1>
+        <h1 className="mt-2 font-display text-4xl text-foreground">Rwanda agriculture — Season B 2026</h1>
+        <p className="mt-2 text-sm text-muted-foreground">Source: NISR Seasonal Agricultural Survey.</p>
 
-        {isLoading && <p className="mt-8 text-muted-foreground">Loading data…</p>}
-        {error && (
-          <div role="alert" className="mt-8 rounded-xl border border-border bg-muted p-6 text-sm text-foreground">
-            {(error as Error).message}
-          </div>
-        )}
+        <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+          <Metric label="Total land" value={`${n.totalLand} M ha`} />
+          <Metric label="Agricultural land" value={`${n.agriLand} M ha (59%)`} />
+          <Metric label="Irrigation" value="13.1% of farmers" />
+          <Metric label="Mechanisation" value="1.8% of farmers" />
+        </div>
+
+        <Panel title="Land use (million hectares)">
+          <ResponsiveContainer width="100%" height={260}>
+            <BarChart data={n.land}>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+              <XAxis dataKey="name" stroke="var(--muted-foreground)" fontSize={12} />
+              <YAxis stroke="var(--muted-foreground)" fontSize={12} />
+              <Tooltip />
+              <Bar dataKey="value" name="Million ha" fill={PRED} radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </Panel>
+
+        <Panel title="Farmers using each input (%)">
+          <ResponsiveContainer width="100%" height={320}>
+            <BarChart data={n.inputs}>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+              <XAxis dataKey="name" stroke="var(--muted-foreground)" fontSize={12} />
+              <YAxis stroke="var(--muted-foreground)" fontSize={12} domain={[0, 100]} />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="small" name="Small-scale" fill={ACTUAL} radius={[4, 4, 0, 0]} />
+              <Bar dataKey="large" name="Large-scale" fill={PRED} radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </Panel>
+
+        <Panel title="Farming practices (% of farmers)">
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={n.practices} layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+              <XAxis type="number" domain={[0, 100]} stroke="var(--muted-foreground)" fontSize={12} />
+              <YAxis type="category" dataKey="name" width={110} stroke="var(--muted-foreground)" fontSize={12} />
+              <Tooltip />
+              <Bar dataKey="value" name="% of farmers" fill={ACTUAL} radius={[0, 4, 4, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </Panel>
+
+        {isLoading && <p className="mt-8 text-muted-foreground">Loading model data…</p>}
 
         {data && (
           <>
