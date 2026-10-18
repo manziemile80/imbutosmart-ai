@@ -34,7 +34,7 @@ export function scoreCrops(input: { soil_type: string; forecast_rain_mm: number;
 
 export function localPredict(input: { soil_type: string; forecast_rain_mm: number; forecast_temp_c: number }): Prediction {
   const ranked = scoreCrops(input).map(({ rel: _r, ...r }) => r);
-  const best = ranked[0];
+  const best = ranked[0]!;
   return {
     recommended_crop: best.crop,
     confidence: best.success_probability,
