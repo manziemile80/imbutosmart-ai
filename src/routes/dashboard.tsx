@@ -4,14 +4,15 @@ import { Bar, BarChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContai
 import { SiteShell } from "@/components/SiteShell";
 import { API_URL, getStats } from "@/lib/api";
 import { NISR_2026B } from "@/lib/local-model";
+import { DistrictLandMap } from "@/components/DistrictLandMap";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
       { title: "Agronomist Dashboard — SowSmart Rwanda" },
-      { name: "description", content: "Historical NISR yields compared with SowSmart AI predictions." },
+      { name: "description", content: "Explore NISR agricultural statistics, Rwanda district land-use shares, and trained-model evaluation results." },
       { property: "og:title", content: "Agronomist Dashboard — SowSmart Rwanda" },
-      { property: "og:description", content: "Compare historical NISR crop yields with model predictions." },
+      { property: "og:description", content: "Explore crops, pasture and fallow across Rwanda’s 30 districts alongside NISR agricultural statistics." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -23,7 +24,7 @@ const ACTUAL = "var(--chart-2)";
 const PRED = "var(--chart-1)";
 
 function Dashboard() {
-  const { data, isLoading } = useQuery({ queryKey: ["stats"], queryFn: getStats, retry: false, enabled: !!API_URL });
+  const { data, isLoading, error } = useQuery({ queryKey: ["stats"], queryFn: getStats, retry: false, enabled: !!API_URL });
   const n = NISR_2026B;
 
   return (
@@ -39,6 +40,8 @@ function Dashboard() {
           <Metric label="Irrigation" value="13.1% of farmers" />
           <Metric label="Mechanisation" value="1.8% of farmers" />
         </div>
+
+        <DistrictLandMap />
 
         <Panel title="Land use (million hectares)">
           <ResponsiveContainer width="100%" height={260}>
@@ -79,6 +82,8 @@ function Dashboard() {
         </Panel>
 
         {isLoading && <p className="mt-8 text-muted-foreground">Loading model data…</p>}
+        {!API_URL && <p className="mt-8 text-sm text-muted-foreground">Trained-model accuracy and yield error are unavailable until the prediction server and real crop-level CSV are connected.</p>}
+        {error && <p role="alert" className="mt-8 text-sm text-destructive">Unable to load trained-model results: {error.message}</p>}
 
         {data && (
           <>
