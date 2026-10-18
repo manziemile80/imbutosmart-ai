@@ -30,7 +30,7 @@ export function SeasonAssistant({ district, language = "en" }: { district: strin
 
   return (
     <section aria-labelledby="season-assistant-title" className="mb-9 border-b border-border pb-8">
-      <div className="flex items-center gap-2 text-primary"><Sprout className="size-5" /><p className="eyebrow">{t.assistant}</p></div>
+      <div className="flex items-center gap-2 text-primary-text"><Sprout className="size-5" /><p className="eyebrow">{t.assistant}</p></div>
       <h2 id="season-assistant-title" className="mt-2 font-display text-2xl">{t.seasons}</h2>
       <form onSubmit={onSubmit} className="mt-4 grid gap-4">
         <label className="grid gap-1.5"><span className="text-sm font-medium">{t.month}</span>
@@ -40,7 +40,7 @@ export function SeasonAssistant({ district, language = "en" }: { district: strin
         </label>
         <div className="grid grid-cols-2 gap-4 border-y border-border py-4">
           <div><p className="text-xs text-muted-foreground">{t.farming}</p><p className="mt-1 text-xl font-semibold">{guide.farming}</p><p className="text-xs text-muted-foreground">{guide.period}</p></div>
-          <div><p className="flex items-center gap-1 text-xs text-muted-foreground"><CloudRain className="size-4" />{t.typical}</p><p className="mt-1 text-lg font-semibold text-primary">{guide.rain}</p></div>
+          <div><p className="flex items-center gap-1 text-xs text-muted-foreground"><CloudRain className="size-4" />{t.typical}</p><p className="mt-1 text-lg font-semibold text-primary-text">{guide.rain}</p></div>
         </div>
         <div><p className="font-medium">{guide.name} · {guide.local}</p><p className="mt-1 text-sm text-muted-foreground">{guide.note}</p></div>
         <p className="text-xs text-muted-foreground">{t.seasonNote}</p>

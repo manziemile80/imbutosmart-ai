@@ -9,7 +9,7 @@ export function SiteShell({ children, language = "en" }: { children: ReactNode; 
       <header className="border-b border-border">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-4">
           <Link to="/" className="font-display text-xl text-foreground">
-            Sow<span className="text-primary">Smart</span> Rwanda
+            Sow<span className="text-primary-text">Smart</span> Rwanda
           </Link>
           <nav className="flex gap-1 text-sm">
             <Link to="/" className="nav-link" activeOptions={{ exact: true }} activeProps={{ className: "nav-link-active" }}>{t.farmer}</Link>
