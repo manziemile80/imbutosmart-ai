@@ -2,6 +2,10 @@ import { describe, expect, it } from "vitest";
 import { getSeasonGuide, seasonInputSchema } from "../lib/season-guide";
 
 describe("usual-season guidance", () => {
+  it("supports exactly English, Kinyarwanda, and French for season advice", () => {
+    expect(seasonInputSchema.shape.language.removeDefault().options).toEqual(["en", "rw", "fr"]);
+    expect(seasonInputSchema.parse({ month: 10, district: "Musanze", language: "fr" }).language).toBe("fr");
+  });
   it("accepts Kinyarwanda and rejects unsupported languages for AI advice", () => {
     expect(seasonInputSchema.parse({ month: 10, district: "Musanze", language: "rw" }).language).toBe("rw");
     expect(seasonInputSchema.safeParse({ month: 10, district: "Musanze", language: "unknown" }).success).toBe(false);
