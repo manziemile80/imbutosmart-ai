@@ -40,13 +40,13 @@ export function SeasonAssistant({ district }: { district: string }) {
           <div><p className="flex items-center gap-1 text-xs text-muted-foreground"><CloudRain className="size-4" />Typical rainfall</p><p className="mt-1 text-lg font-semibold text-primary">{guide.rain}</p></div>
         </div>
         <div><p className="font-medium">{guide.name} · {guide.local}</p><p className="mt-1 text-sm text-muted-foreground">{guide.note}</p></div>
-        <p className="text-xs text-muted-foreground">Usual patterns, not current rainfall. Amounts vary by district and year.</p>
+        <p className="text-xs text-muted-foreground">Wetter/drier describes the usual seasonal pattern, not measured rain or a forecast. Amounts vary by district and year.</p>
         <Button type="submit" disabled={loading} className="h-12 w-full">{loading ? <LoaderCircle className="animate-spin motion-reduce:animate-none" /> : <Sprout />}{loading ? "Preparing advice…" : `Ask AI about ${MONTHS[month - 1]}`}</Button>
       </form>
       {loading && <p role="status" className="mt-3 text-sm text-muted-foreground">Preparing season advice for {district}…</p>}
       {error && <p role="alert" className="mt-4 text-sm text-destructive">{error}</p>}
       {answer && <div aria-live="polite" className="mt-5 border-l-2 border-primary pl-4"><p className="mb-2 text-sm font-semibold">AI advice · {district} · {MONTHS[month - 1]}</p><p className="whitespace-pre-wrap text-sm leading-relaxed">{answer}</p></div>}
-      <p className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground"><a className="underline" href="https://www.meteorwanda.gov.rw/" target="_blank" rel="noreferrer">Meteo Rwanda</a><a className="underline" href="https://www.statistics.gov.rw/" target="_blank" rel="noreferrer">NISR agricultural surveys</a></p>
+      <p className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground"><a className="underline" href="https://www.meteorwanda.gov.rw/services/climatology-of-rwanda" target="_blank" rel="noreferrer">Meteo Rwanda climatology</a><a className="underline" href="https://statistics.gov.rw/statistical-publications/agriculture-environment/seasonal-agricultural-survey-2024-annual-report-2024" target="_blank" rel="noreferrer">NISR season calendar</a></p>
     </section>
   );
 }

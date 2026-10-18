@@ -10,14 +10,16 @@ export const seasonInputSchema = z.object({
 
 export function getSeasonGuide(month: number) {
   if (!Number.isInteger(month) || month < 1 || month > 12) throw new Error("Choose a valid month.");
-  const farming = month >= 9 || month <= 2 ? "Season A" : month <= 6 ? "Season B" : "Season C";
-  const period = farming === "Season A" ? "September–February" : farming === "Season B" ? "March–June" : "July–August";
+  const farming = month === 9 ? "Seasons A & C" : month >= 10 || month <= 2 ? "Season A" : month <= 6 ? "Season B" : "Season C";
+  const period = month === 9 ? "A starts; C ends" : farming === "Season A" ? "September–February" : farming === "Season B" ? "March–June" : "July–September";
   const climate = month >= 3 && month <= 5
-    ? { name: "Long rainy season", local: "Itumba", rain: "High", note: "Usually the wetter rainy period; rainfall often peaks around April." }
-    : month >= 9 && month <= 12
-      ? { name: "Short rainy season", local: "Umuhindo", rain: "Moderate to high", note: "Rains usually return around September; onset and amounts vary by location." }
+    ? { name: "Long rainy season", local: "Itumba", rain: "Wetter period", note: "March–May is a usual rainy period. Rainfall varies considerably by place and year." }
+    : month >= 10 && month <= 12
+      ? { name: "Short rainy season", local: "Umuhindo", rain: "Wetter period", note: "October–December is a usual rainy period; onset and amounts vary by location." }
+      : month === 9
+        ? { name: "Transition toward short rains", local: "Toward Umuhindo", rain: "Variable", note: "September overlaps agricultural Seasons A and C. Wait for locally confirmed rain before rain-fed planting." }
       : month <= 2
-        ? { name: "Short dry season", local: "Urugaryi", rain: "Low / variable", note: "A drier break; occasional rain is still possible." }
-        : { name: "Long dry season", local: "Impeshyi", rain: "Low", note: "Usually the driest period; rain-fed planting is risky without reliable water." };
+        ? { name: "Short dry season", local: "Urugaryi", rain: "Drier / variable", note: "A drier break; occasional rain is still possible." }
+        : { name: "Long dry season", local: "Impeshyi", rain: "Drier period", note: "Usually a dry period; rain-fed planting is risky without reliable water." };
   return { farming, period, ...climate };
 }
