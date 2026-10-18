@@ -3,12 +3,12 @@ import { useServerFn } from "@tanstack/react-start";
 import { CloudRain, Sprout, LoaderCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getSeasonGuide, MONTHS, seasonInputSchema } from "@/lib/season-guide";
-import { farmerCopy, localizedSeason, RW_MONTHS, type FarmerLanguage } from "@/lib/farmer-language";
+import { farmerCopy, localizedSeason, RW_MONTHS, FR_MONTHS, type FarmerLanguage } from "@/lib/farmer-language";
 import { explainSeason } from "@/lib/season-assistant.functions";
 
 export function SeasonAssistant({ district, language = "en" }: { district: string; language?: FarmerLanguage }) {
   const t = farmerCopy[language];
-  const months = language === "rw" ? RW_MONTHS : MONTHS;
+  const months = language === "rw" ? RW_MONTHS : language === "fr" ? FR_MONTHS : MONTHS;
   const [month, setMonth] = useState(10);
   const [answer, setAnswer] = useState("");
   const [error, setError] = useState<string | null>(null);

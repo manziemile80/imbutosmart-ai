@@ -6,7 +6,7 @@ export const MONTHS = ["January", "February", "March", "April", "May", "June", "
 export const seasonInputSchema = z.object({
   district: z.string().refine((value) => DISTRICTS.includes(value), "Choose a district."),
   month: z.number().int().min(1).max(12),
-  language: z.enum(["en", "rw"]).default("en"),
+  language: z.enum(["en", "rw", "fr"]).default("en"),
 });
 
 export function getSeasonGuide(month: number) {

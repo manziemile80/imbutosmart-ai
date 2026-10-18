@@ -32,7 +32,7 @@ function Advisory() {
   return (
     <SiteShell language={language}>
       <section lang={language} className="mx-auto max-w-xl px-5 py-10">
-        <label className="mb-6 grid gap-1.5"><span className="text-sm font-medium">{t.language}</span><select className="field" aria-label="Language / Ururimi" value={language} onChange={(event) => setLanguage(event.target.value === "rw" ? "rw" : "en")}><option value="en">English</option><option value="rw">Kinyarwanda</option></select></label>
+        <label className="mb-6 grid gap-1.5"><span className="text-sm font-medium">{t.language}</span><select className="field" aria-label="Language / Ururimi / Langue" value={language} onChange={(event) => setLanguage(event.target.value === "fr" ? "fr" : event.target.value === "rw" ? "rw" : "en")}><option value="en">English</option><option value="rw">Kinyarwanda</option><option value="fr">Français</option></select></label>
         <SeasonAssistant key={`${district}-${language}`} district={district} language={language} />
         <p className="eyebrow">{t.advisory}</p>
         <h1 className="mt-2 font-display text-4xl leading-tight text-foreground sm:text-5xl">
