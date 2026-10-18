@@ -2,6 +2,10 @@ import { describe, expect, it } from "vitest";
 import { getSeasonGuide, seasonInputSchema } from "../lib/season-guide";
 
 describe("usual-season guidance", () => {
+  it("accepts Kinyarwanda and rejects unsupported languages for AI advice", () => {
+    expect(seasonInputSchema.parse({ month: 10, district: "Musanze", language: "rw" }).language).toBe("rw");
+    expect(seasonInputSchema.safeParse({ month: 10, district: "Musanze", language: "unknown" }).success).toBe(false);
+  });
   it("identifies October as Season A and short rains", () => {
     expect(getSeasonGuide(10)).toMatchObject({ farming: "Season A", local: "Umuhindo", rain: "Wetter period" });
   });
