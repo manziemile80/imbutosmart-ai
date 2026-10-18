@@ -10,7 +10,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "ImbutoSmart AI — What should I plant this season?" },
-      { name: "description", content: "Explore Rwanda’s farming seasons, typical rainfall, and crop recommendations with ImbutoSmart AI’s AI season assistant." },
+      { name: "description", content: "Explore Rwanda’s farming seasons, typical rainfall, and crop recommendations with ImbutoSmart AI’s season assistant." },
       { property: "og:title", content: "ImbutoSmart AI — Farmer Advisory" },
       { property: "og:description", content: "Learn Rwanda’s season names and typical rainfall, then get crop advice for your field." },
       { property: "og:type", content: "website" },
