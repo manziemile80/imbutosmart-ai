@@ -4,6 +4,8 @@
 - [x] Update crop recommendations automatically when field details change.
 - [x] Add English/Kinyarwanda switching to farmer labels, crop results, and season assistance.
 - [x] Verify automatic changes and Kinyarwanda AI advice.
-- [ ] Prepare Render deployment and connect trained predictions (blocked by Render access and real crop-level CSV).
-- [ ] Add an interactive district land-use map with verified boundaries and no fabricated figures.
-- [ ] Verify district selection and land-use CSV import.
+- [x] Prepare the Render deployment Blueprint.
+- [ ] Deploy on Render, train, and connect predictions (blocked by Render account access and real crop-level CSV).
+- [x] Add an interactive district land-use map with verified boundaries and no fabricated figures.
+- [x] Verify district selection and land-use CSV import.
+- [ ] Populate real district land shares (blocked by district crops/pasture/fallow aggregate data; supplied PDF has only national totals).
