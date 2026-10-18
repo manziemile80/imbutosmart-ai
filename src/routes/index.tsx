@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { SiteShell } from "@/components/SiteShell";
 import { SeasonAssistant } from "@/components/SeasonAssistant";
+import { InsuranceGuidance } from "@/components/InsuranceGuidance";
 import { API_URL, DISTRICTS, SOILS } from "@/lib/api";
 import { farmerCopy, cropLabel, soilLabel, type FarmerLanguage } from "@/lib/farmer-language";
 import { useAutoPrediction } from "@/hooks/use-auto-prediction";
