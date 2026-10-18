@@ -3,7 +3,7 @@ import { geoMercator, geoPath, type GeoPermissibleObjects } from "d3-geo";
 import { Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DISTRICTS } from "@/lib/api";
-import boundaries from "@/lib/rwanda-districts.json";
+import { districtGeometry as boundaries } from "@/lib/district-geometry";
 import { LAND_CATEGORIES, landShare, parseDistrictLand, type DistrictLand, type LandCategory } from "@/lib/district-land";
 
 const projection = geoMercator().fitExtent([[20, 20], [580, 470]], boundaries as unknown as GeoPermissibleObjects);
