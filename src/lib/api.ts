@@ -26,12 +26,18 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
   return res.json();
 }
 
-export const predict = (body: {
+export const predict = async (body: {
   district: string;
   soil_type: string;
   forecast_rain_mm: number;
   forecast_temp_c: number;
-}) => call<Prediction>("/predict", { method: "POST", body: JSON.stringify(body) });
+}): Promise<Prediction> => {
+  if (!API_URL) {
+    const { localPredict } = await import("./local-model");
+    return localPredict(body);
+  }
+  return call<Prediction>("/predict", { method: "POST", body: JSON.stringify(body) });
+};
 
 export const getStats = () => call<Stats>("/stats");
 
