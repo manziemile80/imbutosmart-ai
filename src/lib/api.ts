@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export const API_URL = (import.meta.env["VITE_API_URL"] as string | undefined)?.replace(/\/$/, "") ?? "";
 
 export type Prediction = {
@@ -32,6 +34,7 @@ export const predict = async (body: {
   forecast_rain_mm: number;
   forecast_temp_c: number;
 }): Promise<Prediction> => {
+  body = predictionInputSchema.parse(body);
   if (!API_URL) {
     const { localPredict } = await import("./local-model");
     return localPredict(body);
@@ -47,3 +50,10 @@ export const DISTRICTS = [
   "Nyamasheke","Nyanza","Nyarugenge","Nyaruguru","Rubavu","Ruhango","Rulindo","Rusizi","Rutsiro","Rwamagana",
 ];
 export const SOILS = ["Volcanic", "Clay", "Loam", "Sandy", "Laterite", "Humic"];
+
+export const predictionInputSchema = z.object({
+  district: z.string().refine((value) => DISTRICTS.includes(value)),
+  soil_type: z.string().refine((value) => SOILS.includes(value)),
+  forecast_rain_mm: z.number().finite().min(0).max(5000),
+  forecast_temp_c: z.number().finite().min(-5).max(45),
+});
