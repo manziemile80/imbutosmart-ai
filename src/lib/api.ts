@@ -10,7 +10,7 @@ export type Prediction = {
 export type Stats = {
   by_crop: { crop: string; actual: number; predicted: number; n: number }[];
   by_period: { period: string; actual: number; predicted: number }[];
-  metrics: Record<string, number | null>;
+  metrics: { rows?: number; test_accuracy?: number | null; test_r2?: number | null; test_mae_t_ha?: number | null; test_auc?: number | null };
 };
 
 async function call<T>(path: string, init?: RequestInit): Promise<T> {
