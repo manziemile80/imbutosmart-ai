@@ -54,6 +54,7 @@ function Advisory() {
               {SOILS.map((s) => <option key={s} value={s}>{soilLabel(s, language)}</option>)}
             </select>
           </Field>
+          <InsuranceGuidance district={district} soil={soil} language={language} />
           <div className="grid grid-cols-2 gap-4">
             <Field label={t.rain}>
               <input className="field" type="number" inputMode="decimal" min={0} max={5000} required value={rain} onChange={(e) => setRain(e.target.value)} />

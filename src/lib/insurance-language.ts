@@ -2,7 +2,7 @@ import type { FarmerLanguage } from "./farmer-language";
 
 type InsuranceCopy = {
   title: string; suggested: string; summary: string; context: string; disclaimer: string;
-  compare: string; hide: string; checklist: string[]; damage: string; source: string;
+  compare: string; hide: string; checklist: string[]; damage: string; source: string; program: string;
 };
 
 export const insuranceCopy: Record<FarmerLanguage, InsuranceCopy> = {
@@ -21,7 +21,7 @@ export const insuranceCopy: Record<FarmerLanguage, InsuranceCopy> = {
       "For loss-assessed insurance, ask how damage is assessed. For either type, confirm claim deadlines, required evidence and the complaints process.",
     ],
     damage: "If damage occurs: stay away from floodwater, document losses only when safe, and notify your insurer promptly under your policy’s claim rules.",
-    source: "Rwanda agriculture ministry",
+    source: "Explore Tekana / NAIS", program: "Starting point: Rwanda’s Tekana national agriculture insurance scheme. Ask about current cover for your crop and district; this is not a verified policy recommendation.",
   },
   fr: {
     title: "Protégez votre récolte contre les fortes pluies",
@@ -38,7 +38,7 @@ export const insuranceCopy: Record<FarmerLanguage, InsuranceCopy> = {
       "Pour une assurance avec expertise, demandez comment les dégâts sont évalués. Dans les deux cas, vérifiez les délais, les justificatifs et la procédure de réclamation.",
     ],
     damage: "En cas de dégâts : évitez les eaux de crue, documentez les pertes seulement sans danger et prévenez rapidement l’assureur selon les règles du contrat.",
-    source: "Ministère rwandais de l’Agriculture",
+    source: "Consulter Tekana / NAIS", program: "Point de départ : Tekana, le régime national d’assurance agricole du Rwanda. Vérifiez la couverture actuelle pour votre culture et votre district ; ce n’est pas une recommandation de contrat vérifié.",
   },
   rw: {
     title: "Rinda umusaruro wawe imvura nyinshi",
@@ -55,6 +55,6 @@ export const insuranceCopy: Record<FarmerLanguage, InsuranceCopy> = {
       "Ku bwishingizi busuzuma ibyangiritse, baza uko isuzuma rikorwa. Kuri byombi, menya igihe cyo kumenyesha igihombo, ibimenyetso bisabwa n’uburyo bwo gutanga ikirego.",
     ],
     damage: "Iyo habaye ibyangiritse: irinde amazi y’umwuzure, fata ibimenyetso gusa igihe nta kaga, kandi menyesha ikigo vuba ukurikije amategeko y’amasezerano.",
-    source: "Minisiteri y’Ubuhinzi y’u Rwanda",
+    source: "Reba Tekana / NAIS", program: "Aho watangirira: Tekana, gahunda y’igihugu y’ubwishingizi bw’ubuhinzi mu Rwanda. Baza ibishingirwa ubu ku gihingwa no mu karere kawe; iyi si inama y’amasezerano yagenzuwe.",
   },
 };

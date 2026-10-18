@@ -25,6 +25,10 @@ export function InsuranceGuidance({ district, soil, language }: { district: stri
         <ul className="space-y-3">{t.checklist.map((item) => <li key={item} className="flex items-start gap-2 text-sm leading-relaxed"><Check aria-hidden="true" className="mt-1 size-4 shrink-0 text-primary-text" /><span>{item}</span></li>)}</ul>
         <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{t.damage}</p>
       </div>}
+      <div className="mt-4 border-t border-border pt-4">
+        <p className="text-sm leading-relaxed">{t.program}</p>
+        <Button asChild variant="link" className="mt-1 h-auto min-h-9 whitespace-normal px-0 text-primary-text"><a href="https://www.minagri.gov.rw/national-agriculture-insurance-scheme" target="_blank" rel="noreferrer">{t.source}<ExternalLink /></a></Button>
+      </div>
       <p className="mt-4 text-xs leading-relaxed text-muted-foreground">{t.disclaimer}</p>
     </section>
   );
