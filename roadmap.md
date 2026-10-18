@@ -1,4 +1,5 @@
 # Roadmap
+- [x] Add and verify heavy-rain insurance guidance after district and soil choices in all three farmer languages.
 - [x] Add and verify French alongside English and Kinyarwanda, including AI season advice.
 - [x] Add a season and typical-rainfall assistant to the farmer page.
 - [x] Verify season guidance and an actual AI answer.
