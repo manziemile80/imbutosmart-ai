@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: sowsmart-predictions
+    runtime: docker
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: ALLOWED_ORIGINS
+        value: https://sowsmart.lovable.app,https://id-preview--5eebf432-95f5-4468-9f79-f87d749c603c.lovable.app
