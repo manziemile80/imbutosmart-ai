@@ -9,10 +9,9 @@ export const districtGeometry = {
     ...feature,
     geometry: {
       ...feature.geometry,
-      coordinates: feature.geometry.coordinates.map((polygon) => {
-        const area = geoArea({ type: "Polygon", coordinates: polygon } as GeoPermissibleObjects);
-        return area > 2 * Math.PI ? polygon.map((ring) => [...ring].reverse()) : polygon;
-      }),
+      coordinates: geoArea(feature.geometry as unknown as GeoPermissibleObjects) > 2 * Math.PI
+        ? feature.geometry.coordinates.map((ring) => [...ring].reverse())
+        : feature.geometry.coordinates,
     },
   })),
 };
