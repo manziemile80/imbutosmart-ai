@@ -1,7 +1,7 @@
-# SowSmart Rwanda 🌱
+# ImbutoSmart AI 🌱
 NISR 2026 Big Data Hackathon
 
-SowSmart turns NISR agricultural survey data into planting advice. A Random Forest classifier estimates
+ImbutoSmart AI turns NISR agricultural survey data into planting advice. A Random Forest classifier estimates
 the probability that a crop will succeed under a farmer's district, soil and forecast weather, and a
 Random Forest regressor estimates expected yield (t/ha). Crops are ranked by expected value.
 

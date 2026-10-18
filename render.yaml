@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: sowsmart-predictions
+    name: imbutosmart-predictions
     runtime: docker
     dockerContext: ./backend
     dockerfilePath: ./backend/Dockerfile

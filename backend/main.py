@@ -1,5 +1,5 @@
 """
-main.py — SowSmart Rwanda API.
+main.py — ImbutoSmart AI API.
 
     uvicorn main:app --reload --port 8000
 """
@@ -18,9 +18,9 @@ from data_processor import CATEGORICAL, NUMERIC, clean, load_raw
 
 MODEL_DIR = Path(__file__).parent / "models"
 
-app = FastAPI(title="SowSmart Rwanda API", version="1.0.0")
+app = FastAPI(title="ImbutoSmart AI API", version="1.0.0")
 
-# Comma-separated list, e.g. "https://sowsmart.vercel.app,http://localhost:3000"
+# Comma-separated list, e.g. "https://imbutosmart.vercel.app,http://localhost:3000"
 origins = os.getenv("ALLOWED_ORIGINS", "*").split(",")
 app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=["*"], allow_headers=["*"])
 

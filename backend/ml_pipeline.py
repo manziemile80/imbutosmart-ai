@@ -1,5 +1,5 @@
 """
-ml_pipeline.py — Train SowSmart models on the real NISR data.
+ml_pipeline.py — Train ImbutoSmart AI models on the real NISR data.
 
 Run:  python ml_pipeline.py
 Outputs (in backend/models/):

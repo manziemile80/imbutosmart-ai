@@ -10,7 +10,7 @@ export const farmerCopy = {
     localNote: "General estimate, not a measured probability or guaranteed harvest. District-specific training data is not connected; changing district may give the same estimate.",
     assistant: "AI season assistant", seasons: "Seasons & rainfall", month: "Month", farming: "Farming season", typical: "Typical rainfall", ask: "Ask AI about", preparing: "Preparing advice…", advice: "AI advice",
     seasonNote: "This is the usual seasonal pattern, not measured rain or a forecast. Amounts vary by district and year.", aiUnavailable: "AI assistance is unavailable. The usual-season guide remains available.",
-    meteo: "Meteo Rwanda climatology", calendar: "NISR season calendar", disclosure: "AI disclosure", disclosureText: "AI tools helped develop SowSmart. Crop estimates do not replace advice from a local agronomist.",
+    meteo: "Meteo Rwanda climatology", calendar: "NISR season calendar", disclosure: "AI disclosure", disclosureText: "AI tools helped develop ImbutoSmart AI. Crop estimates do not replace advice from a local agronomist.",
   },
   rw: {
     farmer: "Umuhinzi", agronomist: "Impuguke", language: "Ururimi", advisory: "Inama ku muhinzi",
@@ -21,7 +21,7 @@ export const farmerCopy = {
     localNote: "Ibi ni ibigereranyo rusange, si amahirwe yapimwe cyangwa isezerano ry’umusaruro. Amakuru yo gutoza kuri buri karere ntarahuzwa; guhindura akarere bishobora gutanga ikigereranyo kimwe.",
     assistant: "Umufasha wa AI ku bihembwe", seasons: "Ibihembwe n’imvura", month: "Ukwezi", farming: "Igihembwe cy’ihinga", typical: "Imvura isanzwe", ask: "Baza AI kuri", preparing: "Turategura inama…", advice: "Inama za AI",
     seasonNote: "Ibi ni uko imvura isanzwe igwa mu bihembwe, si imvura yapimwe cyangwa iteganyagihe. Ingano ihinduka bitewe n’akarere n’umwaka.", aiUnavailable: "Umufasha wa AI ntabonetse. Amakuru asanzwe y’ibihembwe aracyaboneka.",
-    meteo: "Ikirere cya Rwanda — Meteo Rwanda", calendar: "Kalendari y’ibihembwe — NISR", disclosure: "Ikoreshwa rya AI", disclosureText: "Ibikoresho bya AI byafashije gukora SowSmart. Ibigereranyo by’ibihingwa ntibisimbura inama z’impuguke mu buhinzi yo hafi yawe.",
+    meteo: "Ikirere cya Rwanda — Meteo Rwanda", calendar: "Kalendari y’ibihembwe — NISR", disclosure: "Ikoreshwa rya AI", disclosureText: "Ibikoresho bya AI byafashije gukora ImbutoSmart AI. Ibigereranyo by’ibihingwa ntibisimbura inama z’impuguke mu buhinzi yo hafi yawe.",
   },
 };
 
