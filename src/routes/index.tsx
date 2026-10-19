@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { SiteShell } from "@/components/SiteShell";
 import { SeasonAssistant } from "@/components/SeasonAssistant";
+import { FarmerAssistant } from "@/components/FarmerAssistant";
 import { InsuranceGuidance } from "@/components/InsuranceGuidance";
 import { API_URL, DISTRICTS, SOILS } from "@/lib/api";
 import { farmerCopy, cropLabel, soilLabel, type FarmerLanguage } from "@/lib/farmer-language";
@@ -103,6 +104,9 @@ function Advisory() {
             )}
           </div>
         )}
+        <div className="mt-10 border-t border-border pt-8">
+          <FarmerAssistant district={district} soil={soil} language={language} />
+        </div>
       </section>
     </SiteShell>
   );

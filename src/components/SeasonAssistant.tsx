@@ -23,7 +23,7 @@ export function SeasonAssistant({ district, language = "en" }: { district: strin
     setLoading(true); setError(null); setAnswer("");
     try {
       const response = await ask({ data: parsed.data });
-      setAnswer(response.answer); setError(response.error);
+      setAnswer(response.answer); setError(response.error ? t.aiUnavailable : null);
     } catch { setError(t.aiUnavailable); }
     finally { setLoading(false); }
   }

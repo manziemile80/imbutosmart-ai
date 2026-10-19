@@ -3,6 +3,8 @@
 - [x] Add and verify heavy-rain insurance guidance after district and soil choices in all three farmer languages.
 - [x] Add and verify French alongside English and Kinyarwanda, including AI season advice.
 - [x] Add a season and typical-rainfall assistant to the farmer page.
+- [x] Add a multilingual farmer Q&A assistant that answers free-text farming questions.
+- [x] Move AI assistance to a self-hosted, OpenAI-compatible backend configured by environment variables.
 - [x] Verify season guidance and an actual AI answer.
 - [x] Update crop recommendations automatically when field details change.
 - [x] Add English/Kinyarwanda switching to farmer labels, crop results, and season assistance.

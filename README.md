@@ -34,10 +34,19 @@ npm install && npm run dev
 - Before deployment, supply `backend/nisr_real_data.csv` with real district/crop/soil/weather/yield observations, or train privately and supply the four `backend/models/*.joblib` artifacts. Never commit confidential survey microdata to a public repository. Without these inputs `/health` can respond, but `/predict`, `/meta`, and `/stats` return 503: no trained model.
 - `/stats` also needs the original CSV even when trained artifacts are supplied; artifacts alone support `/predict` and `/meta`, not historical yield comparisons.
 - After deployment, verify `/meta` and a real `/predict` request (not just `/health`), then set the frontend `VITE_API_URL` to the HTTPS Render service address. `/stats` supplies held-out test accuracy and yield MAE in t/ha; historical comparison charts are in-sample, not test results.
-- **Frontend:** set `VITE_API_URL` to the Render URL and publish (Lovable Publish, or any static/edge host such as Vercel).
+- **Frontend:** set `VITE_API_URL` to the Render URL and publish to any static/edge host (such as Vercel, Netlify, or Render).
 
 ## District land-use map
 The dashboard imports district aggregate CSVs in the current browser session; they are not uploaded to the prediction service and are not training data. Required columns: `district,crops_ha,pasture_ha,fallow_ha`. Values must be nonnegative hectares; missing districts remain unavailable. Shares use only the sum of those three categories, not all district land. Crop area must be a non-overlapping physical area, not the sum of crop areas that double-count intercropping. Only import aggregate, non-sensitive figures. The supplied national PDF is not sufficient to populate district shares.
+
+## AI assistance
+The farmer Q&A assistant and the season explanations call any **OpenAI-compatible** chat completions endpoint. Configure it with server-side environment variables:
+
+- `AI_API_KEY` — API key for your provider (falls back to `OPENAI_API_KEY`).
+- `AI_BASE_URL` — endpoint base URL, e.g. `https://api.openai.com/v1` (default). Point it at Azure OpenAI, Groq, OpenRouter, Ollama, or a self-hosted gateway.
+- `AI_MODEL` — model name to request (default `gpt-4o-mini`).
+
+These variables are server-only: the browser never sees the key, and every request is validated before it reaches the model. When no key is set, the assistant reports that it is not configured and the deterministic crop estimates and season guide stay available.
 
 ## AI Disclosure
 AI assistants (Codex) were used to architect the ML pipeline, generate UI components, and debug code. The core data strategy, NISR data preprocessing logic, and system design were implemented by the team.

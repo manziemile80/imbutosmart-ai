@@ -1,16 +1,7 @@
-<!-- LOVABLE:BEGIN -->
-> [!IMPORTANT]
-> This project is connected to [Lovable](https://lovable.dev). Avoid rewriting
-> published git history — force pushing, or rebasing/amending/squashing commits
-> that are already pushed — as it rewrites history on Lovable's side and the
-> user will likely lose their project history.
->
-> Commits you push to the connected branch sync back to Lovable and show up in
-> the editor, so keep the branch in a working state.
-<!-- LOVABLE:END -->
-
 - Keep season reference data and validation in a shared browser-safe module; AI explanations live in a server function with server-only gateway helpers so credentials never enter the browser.
 - Season assistance is a single form-driven explanation without conversation history; deterministic reference guidance remains available when AI is unavailable.
+- The farmer Q&A assistant keeps a conversation thread in the page but sends only the most recent turns to the server; keep its contract, suggested prompts, and copy in a shared browser-safe module.
+- All AI runs against an OpenAI-compatible backend configured by `AI_API_KEY`, `AI_BASE_URL`, and `AI_MODEL`; never hardcode a provider, gateway, or credential, and keep the deterministic guidance visible when AI is unavailable.
 - Keep farmer translations in a shared browser-safe catalog and pass a validated language code to season explanations, so UI and AI advice use the same language without changing model selection.
 - Automatic crop requests are debounced and discard superseded responses; preserve entered weather values and do not fabricate district climate data.
 - Keep district land-use parsing and share calculations browser-safe and separate from crop training; imports are session-local aggregates so survey observations are not confused with physical land allocations.
