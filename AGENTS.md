@@ -17,3 +17,4 @@
 - Render deployment uses the root Blueprint and the backend Docker context; verify model-dependent endpoints before considering a healthy service prediction-ready.
 - Bundle openly licensed district boundaries with attribution; missing district measurements stay unavailable rather than being inferred from national totals.
 - Keep insurance guidance in a browser-safe multilingual catalog; district and soil provide field context, never fabricated risk scores, eligibility, premiums or insurer rankings. Link official program information and require policy confirmation.
+- Keep insurance coverage preferences separate from policy enrolment; stable coverage IDs preserve session choices across language changes without implying purchase or availability.
