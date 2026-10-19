@@ -6,9 +6,10 @@ import viteReact from "@vitejs/plugin-react";
 import { defineConfig, type PluginOption } from "vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 
-// Standard TanStack Start setup. `nitro` is build-only and its `node-server`
-// preset produces a portable Node server bundle; set the `NITRO_PRESET`
-// environment variable (or change this preset) to target another host.
+// Standard TanStack Start setup. `nitro` is build-only: on Vercel it emits the
+// Build Output API (`.vercel/output`) via the `vercel` preset, everywhere else a
+// portable Node server bundle (`node-server`, `.output`). `NITRO_PRESET`
+// overrides the automatic choice to target any other host.
 export default defineConfig(async ({ command }) => {
   const plugins: PluginOption[] = [
     tailwindcss(),
@@ -19,7 +20,8 @@ export default defineConfig(async ({ command }) => {
 
   if (command === "build") {
     const { nitro } = await import("nitro/vite");
-    plugins.push(nitro({ preset: "node-server" }));
+    const preset = process.env["NITRO_PRESET"] ?? (process.env["VERCEL"] ? "vercel" : "node-server");
+    plugins.push(nitro({ preset }));
   }
 
   plugins.push(viteReact());
