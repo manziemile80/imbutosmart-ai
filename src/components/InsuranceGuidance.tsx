@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { ShieldCheck, ChevronDown, ChevronUp, ExternalLink, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { COVERAGE_TYPES, coverageCopy, toggleCoverage, type CoverageType } from "@/lib/insurance-coverage";
 import { insuranceCopy } from "@/lib/insurance-language";
 import { soilLabel, type FarmerLanguage } from "@/lib/farmer-language";
 
 export function InsuranceGuidance({ district, soil, language }: { district: string; soil: string; language: FarmerLanguage }) {
   const [expanded, setExpanded] = useState(false);
+  const [selected, setSelected] = useState<CoverageType[]>([]);
   const t = insuranceCopy[language];
+  const c = coverageCopy[language];
   return (
     <section aria-labelledby="insurance-title" className="border-y border-border py-5" data-testid="insurance-guidance">
       <div className="flex items-start gap-3">
@@ -18,6 +22,23 @@ export function InsuranceGuidance({ district, soil, language }: { district: stri
       </div>
       <p className="mt-4 font-medium text-primary-text">{t.suggested}</p>
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t.summary}</p>
+      <fieldset className="mt-5">
+        <legend className="font-semibold">{c.title}</legend>
+        <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{c.note}</p>
+        <div className="mt-4 grid gap-3">
+          {COVERAGE_TYPES.map((type) => (
+            <label key={type} className={`flex cursor-pointer items-start gap-3 rounded-md border p-3 ${selected.includes(type) ? "border-primary bg-accent" : "border-border bg-card"}`}>
+              <Checkbox className="mt-1 shrink-0" checked={selected.includes(type)} onCheckedChange={() => setSelected((current) => toggleCoverage(current, type))} />
+              <span className="min-w-0"><span className="block text-sm font-medium">{c.choices[type].label}</span><span className="mt-1 block text-xs leading-relaxed text-muted-foreground">{c.choices[type].detail}</span></span>
+            </label>
+          ))}
+        </div>
+        <div className="mt-4 border-l-2 border-primary pl-3" role="status">
+          <p className="text-sm font-medium">{c.selected}</p>
+          <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{selected.length ? selected.map((type) => c.choices[type].label).join(" · ") : c.empty}</p>
+        </div>
+        {selected.length > 0 && <Button type="button" variant="ghost" className="mt-2 text-primary-text" onClick={() => setSelected([])}>{c.clear}</Button>}
+      </fieldset>
       <Button type="button" variant="outline" className="mt-4 h-auto min-h-10 w-full whitespace-normal text-left" aria-expanded={expanded} aria-controls="insurance-checklist" onClick={() => setExpanded(!expanded)}>
         {expanded ? <ChevronUp /> : <ChevronDown />}{expanded ? t.hide : t.compare}
       </Button>
