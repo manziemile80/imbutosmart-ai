@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   AHS_CROPS,
   AHS_SOURCE,
+  RSAS_METHODOLOGY,
   ahsCopy,
   ahsCropShare,
   ahsSeasonRanking,
@@ -75,7 +76,13 @@ describe("NISR AHS 2024 crop reference", () => {
       expect(copy.transition.length).toBeGreaterThan(0);
       expect(copy.source.length).toBeGreaterThan(0);
       expect(copy.note.length).toBeGreaterThan(0);
+      expect(copy.methodology.length).toBeGreaterThan(0);
     }
+  });
+
+  it("cites the RSAS methodology without attaching figures to it", () => {
+    expect(RSAS_METHODOLOGY.survey).toContain("Seasonal Agriculture Survey");
+    expect(RSAS_METHODOLOGY.archive).toContain("NISR");
   });
 
   it("builds a share line and an unavailable line", () => {

@@ -16,6 +16,14 @@ import { cropLabel, type FarmerLanguage } from "./farmer-language";
 
 export type AhsSeason = "A" | "B" | "C";
 
+// How NISR collects the season statistics the app cites. Source: RSAS 2018 DDI
+// documentation (Rwanda National Data Archive), which describes the methodology
+// only — it publishes no district tables and no figures used here.
+export const RSAS_METHODOLOGY = {
+  survey: "Seasonal Agriculture Survey (RSAS)",
+  archive: "Rwanda National Data Archive, NISR",
+} as const;
+
 export const AHS_SOURCE = {
   title: "Agricultural Household Survey (AHS) 2024",
   publisher: "National Institute of Statistics of Rwanda (NISR)",
@@ -72,6 +80,7 @@ export const ahsCopy: Record<FarmerLanguage, {
   unavailable: string;
   transition: string;
   note: string;
+  methodology: string;
 }> = {
   en: {
     title: "What farming households grew",
@@ -81,6 +90,7 @@ export const ahsCopy: Record<FarmerLanguage, {
     unavailable: "The survey does not report this crop for {season}.",
     transition: "September is the transition between Season C and Season A. The survey reports crop prevalence separately for each.",
     note: "This shows how widespread the crop was among farming households nationally — not a yield, a probability, or a guarantee for your field.",
+    methodology: "NISR measures each season through its Seasonal Agriculture Survey, using GPS point-sampling of mapped segments across the country.",
   },
   rw: {
     title: "Ibyo abaturage b'ubuhinzi bahingye",
@@ -90,6 +100,7 @@ export const ahsCopy: Record<FarmerLanguage, {
     unavailable: "Ibarurisho ridashyira ruriya igihingwa muri {season}.",
     transition: "Mutaganda ni gahunda yihuta ry'igihembwe C n'igihembwe A. Ibarurisho rigura kimwe n'igindi.",
     note: "ni uko igihingwa cyayizanye cyane mu buhinzi bw'igihugu — si ibicuruzwa, si ibizera, cyangwa isezerano ry'umurima wawe.",
+    methodology: "NISR igura igihembwe buri gihe n'Ibarurisho ry'Ubuhinzi ry'igihe, ishyingira GPS ku birombe byanditswe kuri maruru yose mu Rwanda.",
   },
   fr: {
     title: "Ce que les ménages agricoles ont cultivé",
@@ -99,6 +110,7 @@ export const ahsCopy: Record<FarmerLanguage, {
     unavailable: "L'enquête ne rapporte pas cette culture pour {season}.",
     transition: "Septembre est la transition entre la saison C et la saison A. L'enquête rapporte la prévalence de chaque culture séparément.",
     note: "Cela indique à quelle échelle cette culture était répandue chez les ménages agricoles au niveau national — ce n'est ni un rendement, ni une probabilité, ni une garantie pour votre champ.",
+    methodology: "L'INRS mesure chaque saison grâce à son Enquête agricole saisonnière, par échantillonnage GPS de segments cartographiés dans tout le pays.",
   },
 };
 

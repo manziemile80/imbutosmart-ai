@@ -1,4 +1,4 @@
-import { AHS_SOURCE, ahsCopy, ahsSeasonRanking, monthToAhsSeason } from "@/lib/ahs-crops";
+import { AHS_SOURCE, RSAS_METHODOLOGY, ahsCopy, ahsSeasonRanking, monthToAhsSeason } from "@/lib/ahs-crops";
 import { cropLabel, type FarmerLanguage } from "@/lib/farmer-language";
 import { BarChart3 } from "lucide-react";
 
@@ -35,6 +35,7 @@ export function AhsPrevalence({ month, language, seasonLabel }: { month: number;
         </>
       )}
       <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">{t.note}</p>
+      <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">{t.methodology} ({RSAS_METHODOLOGY.survey}, {RSAS_METHODOLOGY.archive}.)</p>
       <p className="mt-1 text-[11px] text-muted-foreground">
         {t.source}: {AHS_SOURCE.citation} ({AHS_SOURCE.published}).
       </p>
