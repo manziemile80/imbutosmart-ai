@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { MAX_RECORDING_MS, type VoiceLanguage, type VoiceNotice } from "@/lib/voice-assistant";
-import { speakFarmerText, transcribeFarmerSpeech } from "@/lib/voice-assistant.functions";
+import { getVoiceConfigStatus, speakFarmerText, transcribeFarmerSpeech } from "@/lib/voice-assistant.functions";
 
 // Browser-only voice hook: records a short clip with MediaRecorder, sends it to
 // the server for transcription, and plays back synthesized speech. All provider
@@ -42,6 +42,9 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
   const [status, setStatus] = useState<VoiceStatus>("idle");
   const [notice, setNotice] = useState<VoiceNotice | null>(null);
   const [recordingSupported, setRecordingSupported] = useState(true);
+  const [configured, setConfigured] = useState<boolean | null>(null);
+
+  const voiceConfigStatus = useServerFn(getVoiceConfigStatus);
 
   const onTranscriptRef = useRef(onTranscript);
   onTranscriptRef.current = onTranscript;
@@ -66,6 +69,22 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
       audioRef.current?.pause();
     };
   }, []);
+
+  // Ask the server once whether voice is configured so the UI can show a calm
+  // "needs an API key" note up front instead of only after a failed press.
+  useEffect(() => {
+    let cancelled = false;
+    voiceConfigStatus()
+      .then((result) => {
+        if (!cancelled) setConfigured(Boolean(result?.configured));
+      })
+      .catch(() => {
+        if (!cancelled) setConfigured(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [voiceConfigStatus]);
 
   const cleanupStream = useCallback(() => {
     streamRef.current?.getTracks().forEach((track) => track.stop());
@@ -196,5 +215,5 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
 
   const clearNotice = useCallback(() => setNotice(null), []);
 
-  return { status, notice, recordingSupported, startRecording, stopRecording, speakText, stopSpeaking, clearNotice };
+  return { status, notice, recordingSupported, configured, startRecording, stopRecording, speakText, stopSpeaking, clearNotice };
 }

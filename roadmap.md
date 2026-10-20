@@ -13,4 +13,6 @@
 - [ ] Deploy on Render, train, and connect predictions (blocked by Render account access and real crop-level CSV).
 - [x] Add an interactive district land-use map with verified boundaries and no fabricated figures.
 - [x] Verify district selection and land-use CSV import.
+- [x] Add a voice assistant that records a spoken question, transcribes it, answers it and speaks the reply.
+- [x] Run the voice assistant and farmer Q&A entirely free on local models (faster-whisper, Windows SAPI, Ollama qwen2.5:3b) via a separate speech backend.
 - [ ] Populate real district land shares (blocked by district crops/pasture/fallow aggregate data; supplied PDF has only national totals).

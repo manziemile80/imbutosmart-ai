@@ -48,5 +48,35 @@ The farmer Q&A assistant and the season explanations call any **OpenAI-compatibl
 
 These variables are server-only: the browser never sees the key, and every request is validated before it reaches the model. When no key is set, the assistant reports that it is not configured and the deterministic crop estimates and season guide stay available.
 
+### Running entirely free on one machine
+Chat and voice can both run locally with no paid provider. Chat uses a local Ollama model; voice uses a separate self-hosted speech server.
+
+```sh
+# Chat (local LLM)
+winget install --id Ollama.Ollama -e
+ollama pull qwen2.5:3b            # ~2 GB, Q4_K_M, fits ~8 GB RAM on CPU
+
+# Voice (local speech-to-text + text-to-speech)
+python -m pip install --user "vocal-ai[kokoro]" "av<19"
+winget install --id=Gyan.FFmpeg -e   # required for audio conversion
+powershell -ExecutionPolicy Bypass -File scripts\start-local-voice.ps1
+```
+
+Then set in `.env`:
+
+```
+AI_API_KEY=ollama
+AI_BASE_URL=http://127.0.0.1:11434/v1
+AI_MODEL=qwen2.5:3b
+
+AI_SPEECH_BASE_URL=http://127.0.0.1:8000/v1
+AI_STT_MODEL=Systran/faster-whisper-tiny
+AI_TTS_MODEL=pyttsx3
+```
+
+`AI_SPEECH_BASE_URL` points voice at its own OpenAI-compatible backend, so speech keeps working even when chat uses a different provider; it falls back to `AI_BASE_URL` when unset. A dedicated speech URL with no key sends a harmless placeholder, so a local server that ignores auth needs no credential. Verify the whole loop with `powershell -ExecutionPolicy Bypass -File scripts\test-voice-e2e.ps1`.
+
+`av<19` is required: faster-whisper 1.2.1 still passes `metadata_errors` to `av.open`, which PyAV 19 removed. Pin until faster-whisper ships the upstream fix.
+
 ## AI Disclosure
 AI assistants (Codex) were used to architect the ML pipeline, generate UI components, and debug code. The core data strategy, NISR data preprocessing logic, and system design were implemented by the team.

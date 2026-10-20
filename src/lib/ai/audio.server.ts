@@ -21,13 +21,24 @@ export type SpeechResult = { text: string; error: AiErrorCode | null };
 export type SpeechAudio = { audio: string; mimeType: string; error: AiErrorCode | null };
 
 export function getSpeechConfig(): SpeechConfig | null {
-  const apiKey = process.env["AI_API_KEY"]?.trim() || process.env["OPENAI_API_KEY"]?.trim();
-  if (!apiKey) return null;
-  const baseURL = (process.env["AI_BASE_URL"]?.trim() || DEFAULT_AI_BASE_URL).replace(/\/+$/, "");
+  // Speech can run against its own backend (e.g. a free self-hosted STT/TTS
+  // server) that is separate from the chat backend, so voice keeps working even
+  // when the chat provider is unset. Both fall back to the shared AI_* values so
+  // a single-provider setup needs no extra configuration.
+  const explicitBase = process.env["AI_SPEECH_BASE_URL"]?.trim();
+  const baseURL = (explicitBase || process.env["AI_BASE_URL"]?.trim() || DEFAULT_AI_BASE_URL).replace(/\/+$/, "");
+  const apiKey =
+    process.env["AI_SPEECH_API_KEY"]?.trim() ||
+    process.env["AI_API_KEY"]?.trim() ||
+    process.env["OPENAI_API_KEY"]?.trim();
+  // A self-hosted speech server typically ignores auth, but the client still
+  // expects a non-empty key. When a dedicated speech base URL is configured
+  // without a key, send a placeholder so voice works with zero credentials.
+  if (!apiKey && !explicitBase) return null;
   const sttModel = process.env["AI_STT_MODEL"]?.trim() || DEFAULT_STT_MODEL;
   const ttsModel = process.env["AI_TTS_MODEL"]?.trim() || DEFAULT_TTS_MODEL;
   const ttsVoice = process.env["AI_TTS_VOICE"]?.trim() || DEFAULT_TTS_VOICE;
-  return { baseURL, apiKey, sttModel, ttsModel, ttsVoice };
+  return { baseURL, apiKey: apiKey || "not-needed", sttModel, ttsModel, ttsVoice };
 }
 
 // Transcribes a short recording into text. The audio arrives base64-encoded from

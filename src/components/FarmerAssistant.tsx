@@ -66,6 +66,12 @@ export function FarmerAssistant({ district, soil, language }: { district: string
       <p className="mt-1 text-xs text-muted-foreground">{district} · {soilLabel(soil, language)}</p>
       <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t.intro}</p>
 
+      {voice.configured === false && (
+        <p role="status" className="mt-3 rounded-md border border-border bg-card p-3 text-sm leading-relaxed text-muted-foreground">
+          {vt.configNote}
+        </p>
+      )}
+
       {messages.length > 0 && (
         <div role="log" aria-live="polite" className="mt-5 grid gap-3">
           {messages.map((message, index) => (
@@ -93,7 +99,14 @@ export function FarmerAssistant({ district, soil, language }: { district: string
       {voice.status === "recording" && <p role="status" className="mt-3 flex items-center gap-2 text-sm text-muted-foreground"><LoaderCircle className="size-4 animate-spin motion-reduce:animate-none" aria-hidden="true" />{vt.recording}</p>}
       {voice.status === "transcribing" && <p role="status" className="mt-3 flex items-center gap-2 text-sm text-muted-foreground"><LoaderCircle className="size-4 animate-spin motion-reduce:animate-none" aria-hidden="true" />{vt.transcribing}</p>}
       {aiError && <p role="alert" className="mt-3 text-sm text-destructive">{t.errors[aiError]}</p>}
-      {voice.notice && <p role="alert" className="mt-3 text-sm text-destructive">{vt.notices[voice.notice]}</p>}
+      {voice.notice && (
+        <p
+          role={voice.notice === "unconfigured" ? "status" : "alert"}
+          className={voice.notice === "unconfigured" ? "mt-3 text-sm text-muted-foreground" : "mt-3 text-sm text-destructive"}
+        >
+          {vt.notices[voice.notice]}
+        </p>
+      )}
       {inputError && <p role="alert" className="mt-3 text-sm text-destructive">{inputError}</p>}
 
       {messages.length === 0 && !loading && (

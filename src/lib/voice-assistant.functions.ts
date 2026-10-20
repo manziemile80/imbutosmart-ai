@@ -8,6 +8,16 @@ import type { SpeechAudio, SpeechResult } from "./ai/audio.server";
 // contract for the spoken Q&A and add speech-to-text / text-to-speech endpoints
 // on the shared OpenAI-compatible backend. Credentials never reach the browser.
 
+// Reports whether the voice backend is configured on the server. Returns a bare
+// boolean so the browser can show a calm "not set up yet" note up front without
+// learning any provider, endpoint, or credential.
+export const getVoiceConfigStatus = createServerFn({ method: "GET" }).handler(
+  async (): Promise<{ configured: boolean }> => {
+    const { getSpeechConfig } = await import("./ai/audio.server");
+    return { configured: Boolean(getSpeechConfig()) };
+  },
+);
+
 export const transcribeFarmerSpeech = createServerFn({ method: "POST" })
   .validator((input: unknown) => speechInputSchema.parse(input))
   .handler(async ({ data }): Promise<SpeechResult> => {

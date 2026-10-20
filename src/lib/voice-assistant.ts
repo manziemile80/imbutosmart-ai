@@ -111,6 +111,7 @@ export const voiceCopy: Record<
     answer: string;
     clear: string;
     disclaimer: string;
+    configNote: string;
     notices: Record<VoiceNotice, string>;
   }
 > = {
@@ -135,8 +136,9 @@ export const voiceCopy: Record<
     answer: "AI answer",
     clear: "Clear",
     disclaimer: "Spoken guidance is general only — not live weather, a diagnosis, or a guarantee. Confirm with a local agronomist and Meteo Rwanda before acting.",
+    configNote: "Voice isn't switched on yet — the server still needs an API key. You can read the guide and use the text assistants below in the meantime.",
     notices: {
-      unconfigured: "Voice assistance is not configured yet. The guide above and the text assistants remain available.",
+      unconfigured: "Voice assistance isn't configured on the server yet (no API key). The guide above and the text assistants remain available.",
       failed: "The voice assistant could not answer just now. Please try again.",
       empty: "No answer was returned. Please try rephrasing your question.",
       unsupported: "This browser cannot record audio. Please type your question instead.",
@@ -165,8 +167,9 @@ export const voiceCopy: Record<
     answer: "Igisubizo cya AI",
     clear: "Gusiba",
     disclaimer: "Inama mu ijwi ni rusange gusa — si amakuru y'ikirere ariho, isuzuma, cyangwa isezerano. Emeza n'impuguke mu buhinzi na Meteo Rwanda mbere yo kubikora.",
+    configNote: "Umufasha w'ijwi nta kurahura — seriveri incyo ifite API key. Mu gihe cy'ubu, usome amakuru hanyuma uboneshe abafasha bandika hasi.",
     notices: {
-      unconfigured: "Umufasha w'ijwi ntarashyirwaho. Amakuru ari hejuru n'abafasha bandika baracyaboneka.",
+      unconfigured: "Umufasha w'ijwi ntarashyirwaho kuri seriveri (nta API key). Amakuru ari hejuru n'abafasha bandika baracyaboneka.",
       failed: "Umufasha w'ijwi ntiyashoboye gusubiza ubu. Ongera ugerageze.",
       empty: "Nta gisubizo cyatanzwe. Ongera ugerageze uhindure ikibazo.",
       unsupported: "Iyi porogaramu ntishobora gufata ijwi. Nyamara wandike ikibazo cyawe.",
@@ -195,8 +198,9 @@ export const voiceCopy: Record<
     answer: "Réponse de l'IA",
     clear: "Effacer",
     disclaimer: "Les conseils vocaux sont généraux uniquement — pas de météo en direct, de diagnostic ni de garantie. Confirmez avec un agronome local et Meteo Rwanda avant d'agir.",
+    configNote: "La voix n'est pas encore activée — le serveur a besoin d'une clé API. En attendant, consultez le guide et utilisez les assistants écrits ci-dessous.",
     notices: {
-      unconfigured: "L'assistance vocale n'est pas encore configurée. Le guide ci-dessus et les assistants écrits restent disponibles.",
+      unconfigured: "L'assistance vocale n'est pas encore configurée sur le serveur (aucune clé API). Le guide ci-dessus et les assistants écrits restent disponibles.",
       failed: "L'assistant vocal n'a pas pu répondre pour l'instant. Veuillez réessayer.",
       empty: "Aucune réponse n'a été renvoyée. Reformulez votre question.",
       unsupported: "Ce navigateur ne peut pas enregistrer l'audio. Écrivez plutôt votre question.",

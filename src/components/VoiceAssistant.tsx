@@ -63,6 +63,12 @@ export function VoiceAssistant({ district, soil, language }: { district: string;
       <h2 id="voice-assistant-title" className="mt-2 font-display text-2xl">{t.heading}</h2>
       <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t.intro}</p>
 
+      {voice.configured === false && (
+        <p role="status" className="mt-3 rounded-md border border-border bg-card p-3 text-sm leading-relaxed text-muted-foreground">
+          {t.configNote}
+        </p>
+      )}
+
       <div className="mt-5 rounded-md border border-border bg-card p-4">
         <p className="font-semibold">{t.guideTitle}</p>
         <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{t.guideIntro}</p>
@@ -120,7 +126,14 @@ export function VoiceAssistant({ district, soil, language }: { district: string;
             {statusText}
           </p>
         )}
-        {voice.notice && <p role="alert" className="mt-3 text-sm text-destructive">{t.notices[voice.notice]}</p>}
+        {voice.notice && (
+          <p
+            role={voice.notice === "unconfigured" ? "status" : "alert"}
+            className={voice.notice === "unconfigured" ? "mt-3 text-sm text-muted-foreground" : "mt-3 text-sm text-destructive"}
+          >
+            {t.notices[voice.notice]}
+          </p>
+        )}
         {answerError && <p role="alert" className="mt-3 text-sm text-destructive">{t.notices[answerError]}</p>}
         {!voice.recordingSupported && !voice.notice && (
           <p className="mt-3 text-sm text-muted-foreground">{t.notices.unsupported}</p>
