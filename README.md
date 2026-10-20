@@ -50,6 +50,11 @@ The farmer Q&A assistant and the season explanations call any **OpenAI-compatibl
 
 These variables are server-only: the browser never sees the key, and every request is validated before it reaches the model. When no key is set, the assistant reports that it is not configured and the deterministic crop estimates and season guide stay available.
 
+The chat backend is chosen by `AI_PROVIDER`:
+
+- `openai` (default) — any OpenAI-compatible `/chat/completions` endpoint. `AI_BASE_URL` may be set on its own when the endpoint needs no auth.
+- `vercel-gateway` — the Vercel AI Gateway, which addresses models as `provider/model` and authenticates a Vercel deployment with its own OIDC token, so no extra key is needed.
+
 ### Running entirely free on one machine
 Chat and voice can both run locally with no paid provider. Chat uses a local Ollama model; voice uses a separate self-hosted speech server.
 
