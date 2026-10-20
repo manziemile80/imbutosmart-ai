@@ -57,6 +57,17 @@ The chat backend is chosen by `AI_PROVIDER`:
 - `openai` (default) — any OpenAI-compatible `/chat/completions` endpoint. `AI_BASE_URL` may be set on its own when the endpoint needs no auth.
 - `vercel-gateway` — the Vercel AI Gateway, which addresses models as `provider/model` and authenticates a Vercel deployment with its own OIDC token, so no extra key is needed.
 
+### Chat with Groq
+Groq serves an OpenAI-compatible API with a free tier, so it is a good fit for the farmer assistants. Create a key at `console.groq.com/keys`, then set:
+
+```
+AI_BASE_URL=https://api.groq.com/openai/v1
+AI_MODEL=openai/gpt-oss-20b
+AI_API_KEY=gsk_...
+```
+
+`openai/gpt-oss-20b` is fast, cheap and generous on the free plan (250K tokens per minute, 1K requests per minute). The Llama models moved to Enterprise plans, so they are no longer on the free tier.
+
 ### Running entirely free on one machine
 Chat and voice can both run locally with no paid provider. Chat uses a local Ollama model; voice uses a separate self-hosted speech server.
 
