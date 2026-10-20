@@ -72,3 +72,17 @@ export function localizedSeason(guide: { farming: string; period: string; name: 
   };
   return { ...guide, farming: guide.farming === "Seasons A & C" ? "Ibihembwe A na C" : guide.farming.replace("Season", "Igihembwe"), period: periods[guide.period] ?? guide.period, name: names[guide.name] ?? guide.name, local: guide.local === "Toward Umuhindo" ? "Hegereje Umuhindo" : guide.local, rain: rain[guide.rain] ?? guide.rain, note: notes[guide.local] ?? guide.note };
 }
+
+// Deterministic explanation of the usual-season reference, used when the AI answer states a measurement the guide never contains. It stays inside the reference data, so it can never invent a figure either.
+export function seasonReferenceSummary(guide: { farming: string; period: string; name: string; local: string; rain: string; note: string }, language: FarmerLanguage): string {
+  const local = localizedSeason(guide, language);
+  const lowerFirst = (value: string) => value.charAt(0).toLowerCase() + value.slice(1);
+  if (language === "fr") {
+    const article = local.farming.startsWith("Saisons") ? "aux " : "la ";
+    return `Ce mois appartient à ${article}${lowerFirst(local.farming)} (${local.period}). La saison climatique est la ${lowerFirst(local.name)} (${local.local}) : ${lowerFirst(local.rain)}. ${local.note} Vérifiez Meteo Rwanda et un agronome local avant de planter.`;
+  }
+  if (language === "rw") {
+    return `Uyu munsi ukaba mu ${local.farming} (${local.period}). Igihe cy’ikirere ni ${local.name} (${local.local}) : ${lowerFirst(local.rain)}. ${local.note} Reba Meteo Rwanda n’impuguke yo hafi mbere yo guhinga.`;
+  }
+  return `This month falls in ${local.farming} (${local.period}). The climatic season is the ${local.name} (${local.local}): ${lowerFirst(local.rain)}. ${local.note} Check Meteo Rwanda and a local agronomist before planting.`;
+}

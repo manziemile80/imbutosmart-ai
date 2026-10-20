@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { getSeasonGuide, seasonInputSchema } from "../lib/season-guide";
+import { getSeasonGuide, seasonInputSchema, statesMeasurement } from "../lib/season-guide";
+import { seasonReferenceSummary } from "../lib/farmer-language";
 
 describe("usual-season guidance", () => {
   it("supports exactly English, Kinyarwanda, and French for season advice", () => {
@@ -31,5 +32,31 @@ describe("usual-season guidance", () => {
   it("rejects unknown months and districts", () => {
     expect(seasonInputSchema.safeParse({ month: 13, district: "Musanze" }).success).toBe(false);
     expect(seasonInputSchema.safeParse({ month: 10, district: "Unknown" }).success).toBe(false);
+  });
+});
+
+describe("fabricated-measurement guard", () => {
+  it("flags answers that state a rainfall, temperature or quantity figure", () => {
+    expect(statesMeasurement("We usually get around 130 millimeters of rain in Musanze.")).toBe(true);
+    expect(statesMeasurement("Temperatures reach 30 degrees this month.")).toBe(true);
+    expect(statesMeasurement("Expect 80 percent germination.")).toBe(true);
+    expect(statesMeasurement("Apply 2 kg per hectare.")).toBe(true);
+  });
+  it("allows qualitative answers that stay inside the reference guide", () => {
+    expect(statesMeasurement("This month falls in Season B, from March to June.")).toBe(false);
+    expect(statesMeasurement("March to May is a usual rainy period, but rainfall varies by place and year.")).toBe(false);
+  });
+  it("falls back to reference guidance that states no measurement", () => {
+    for (const language of ["en", "rw", "fr"] as const) {
+      const summary = seasonReferenceSummary(getSeasonGuide(4), language);
+      expect(summary.length).toBeGreaterThan(20);
+      expect(statesMeasurement(summary)).toBe(false);
+    }
+  });
+  it("names the farming season, the climatic season and the usual rainfall level", () => {
+    const summary = seasonReferenceSummary(getSeasonGuide(4), "en");
+    expect(summary).toContain("Season B");
+    expect(summary).toContain("Long rainy season");
+    expect(summary).toContain("wetter period");
   });
 });

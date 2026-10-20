@@ -24,3 +24,12 @@ export function getSeasonGuide(month: number) {
         : { name: "Long dry season", local: "Impeshyi", rain: "Drier period", note: "Usually a dry period; rain-fed planting is risky without reliable water." };
   return { farming, period, ...climate };
 }
+
+// The season guide is entirely qualitative: it names seasons and usual rainfall levels but never amounts. So any figure in an AI explanation of it would be invented, and small local models do invent one. Farmers act on these numbers, so an explanation that states a measurement is not shown.
+const DIGIT = /\d/;
+const MEASUREMENT_WORD = /\b(?:mm|cm|km|kg|tonnes?|tons?|t\/ha|kg\/ha|hectares?|litres?|liters?|millimetres?|millimeters?|centimetres?|centimeters?|degrees?|celsius|percent|pourcent)\b/i;
+
+// True when an answer states a measurement the reference guide never contains.
+export function statesMeasurement(text: string): boolean {
+  return DIGIT.test(text) || MEASUREMENT_WORD.test(text);
+}
