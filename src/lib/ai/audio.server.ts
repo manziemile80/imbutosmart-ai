@@ -1,9 +1,10 @@
-import type { AiErrorCode } from "./error-codes";
 import { DEFAULT_AI_BASE_URL } from "./chat.server";
+import type { SpeechAudio, SpeechResult } from "./speech";
 
-// Server-only speech helpers. Speech-to-text and text-to-speech run against the
-// same OpenAI-compatible backend as the chat assistants, configured entirely by
-// environment variables so no provider, gateway, or credential is hardcoded.
+// Server-only transport for any OpenAI-compatible speech endpoint. A second
+// provider with its own API (see ./elevenlabs.server.ts) lives behind the
+// dispatcher in ./speech.server.ts, which picks one from the environment. No
+// provider, gateway, or credential is baked in here.
 
 export const DEFAULT_STT_MODEL = "whisper-1";
 export const DEFAULT_TTS_MODEL = "tts-1";
@@ -17,10 +18,7 @@ export type SpeechConfig = {
   ttsVoice: string;
 };
 
-export type SpeechResult = { text: string; error: AiErrorCode | null };
-export type SpeechAudio = { audio: string; mimeType: string; error: AiErrorCode | null };
-
-export function getSpeechConfig(): SpeechConfig | null {
+export function getOpenAiSpeechConfig(): SpeechConfig | null {
   // Speech can run against its own backend (e.g. a free self-hosted STT/TTS
   // server) that is separate from the chat backend, so voice keeps working even
   // when the chat provider is unset. Both fall back to the shared AI_* values so
@@ -43,13 +41,13 @@ export function getSpeechConfig(): SpeechConfig | null {
 
 // Transcribes a short recording into text. The audio arrives base64-encoded from
 // the browser recorder and is re-wrapped as multipart form data.
-export async function transcribeAudio(
+export async function transcribeOpenAiAudio(
   signal: AbortSignal | undefined,
   audioBase64: string,
   mimeType: string,
   language: string,
 ): Promise<SpeechResult> {
-  const config = getSpeechConfig();
+  const config = getOpenAiSpeechConfig();
   if (!config) return { text: "", error: "unconfigured" };
   try {
     const bytes = Buffer.from(audioBase64, "base64");
@@ -79,12 +77,12 @@ export async function transcribeAudio(
 }
 
 // Renders text as speech and returns the audio as base64 for the browser to play.
-export async function synthesizeSpeech(
+export async function synthesizeOpenAiSpeech(
   signal: AbortSignal | undefined,
   text: string,
   language: string,
 ): Promise<SpeechAudio> {
-  const config = getSpeechConfig();
+  const config = getOpenAiSpeechConfig();
   if (!config) return { audio: "", mimeType: "", error: "unconfigured" };
   try {
     const response = await fetch(`${config.baseURL}/audio/speech`, {

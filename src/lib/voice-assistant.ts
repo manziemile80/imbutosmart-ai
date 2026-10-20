@@ -47,7 +47,7 @@ export type SynthesisInput = z.infer<typeof synthesisInputSchema>;
 
 // Client-side status codes the UI maps to copy. Server-side failures reuse the
 // shared AiErrorCode so both assistants speak the same language about outages.
-export type VoiceNotice = AiErrorCode | "unsupported" | "denied" | "no-speech";
+export type VoiceNotice = AiErrorCode | "unsupported" | "denied" | "no-speech" | "not-spoken" | "unavailable";
 
 export type VoiceGuideItem = { title: string; detail: string };
 
@@ -112,6 +112,7 @@ export const voiceCopy: Record<
     clear: string;
     disclaimer: string;
     configNote: string;
+    spokenUnavailable: string;
     notices: Record<VoiceNotice, string>;
   }
 > = {
@@ -137,6 +138,7 @@ export const voiceCopy: Record<
     clear: "Clear",
     disclaimer: "Spoken guidance is general only — not live weather, a diagnosis, or a guarantee. Confirm with a local agronomist and Meteo Rwanda before acting.",
     configNote: "Voice isn't switched on yet — the server still needs an API key. You can read the guide and use the text assistants below in the meantime.",
+    spokenUnavailable: "The voice service cannot read this language aloud, so answers are written here instead. The text assistants below work in every language.",
     notices: {
       unconfigured: "Voice assistance isn't configured on the server yet (no API key). The guide above and the text assistants remain available.",
       failed: "The voice assistant could not answer just now. Please try again.",
@@ -144,6 +146,8 @@ export const voiceCopy: Record<
       unsupported: "This browser cannot record audio. Please type your question instead.",
       denied: "Microphone access was blocked. Allow the microphone or type your question instead.",
       "no-speech": "We did not hear anything. Please try again and speak a little closer to the microphone.",
+      "not-spoken": "The voice service cannot read this language aloud. The answer is written above.",
+      unavailable: "The voice service cannot serve requests on the current plan, so answers stay written here. The text assistants still work.",
     },
   },
   rw: {
@@ -168,6 +172,7 @@ export const voiceCopy: Record<
     clear: "Gusiba",
     disclaimer: "Inama mu ijwi ni rusange gusa — si amakuru y'ikirere ariho, isuzuma, cyangwa isezerano. Emeza n'impuguke mu buhinzi na Meteo Rwanda mbere yo kubikora.",
     configNote: "Umufasha w'ijwi nta kurahura — seriveri incyo ifite API key. Mu gihe cy'ubu, usome amakuru hanyuma uboneshe abafasha bandika hasi.",
+    spokenUnavailable: "Ubutumwa bw'ijwi ntibishobora gusoma ururimi rw'ubu mu ijwi, ibisobanuro byandikwa hano ariko. Abafasha bandika hasi bashobora gukora muri bururimi.",
     notices: {
       unconfigured: "Umufasha w'ijwi ntarashyirwaho kuri seriveri (nta API key). Amakuru ari hejuru n'abafasha bandika baracyaboneka.",
       failed: "Umufasha w'ijwi ntiyashoboye gusubiza ubu. Ongera ugerageze.",
@@ -175,6 +180,8 @@ export const voiceCopy: Record<
       unsupported: "Iyi porogaramu ntishobora gufata ijwi. Nyamara wandike ikibazo cyawe.",
       denied: "Kwinjira muri mikoro byanzwe. Emerera mikoro cyangwa wandike ikibazo cyawe.",
       "no-speech": "Nta jwi twumvise. Ongera ugerageze uvuge hafi ya mikoro.",
+      "not-spoken": "Ubutumwa bw'ijwi ntibishobora gusoma ururimi rw'ubu mu ijwi. Igisubizo cyandikwe hejuru.",
+      unavailable: "Ubutumwa bw'ijwi ntibushobora gutanga ibisobanuro ku gahunda y'ubu. Ibisobanuro birandikwa hano ariko. Abafasha bandika hasi baracyakora.",
     },
   },
   fr: {
@@ -199,6 +206,7 @@ export const voiceCopy: Record<
     clear: "Effacer",
     disclaimer: "Les conseils vocaux sont généraux uniquement — pas de météo en direct, de diagnostic ni de garantie. Confirmez avec un agronome local et Meteo Rwanda avant d'agir.",
     configNote: "La voix n'est pas encore activée — le serveur a besoin d'une clé API. En attendant, consultez le guide et utilisez les assistants écrits ci-dessous.",
+    spokenUnavailable: "Le service vocal ne peut pas lire cette langue à voix haute : les réponses restent écrites ici. Les assistants écrits ci-dessous fonctionnent dans toutes les langues.",
     notices: {
       unconfigured: "L'assistance vocale n'est pas encore configurée sur le serveur (aucune clé API). Le guide ci-dessus et les assistants écrits restent disponibles.",
       failed: "L'assistant vocal n'a pas pu répondre pour l'instant. Veuillez réessayer.",
@@ -206,6 +214,8 @@ export const voiceCopy: Record<
       unsupported: "Ce navigateur ne peut pas enregistrer l'audio. Écrivez plutôt votre question.",
       denied: "L'accès au microphone a été bloqué. Autorisez le microphone ou écrivez votre question.",
       "no-speech": "Nous n'avons rien entendu. Réessayez en parlant plus près du microphone.",
+      "not-spoken": "Le service vocal ne peut pas lire cette langue à voix haute. La réponse est écrite ci-dessus.",
+      unavailable: "Le service vocal ne peut pas traiter les demandes avec la formule actuelle : les réponses restent écrites ici. Les assistants écrits fonctionnent toujours.",
     },
   },
 };
@@ -219,6 +229,12 @@ export function guideSpokenText(language: VoiceLanguage): string {
 // already ISO-639-1 codes, so the mapping is the identity.
 export function speechLanguageCode(language: VoiceLanguage): VoiceLanguage {
   return language;
+}
+
+// Whether the speech backend can read this language aloud. A null list means the
+// server has not answered yet, so nothing is ruled out.
+export function canSpeakLanguage(spokenLanguages: VoiceLanguage[] | null, language: VoiceLanguage): boolean {
+  return spokenLanguages === null || spokenLanguages.includes(language);
 }
 
 export function buildVoiceSystemPrompt(language: VoiceLanguage, district: string, soil: string): string {

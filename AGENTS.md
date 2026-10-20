@@ -3,12 +3,14 @@
 - The season guide holds no measurements, so a season explanation that states a figure was invented and is replaced by the deterministic reference summary.
 - The farmer Q&A assistant keeps a conversation thread in the page but sends only the most recent turns to the server; keep its contract, suggested prompts, and copy in a shared browser-safe module.
 - All AI runs against an OpenAI-compatible backend configured by `AI_API_KEY`, `AI_BASE_URL`, and `AI_MODEL`; never hardcode a provider, gateway, or credential, and keep the deterministic guidance visible when AI is unavailable.
+- The speech backend is selected by `AI_SPEECH_PROVIDER` and keeps its own credential variables; providers with their own API live behind the server-side gateway, never in the browser.
+- The server reports which app languages the speech backend can speak aloud, and a language it cannot read is offered as writing only rather than spoken badly.
 - Keep farmer translations in a shared browser-safe catalog and pass a validated language code to season explanations, so UI and AI advice use the same language without changing model selection.
 - Automatic crop requests are debounced and discard superseded responses; preserve entered weather values and do not fabricate district climate data.
 - Keep district land-use parsing and share calculations browser-safe and separate from crop training; imports are session-local aggregates so survey observations are not confused with physical land allocations.
 - Render deployment uses the root Blueprint and the backend Docker context; verify model-dependent endpoints before considering a healthy service prediction-ready.
 - Bundle openly licensed district boundaries with attribution; missing district measurements stay unavailable rather than being inferred from national totals.
 - Keep insurance guidance in a browser-safe multilingual catalog; district and soil provide field context, never fabricated risk scores, eligibility, premiums or insurer rankings. Link official program information and require policy confirmation.
-- Verify the free local AI stack through the app's own server functions with `scripts/test-app-local-e2e.mjs`, not only through the raw OpenAI-compatible endpoints.
+- Verify the free local AI stack through the app's own server functions with `scripts/test-app-ai-e2e.mjs`, not only through the raw OpenAI-compatible endpoints.
 - Keep insurance coverage preferences separate from policy enrolment; stable coverage IDs preserve session choices across language changes without implying purchase or availability.
 - Use the shared native-input Checkbox for coverage selection, avoiding a separate provider dependency while retaining accessible form behavior.

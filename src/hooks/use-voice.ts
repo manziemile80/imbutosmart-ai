@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { MAX_RECORDING_MS, type VoiceLanguage, type VoiceNotice } from "@/lib/voice-assistant";
+import { MAX_RECORDING_MS, canSpeakLanguage, type VoiceLanguage, type VoiceNotice } from "@/lib/voice-assistant";
 import { getVoiceConfigStatus, speakFarmerText, transcribeFarmerSpeech } from "@/lib/voice-assistant.functions";
 
 // Browser-only voice hook: records a short clip with MediaRecorder, sends it to
@@ -43,6 +43,7 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
   const [notice, setNotice] = useState<VoiceNotice | null>(null);
   const [recordingSupported, setRecordingSupported] = useState(true);
   const [configured, setConfigured] = useState<boolean | null>(null);
+  const [spokenLanguages, setSpokenLanguages] = useState<VoiceLanguage[] | null>(null);
 
   const voiceConfigStatus = useServerFn(getVoiceConfigStatus);
 
@@ -72,19 +73,28 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
 
   // Ask the server once whether voice is configured so the UI can show a calm
   // "needs an API key" note up front instead of only after a failed press.
+  // The reply also says which languages the backend can speak aloud, so a
+  // language it cannot read is offered as writing only.
   useEffect(() => {
     let cancelled = false;
     voiceConfigStatus()
       .then((result) => {
-        if (!cancelled) setConfigured(Boolean(result?.configured));
+        if (cancelled) return;
+        setConfigured(Boolean(result?.configured));
+        setSpokenLanguages(result?.spokenLanguages ?? null);
       })
       .catch(() => {
-        if (!cancelled) setConfigured(false);
+        if (cancelled) return;
+        setConfigured(false);
+        setSpokenLanguages(null);
       });
     return () => {
       cancelled = true;
     };
   }, [voiceConfigStatus]);
+
+  // Null means the server has not answered yet, so nothing is ruled out.
+  const canSpeak = canSpeakLanguage(spokenLanguages, language);
 
   const cleanupStream = useCallback(() => {
     streamRef.current?.getTracks().forEach((track) => track.stop());
@@ -181,6 +191,12 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
       const trimmed = text.trim();
       if (!trimmed) return;
       setNotice(null);
+      // A backend that cannot speak this language is not asked to: the answer
+      // stays written, and the farmer is told why it was not read aloud.
+      if (!canSpeak) {
+        setNotice("not-spoken");
+        return;
+      }
       audioRef.current?.pause();
       setStatus("speaking");
       try {
@@ -210,10 +226,10 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
         }
       }
     },
-    [language, speak],
+    [canSpeak, language, speak],
   );
 
   const clearNotice = useCallback(() => setNotice(null), []);
 
-  return { status, notice, recordingSupported, configured, startRecording, stopRecording, speakText, stopSpeaking, clearNotice };
+  return { status, notice, recordingSupported, configured, canSpeak, startRecording, stopRecording, speakText, stopSpeaking, clearNotice };
 }

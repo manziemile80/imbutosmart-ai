@@ -1,13 +1,13 @@
-// End-to-end check of the app's own server functions against the free local
-// stack (Ollama chat + local speech server). Unlike scripts/test-voice-e2e.ps1,
-// which calls the raw OpenAI-compatible endpoints, this drives the same server
-// functions the browser calls, so it covers the app's validation, prompting and
-// error handling too.
+// End-to-end check of the app's own server functions against whichever AI
+// backend is configured (local models or a hosted provider). Unlike
+// scripts/test-voice-e2e.ps1, which calls the raw OpenAI-compatible endpoints,
+// this drives the same server functions the browser calls, so it covers the
+// app's validation, prompting and error handling too.
 //
 // Usage:
-//   1. Start the local speech server:  scripts\start-local-voice.ps1
+//   1. Start the speech backend (local speech server, or configure a provider)
 //   2. Start the dev server:            npm run dev
-//   3. Run this check:                  node scripts\test-app-local-e2e.mjs
+//   3. Run this check:                  node scripts\test-app-ai-e2e.mjs
 //
 // Set APP_URL to point at a different dev server (default http://localhost:5173).
 
@@ -87,6 +87,11 @@ check(
   "no credential reaches the browser",
   !JSON.stringify(voiceStatus).toLowerCase().includes("key"),
 );
+check(
+  "server reports which languages it can speak aloud",
+  Array.isArray(voiceStatus?.spokenLanguages) && voiceStatus.spokenLanguages.length > 0,
+  (voiceStatus?.spokenLanguages ?? []).join(", "),
+);
 
 console.log("2/5 Farmer Q&A (English)");
 const english = await call("farmer-chat.functions.ts", "askFarmerAssistant", {
@@ -120,28 +125,40 @@ check("explanation returned", Boolean(season?.answer), season?.answer?.slice(0, 
 check("no error reported", season?.error === null, season?.error ?? "");
 // The season guide holds no measurements, so the app replaces an explanation
 // that states one. A digit means an invented figure reached the farmer.
-check("no invented measurement", !/\d/.test(season?.answer ?? ""), season?.answer?.match(/\d[^ ]*/g)?.join(" "));
+check(
+  "no invented measurement",
+  !/\d/.test(season?.answer ?? ""),
+  season?.answer?.match(/\d[^ ]*/g)?.join(" "),
+);
 
 console.log("5/5 Speech round trip");
 const spoken = await call("voice-assistant.functions.ts", "speakFarmerText", {
   text: "Maize needs good drainage after heavy rain.",
   language: "en",
 });
-const audioBytes = spoken?.audio ? Buffer.from(spoken.audio, "base64").length : 0;
-check("speech synthesised", audioBytes > 0, `${audioBytes} bytes, ${spoken?.mimeType}`);
-const transcript = await call("voice-assistant.functions.ts", "transcribeFarmerSpeech", {
-  audioBase64: spoken?.audio,
-  mimeType: spoken?.mimeType,
-  language: "en",
-});
-check("speech transcribed", Boolean(transcript?.text), transcript?.text);
-// The tiny local ASR model can mishear a word, so match on a word it rarely
-// gets wrong rather than on the crop name.
-check("transcript mentions drainage", /drain/i.test(transcript?.text ?? ""));
+if (spoken?.error === "unavailable") {
+  // The backend is reachable but the configured plan does not include reading
+  // answers aloud. The app reports that calmly instead of failing.
+  check("app reports spoken output as unavailable instead of failing", true);
+  console.log("      the configured speech plan does not include reading answers aloud");
+  console.log("      transcription could not be checked without a spoken clip");
+} else {
+  const audioBytes = spoken?.audio ? Buffer.from(spoken.audio, "base64").length : 0;
+  check("speech synthesised", audioBytes > 0, `${audioBytes} bytes, ${spoken?.mimeType}`);
+  const transcript = await call("voice-assistant.functions.ts", "transcribeFarmerSpeech", {
+    audioBase64: spoken?.audio,
+    mimeType: spoken?.mimeType,
+    language: "en",
+  });
+  check("speech transcribed", Boolean(transcript?.text), transcript?.text);
+  // The tiny local ASR model can mishear a word, so match on a word it rarely
+  // gets wrong rather than on the crop name.
+  check("transcript mentions drainage", /drain/i.test(transcript?.text ?? ""));
+}
 
 console.log("");
 if (failures > 0) {
   console.error(`FAILED: ${failures} check(s) did not pass.`);
   process.exit(1);
 }
-console.log("END-TO-END OK: app server functions answered on the free local stack");
+console.log("END-TO-END OK: the app's server functions answered on the configured backends");

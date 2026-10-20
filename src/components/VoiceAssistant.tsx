@@ -69,6 +69,12 @@ export function VoiceAssistant({ district, soil, language }: { district: string;
         </p>
       )}
 
+      {voice.configured === true && !voice.canSpeak && (
+        <p role="status" className="mt-3 rounded-md border border-border bg-card p-3 text-sm leading-relaxed text-muted-foreground">
+          {t.spokenUnavailable}
+        </p>
+      )}
+
       <div className="mt-5 rounded-md border border-border bg-card p-4">
         <p className="font-semibold">{t.guideTitle}</p>
         <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{t.guideIntro}</p>

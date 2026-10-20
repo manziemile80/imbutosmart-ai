@@ -25,9 +25,11 @@ uvicorn main:app --reload --port 8000
 
 ## Run the frontend
 ```bash
-cp .env.example .env           # set VITE_API_URL
+cp .env.example .env           # set VITE_API_URL and any API keys
 npm install && npm run dev
 ```
+
+`.env` holds real API keys, so it is not committed. `.env.example` is the template: copy it and fill in the values you need. Every `AI_*` and `ELEVENLABS_*` variable is server-only and never reaches the browser.
 
 ## Deploy
 - **Backend → Render.com:** Connect this repository in Render and create a Blueprint using the root `render.yaml`. Alternatively create a Docker Web Service with root directory `backend`. This workspace has no Render deployment connection; the Blueprint must be launched from your Render account. Render may charge for your chosen service plan.
@@ -76,9 +78,27 @@ AI_TTS_MODEL=pyttsx3
 
 `AI_SPEECH_BASE_URL` points voice at its own OpenAI-compatible backend, so speech keeps working even when chat uses a different provider; it falls back to `AI_BASE_URL` when unset. A dedicated speech URL with no key sends a harmless placeholder, so a local server that ignores auth needs no credential. Verify the whole loop with `powershell -ExecutionPolicy Bypass -File scripts\test-voice-e2e.ps1`.
 
-`node scripts\test-app-local-e2e.mjs` is the app-level check: it calls the server functions the browser calls (farmer Q&A, season advice, speech round trip), so it also covers request validation, prompting and error handling. It needs the dev server running (`npm run dev`).
+`node scripts\test-app-ai-e2e.mjs` is the app-level check: it calls the server functions the browser calls (farmer Q&A, season advice, speech round trip), so it also covers request validation, prompting and error handling. It needs the dev server running (`npm run dev`).
 
 `av<19` is required: faster-whisper 1.2.1 still passes `metadata_errors` to `av.open`, which PyAV 19 removed. Pin until faster-whisper ships the upstream fix.
+
+### Voice with ElevenLabs
+ElevenLabs has its own speech API, so it is selected by name and keeps its credential in its own variable. The chat backend is unaffected.
+
+```
+AI_SPEECH_PROVIDER=elevenlabs
+ELEVENLABS_API_KEY=your-elevenlabs-key
+ELEVENLABS_TTS_MODEL=eleven_multilingual_v2
+ELEVENLABS_STT_MODEL=scribe_v2
+ELEVENLABS_VOICE_ID=21m00Tcm4TlvDq8ikWAM
+```
+
+- Speech-to-text uses `scribe_v2` and transcribes English and French well. Kinyarwanda is not in ElevenLabs' supported languages, so no language hint is sent for it and the model detects the language itself.
+- Reading answers aloud needs a plan that includes the API: a free account can transcribe but is refused library voices, and a plan with credits (or a voice you created in the account) is needed for `text-to-speech`. When the backend refuses for that reason the app says so calmly and keeps the answer written out instead of showing an error.
+- `ELEVENLABS_VOICE_ID` selects the voice. Run `node scripts\list-elevenlabs-voices.mjs` to see the voices the account can use (the key needs the `voices_read` permission).
+- The server tells the page which of the app's languages the backend can actually speak, so a language it cannot read is offered as writing only rather than spoken badly.
+
+Restart the dev server after changing `.env`: the server-side variables are read when the server starts, and a reload does not always pick them up.
 
 ## AI Disclosure
 AI assistants (Codex) were used to architect the ML pipeline, generate UI components, and debug code. The core data strategy, NISR data preprocessing logic, and system design were implemented by the team.

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildVoiceSystemPrompt,
+  canSpeakLanguage,
   guideSpokenText,
   isSupportedAudioType,
   MAX_AUDIO_BASE64_CHARS,
@@ -42,9 +43,25 @@ describe("voice assistant contract", () => {
       expect(voiceGuide(language).length).toBeGreaterThan(0);
       expect(voiceCopy[language].heading.length).toBeGreaterThan(0);
       expect(Object.keys(voiceCopy[language].notices).sort()).toEqual(
-        ["denied", "empty", "failed", "no-speech", "unconfigured", "unsupported"],
+        ["denied", "empty", "failed", "no-speech", "not-spoken", "unavailable", "unconfigured", "unsupported"],
       );
     }
+  });
+
+  it("explains in every language when speech cannot be read aloud or is unavailable", () => {
+    for (const language of VOICE_LANGUAGES) {
+      expect(voiceCopy[language].spokenUnavailable.length).toBeGreaterThan(0);
+      expect(voiceCopy[language].notices["not-spoken"].length).toBeGreaterThan(0);
+      expect(voiceCopy[language].notices.unavailable.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("offers only the languages the speech backend can actually speak", () => {
+    expect(canSpeakLanguage(null, "rw")).toBe(true);
+    expect(canSpeakLanguage(["en", "fr"], "en")).toBe(true);
+    expect(canSpeakLanguage(["en", "fr"], "fr")).toBe(true);
+    expect(canSpeakLanguage(["en", "fr"], "rw")).toBe(false);
+    expect(canSpeakLanguage([], "en")).toBe(false);
   });
 
   it("builds spoken guide text that includes every item title", () => {

@@ -17,4 +17,5 @@
 - [x] Run the voice assistant and farmer Q&A entirely free on local models (faster-whisper, Windows SAPI, Ollama qwen2.5:3b) via a separate speech backend.
 - [x] Verify the app's own server functions on that free local stack (farmer Q&A, season advice, speech round trip) with a repeatable check script.
 - [x] Stop season advice from inventing rainfall figures: an explanation that states a measurement falls back to the deterministic reference.
+- [x] Add ElevenLabs as a speech backend behind a provider-agnostic gateway, with the spoken languages it can really produce reported to the page.
 - [ ] Populate real district land shares (blocked by district crops/pasture/fallow aggregate data; supplied PDF has only national totals).
