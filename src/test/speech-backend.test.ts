@@ -69,9 +69,19 @@ describe("speech gateway", () => {
     expect(calls).toBe(1);
   });
 
-  it("reports a refused request instead of failing silently", async () => {
+  it("reports a request the backend cannot serve as unavailable", async () => {
     process.env["AI_SPEECH_BASE_URL"] = "https://api.groq.com/openai/v1";
     globalThis.fetch = (async () => new Response("nope", { status: 402 })) as typeof fetch;
+
+    const { synthesizeSpeech } = await import("../lib/ai/speech.server");
+    const result = await synthesizeSpeech(undefined, "A short answer.", "en");
+    expect(result.error).toBe("unavailable");
+    expect(result.audios).toHaveLength(0);
+  });
+
+  it("reports a broken request as a plain failure", async () => {
+    process.env["AI_SPEECH_BASE_URL"] = "https://api.groq.com/openai/v1";
+    globalThis.fetch = (async () => new Response("boom", { status: 500 })) as typeof fetch;
 
     const { synthesizeSpeech } = await import("../lib/ai/speech.server");
     const result = await synthesizeSpeech(undefined, "A short answer.", "en");

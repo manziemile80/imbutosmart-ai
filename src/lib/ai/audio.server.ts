@@ -1,5 +1,5 @@
 import { DEFAULT_AI_BASE_URL } from "./chat.server";
-import type { SpeechAudio, SpeechResult } from "./speech";
+import type { SpeechAudio, SpeechErrorCode, SpeechResult } from "./speech";
 
 // Server-only transport for an OpenAI-compatible speech endpoint, which serves
 // speech-to-text at /audio/transcriptions and text-to-speech at /audio/speech.
@@ -43,6 +43,14 @@ export function getOpenAiSpeechConfig(): SpeechConfig | null {
   return { baseURL, apiKey: apiKey || "not-needed", sttModel, ttsModel, ttsVoice, ttsFormat };
 }
 
+// A request the backend cannot serve, for example a model whose terms have not
+// been accepted or a plan that does not include the feature, is reported apart
+// from a plain failure so the page can say so calmly.
+function speechErrorFor(status: number): SpeechErrorCode {
+  if (status === 400 || status === 401 || status === 402 || status === 403) return "unavailable";
+  return "failed";
+}
+
 // Transcribes a short recording into text. The audio arrives base64-encoded from
 // the browser recorder and is re-wrapped as multipart form data.
 export async function transcribeOpenAiAudio(
@@ -69,7 +77,7 @@ export async function transcribeOpenAiAudio(
     });
     if (!response.ok) {
       console.error("[ai] transcription failed", response.status, await response.text().catch(() => ""));
-      return { text: "", error: "failed" };
+      return { text: "", error: speechErrorFor(response.status) };
     }
     const payload = (await response.json()) as { text?: unknown };
     const text = typeof payload.text === "string" ? payload.text.trim() : "";
@@ -105,7 +113,7 @@ export async function synthesizeOpenAiSpeech(
     });
     if (!response.ok) {
       console.error("[ai] speech synthesis failed", response.status, await response.text().catch(() => ""));
-      return { audio: "", mimeType: "", error: "failed" };
+      return { audio: "", mimeType: "", error: speechErrorFor(response.status) };
     }
     const contentType = response.headers.get("content-type") ?? "audio/mpeg";
     const buffer = Buffer.from(await response.arrayBuffer());
