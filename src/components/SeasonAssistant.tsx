@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { CloudRain, Sprout, LoaderCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getSeasonGuide, MONTHS, seasonInputSchema } from "@/lib/season-guide";
+import { AhsPrevalence } from "@/components/AhsPrevalence";
 import { farmerCopy, localizedSeason, RW_MONTHS, FR_MONTHS, type FarmerLanguage } from "@/lib/farmer-language";
 import { explainSeason } from "@/lib/season-assistant.functions";
 
@@ -49,6 +50,7 @@ export function SeasonAssistant({ district, language = "en" }: { district: strin
       {loading && <p role="status" className="mt-3 text-sm text-muted-foreground">{t.preparing} {district}</p>}
       {error && <p role="alert" className="mt-4 text-sm text-destructive">{error}</p>}
       {answer && <div aria-live="polite" className="mt-5 border-l-2 border-primary pl-4"><p className="mb-2 text-sm font-semibold">{t.advice} · {district} · {months[month - 1]}</p><p className="whitespace-pre-wrap text-sm leading-relaxed">{answer}</p></div>}
+      <AhsPrevalence month={month} language={language} seasonLabel={guide.farming} />
       <p className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground"><a className="underline" href="https://www.meteorwanda.gov.rw/services/climatology-of-rwanda" target="_blank" rel="noreferrer">{t.meteo}</a><a className="underline" href="https://statistics.gov.rw/statistical-publications/agriculture-environment/seasonal-agricultural-survey-2024-annual-report-2024" target="_blank" rel="noreferrer">{t.calendar}</a></p>
     </section>
   );
