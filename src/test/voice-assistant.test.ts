@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+﻿import { describe, expect, it } from "vitest";
 import {
   buildVoiceSystemPrompt,
   canSpeakLanguage,
@@ -20,7 +20,9 @@ describe("voice assistant contract", () => {
   });
 
   it("defaults speech and synthesis language to English", () => {
-    expect(speechInputSchema.parse({ mimeType: "audio/webm;codecs=opus", audioBase64: "AAAA" }).language).toBe("en");
+    expect(
+      speechInputSchema.parse({ mimeType: "audio/webm;codecs=opus", audioBase64: "AAAA" }).language,
+    ).toBe("en");
     expect(synthesisInputSchema.parse({ text: "Hello" }).language).toBe("en");
   });
 
@@ -28,23 +30,39 @@ describe("voice assistant contract", () => {
     expect(isSupportedAudioType("audio/webm;codecs=opus")).toBe(true);
     expect(isSupportedAudioType("audio/mp4")).toBe(true);
     expect(isSupportedAudioType("video/mp4")).toBe(false);
-    expect(speechInputSchema.safeParse({ mimeType: "application/json", audioBase64: "AAAA" }).success).toBe(false);
+    expect(
+      speechInputSchema.safeParse({ mimeType: "application/json", audioBase64: "AAAA" }).success,
+    ).toBe(false);
   });
 
   it("rejects empty and oversized speech and synthesis input", () => {
-    expect(speechInputSchema.safeParse({ mimeType: "audio/webm", audioBase64: "   " }).success).toBe(false);
-    expect(speechInputSchema.safeParse({ mimeType: "audio/webm", audioBase64: "a".repeat(MAX_AUDIO_BASE64_CHARS + 1) }).success).toBe(false);
+    expect(
+      speechInputSchema.safeParse({ mimeType: "audio/webm", audioBase64: "   " }).success,
+    ).toBe(false);
+    expect(
+      speechInputSchema.safeParse({
+        mimeType: "audio/webm",
+        audioBase64: "a".repeat(MAX_AUDIO_BASE64_CHARS + 1),
+      }).success,
+    ).toBe(false);
     expect(synthesisInputSchema.safeParse({ text: "   " }).success).toBe(false);
-    expect(synthesisInputSchema.safeParse({ text: "a".repeat(MAX_SPEECH_TEXT + 1) }).success).toBe(false);
+    expect(synthesisInputSchema.safeParse({ text: "a".repeat(MAX_SPEECH_TEXT + 1) }).success).toBe(
+      false,
+    );
   });
 
   it("offers the information checklist and copy in every language", () => {
     for (const language of VOICE_LANGUAGES) {
       expect(voiceGuide(language).length).toBeGreaterThan(0);
       expect(voiceCopy[language].heading.length).toBeGreaterThan(0);
-      expect(Object.keys(voiceCopy[language].notices).sort()).toEqual(
-        ["denied", "empty", "no-speech", "not-spoken", "unconfigured", "unsupported"],
-      );
+      expect(Object.keys(voiceCopy[language].notices).sort()).toEqual([
+        "denied",
+        "empty",
+        "no-speech",
+        "not-spoken",
+        "unconfigured",
+        "unsupported",
+      ]);
     }
   });
 
@@ -53,6 +71,14 @@ describe("voice assistant contract", () => {
       expect(voiceCopy[language].spokenUnavailable.length).toBeGreaterThan(0);
       expect(voiceCopy[language].notices["not-spoken"].length).toBeGreaterThan(0);
     }
+  });
+
+  it("tells Kinyarwanda readers the answer stays written when speech cannot read it", () => {
+    // The configured backend may speak only English; Kinyarwanda then falls
+    // back to the written answer instead of being read aloud badly.
+    expect(canSpeakLanguage(["en"], "rw")).toBe(false);
+    expect(voiceCopy.rw.spokenUnavailable).toMatch(/andik/i);
+    expect(voiceCopy.rw.notices["not-spoken"]).toMatch(/andik/i);
   });
 
   it("offers only the languages the speech backend can actually speak", () => {

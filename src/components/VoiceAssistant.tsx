@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { LoaderCircle, Mic, Sparkles, Square, Trash2, Volume2 } from "lucide-react";
+import { AlertCircle, LoaderCircle, Mic, Sparkles, Square, Trash2, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { soilLabel, type FarmerLanguage } from "@/lib/farmer-language";
 import { guideSpokenText, voiceCopy, voiceGuide } from "@/lib/voice-assistant";
@@ -9,7 +9,15 @@ import type { AiErrorCode } from "@/lib/ai/error-codes";
 import { askVoiceAssistant } from "@/lib/voice-assistant.functions";
 import { useVoice } from "@/hooks/use-voice";
 
-export function VoiceAssistant({ district, soil, language }: { district: string; soil: string; language: FarmerLanguage }) {
+export function VoiceAssistant({
+  district,
+  soil,
+  language,
+}: {
+  district: string;
+  soil: string;
+  language: FarmerLanguage;
+}) {
   const t = voiceCopy[language];
   const items = voiceGuide(language);
   const ask = useServerFn(askVoiceAssistant);
@@ -60,18 +68,27 @@ export function VoiceAssistant({ district, soil, language }: { district: string;
         <Volume2 className="size-5" aria-hidden="true" />
         <p className="eyebrow">{t.eyebrow}</p>
       </div>
-      <h2 id="voice-assistant-title" className="mt-2 font-display text-2xl">{t.heading}</h2>
+      <h2 id="voice-assistant-title" className="mt-2 font-display text-2xl">
+        {t.heading}
+      </h2>
       <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t.intro}</p>
 
       {voice.configured === false && (
-        <p role="status" className="mt-3 rounded-md border border-border bg-card p-3 text-sm leading-relaxed text-muted-foreground">
+        <p
+          role="status"
+          className="mt-3 rounded-md border border-border bg-card p-3 text-sm leading-relaxed text-muted-foreground"
+        >
           {t.configNote}
         </p>
       )}
 
       {voice.configured === true && !voice.canSpeak && (
-        <p role="status" className="mt-3 rounded-md border border-border bg-card p-3 text-sm leading-relaxed text-muted-foreground">
-          {t.spokenUnavailable}
+        <p
+          role="status"
+          className="mt-3 flex items-start gap-2 rounded-md border border-amber-400/60 bg-amber-50 p-3 text-sm leading-relaxed text-amber-900"
+        >
+          <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+          <span>{t.spokenUnavailable}</span>
         </p>
       )}
 
@@ -86,15 +103,19 @@ export function VoiceAssistant({ district, soil, language }: { district: string;
             </li>
           ))}
         </ul>
-        <Button
-          type="button"
-          variant="outline"
-          className="mt-4 h-10"
-          onClick={() => (speaking ? voice.stopSpeaking() : void voice.speakText(guideSpokenText(language)))}
-        >
-          {speaking ? <Square aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
-          {speaking ? t.stop : t.listen}
-        </Button>
+        {voice.canSpeak && (
+          <Button
+            type="button"
+            variant="outline"
+            className="mt-4 h-10"
+            onClick={() =>
+              speaking ? voice.stopSpeaking() : void voice.speakText(guideSpokenText(language))
+            }
+          >
+            {speaking ? <Square aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
+            {speaking ? t.stop : t.listen}
+          </Button>
+        )}
       </div>
 
       <div className="mt-6">
@@ -106,19 +127,28 @@ export function VoiceAssistant({ district, soil, language }: { district: string;
             {messages.map((message, index) => (
               <div
                 key={`${index}-${message.role}`}
-                className={message.role === "user" ? "rounded-md border border-border bg-card p-3" : "rounded-md border-l-2 border-primary bg-accent p-3"}
+                className={
+                  message.role === "user"
+                    ? "rounded-md border border-border bg-card p-3"
+                    : "rounded-md border-l-2 border-primary bg-accent p-3"
+                }
               >
                 <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   {message.role === "user" ? t.transcript : t.answer}
                 </p>
-                <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed">{message.content}</p>
+                <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed">
+                  {message.content}
+                </p>
                 {message.role === "assistant" && (
                   <button
                     type="button"
                     className="mt-2 inline-flex items-center gap-1 text-xs text-primary-text underline"
-                    onClick={() => (speaking ? voice.stopSpeaking() : void voice.speakText(message.content))}
+                    onClick={() =>
+                      speaking ? voice.stopSpeaking() : void voice.speakText(message.content)
+                    }
                   >
-                    <Volume2 className="size-3.5" aria-hidden="true" />{t.listen}
+                    <Volume2 className="size-3.5" aria-hidden="true" />
+                    {t.listen}
                   </button>
                 )}
               </div>
@@ -128,19 +158,30 @@ export function VoiceAssistant({ district, soil, language }: { district: string;
 
         {statusText && (
           <p role="status" className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
-            <LoaderCircle className="size-4 animate-spin motion-reduce:animate-none" aria-hidden="true" />
+            <LoaderCircle
+              className="size-4 animate-spin motion-reduce:animate-none"
+              aria-hidden="true"
+            />
             {statusText}
           </p>
         )}
         {voice.notice && (
           <p
             role={voice.notice === "unconfigured" ? "status" : "alert"}
-            className={voice.notice === "unconfigured" ? "mt-3 text-sm text-muted-foreground" : "mt-3 text-sm text-destructive"}
+            className={
+              voice.notice === "unconfigured"
+                ? "mt-3 text-sm text-muted-foreground"
+                : "mt-3 text-sm text-destructive"
+            }
           >
             {t.notices[voice.notice]}
           </p>
         )}
-        {answerError && answerError !== "failed" && <p role="alert" className="mt-3 text-sm text-destructive">{t.notices[answerError]}</p>}
+        {answerError && answerError !== "failed" && (
+          <p role="alert" className="mt-3 text-sm text-destructive">
+            {t.notices[answerError]}
+          </p>
+        )}
         {!voice.recordingSupported && !voice.notice && (
           <p className="mt-3 text-sm text-muted-foreground">{t.notices.unsupported}</p>
         )}
@@ -153,19 +194,36 @@ export function VoiceAssistant({ district, soil, language }: { district: string;
             aria-pressed={recording}
             onClick={() => (recording ? voice.stopRecording() : void voice.startRecording())}
           >
-            {busy
-              ? <LoaderCircle className="animate-spin motion-reduce:animate-none" aria-hidden="true" />
-              : <Mic aria-hidden="true" />}
+            {busy ? (
+              <LoaderCircle
+                className="animate-spin motion-reduce:animate-none"
+                aria-hidden="true"
+              />
+            ) : (
+              <Mic aria-hidden="true" />
+            )}
             {recording ? t.stopRecording : t.record}
           </Button>
           {speaking && (
             <Button type="button" variant="outline" className="h-11" onClick={voice.stopSpeaking}>
-              <Square aria-hidden="true" />{t.stop}
+              <Square aria-hidden="true" />
+              {t.stop}
             </Button>
           )}
           {messages.length > 0 && (
-            <Button type="button" variant="outline" className="h-11" disabled={busy} onClick={() => { setMessages([]); setAnswerError(null); voice.clearNotice(); }}>
-              <Trash2 aria-hidden="true" />{t.clear}
+            <Button
+              type="button"
+              variant="outline"
+              className="h-11"
+              disabled={busy}
+              onClick={() => {
+                setMessages([]);
+                setAnswerError(null);
+                voice.clearNotice();
+              }}
+            >
+              <Trash2 aria-hidden="true" />
+              {t.clear}
             </Button>
           )}
         </div>
