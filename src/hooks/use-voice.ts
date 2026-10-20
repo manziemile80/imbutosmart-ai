@@ -109,14 +109,15 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
         const result = await transcribe({ data: { language, mimeType: mimeType || "audio/webm", audioBase64 } });
         if (!activeRef.current) return;
         if (result.error) {
-          // A backend that cannot serve requests is not an error the farmer
-          // needs to see: nothing is transcribed and nothing is shown.
-          if (result.error !== "unavailable") setNotice(result.error);
+          // A backend that cannot serve requests, or one that simply failed, is
+          // not an error the farmer needs to see: nothing is transcribed and
+          // nothing is shown.
+          if (result.error === "unconfigured") setNotice("unconfigured");
         } else {
           onTranscriptRef.current(result.text);
         }
       } catch {
-        if (activeRef.current) setNotice("failed");
+        if (activeRef.current) setStatus("idle");
       } finally {
         if (activeRef.current) setStatus("idle");
       }
@@ -176,7 +177,9 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
       timeoutRef.current = setTimeout(() => stopRecording(), MAX_RECORDING_MS);
     } catch (error) {
       const name = error instanceof DOMException ? error.name : "";
-      setNotice(name === "NotAllowedError" || name === "SecurityError" ? "denied" : "failed");
+      // A blocked microphone is something the farmer can fix, so it is reported.
+      // Anything else just leaves the question unanswered.
+      if (name === "NotAllowedError" || name === "SecurityError") setNotice("denied");
       setStatus("idle");
       cleanupStream();
     }
@@ -220,7 +223,7 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
           // A backend that cannot serve spoken output, for example one whose
           // plan or terms do not cover it, is not an error the farmer needs to
           // see: the answer simply stays written.
-          if (result.error !== "unavailable") setNotice(result.error ?? "empty");
+          if (result.error === "unconfigured") setNotice("unconfigured");
           setStatus("idle");
           return;
         }
@@ -230,7 +233,6 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
           if (!activeRef.current) return;
           const played = await playClip(clip, result.mimeType);
           if (!played) {
-            setNotice("failed");
             setStatus("idle");
             return;
           }
@@ -238,7 +240,6 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
         if (activeRef.current) setStatus("idle");
       } catch {
         if (activeRef.current) {
-          setNotice("failed");
           setStatus("idle");
         }
       }

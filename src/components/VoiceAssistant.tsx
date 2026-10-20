@@ -140,7 +140,7 @@ export function VoiceAssistant({ district, soil, language }: { district: string;
             {t.notices[voice.notice]}
           </p>
         )}
-        {answerError && <p role="alert" className="mt-3 text-sm text-destructive">{t.notices[answerError]}</p>}
+        {answerError && answerError !== "failed" && <p role="alert" className="mt-3 text-sm text-destructive">{t.notices[answerError]}</p>}
         {!voice.recordingSupported && !voice.notice && (
           <p className="mt-3 text-sm text-muted-foreground">{t.notices.unsupported}</p>
         )}

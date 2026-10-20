@@ -43,7 +43,7 @@ describe("voice assistant contract", () => {
       expect(voiceGuide(language).length).toBeGreaterThan(0);
       expect(voiceCopy[language].heading.length).toBeGreaterThan(0);
       expect(Object.keys(voiceCopy[language].notices).sort()).toEqual(
-        ["denied", "empty", "failed", "no-speech", "not-spoken", "unconfigured", "unsupported"],
+        ["denied", "empty", "no-speech", "not-spoken", "unconfigured", "unsupported"],
       );
     }
   });

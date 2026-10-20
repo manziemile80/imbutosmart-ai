@@ -6,6 +6,7 @@
 - The speech backend is an OpenAI-compatible endpoint configured by `AI_SPEECH_BASE_URL` and the shared credential, behind the server-side gateway and never in the browser.
 - The server reports which app languages the speech backend can speak aloud, and a language it cannot read is offered as writing only rather than spoken badly.
 - A speech backend that cannot serve requests, for example one whose plan or terms do not cover it, is not shown as an error: the answer stays written and the page stays calm.
+- The voice panel shows only the problems a farmer can act on, such as a blocked microphone or a language the backend cannot read aloud. A request that simply fails is left unanswered rather than shown as an error.
 - Keep farmer translations in a shared browser-safe catalog and pass a validated language code to season explanations, so UI and AI advice use the same language without changing model selection.
 - Automatic crop requests are debounced and discard superseded responses; preserve entered weather values and do not fabricate district climate data.
 - Keep district land-use parsing and share calculations browser-safe and separate from crop training; imports are session-local aggregates so survey observations are not confused with physical land allocations.

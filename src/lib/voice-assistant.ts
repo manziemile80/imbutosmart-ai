@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { DISTRICTS, SOILS } from "./api";
-import type { AiErrorCode } from "./ai/error-codes";
 
 // Browser-safe definition of the voice assistant: speech-to-text / text-to-speech
 // request validation, the "what information you'll need" guide, and the
@@ -45,11 +44,11 @@ export const synthesisInputSchema = z.object({
 export type SpeechInput = z.infer<typeof speechInputSchema>;
 export type SynthesisInput = z.infer<typeof synthesisInputSchema>;
 
-// Client-side status codes the UI maps to copy. Server-side failures reuse the
-// shared AiErrorCode so both assistants speak the same language about outages.
-// A speech backend that cannot serve requests is not a notice at all: the
-// answer stays written and nothing is shown.
-export type VoiceNotice = AiErrorCode | "unsupported" | "denied" | "no-speech" | "not-spoken";
+// Client-side status codes the UI maps to copy. Only the problems a farmer can
+// act on are notices: a blocked microphone, no speech heard, a voice service
+// that is not set up, or a language it cannot read aloud. A request that simply
+// fails is not shown: the answer stays written and the page stays calm.
+export type VoiceNotice = "unconfigured" | "empty" | "unsupported" | "denied" | "no-speech" | "not-spoken";
 
 export type VoiceGuideItem = { title: string; detail: string };
 
@@ -143,7 +142,6 @@ export const voiceCopy: Record<
     spokenUnavailable: "The voice service cannot read this language aloud, so answers are written here instead. The text assistants below work in every language.",
     notices: {
       unconfigured: "Voice assistance isn't configured on the server yet (no API key). The guide above and the text assistants remain available.",
-      failed: "The voice assistant could not answer just now. Please try again.",
       empty: "No answer was returned. Please try rephrasing your question.",
       unsupported: "This browser cannot record audio. Please type your question instead.",
       denied: "Microphone access was blocked. Allow the microphone or type your question instead.",
@@ -176,7 +174,6 @@ export const voiceCopy: Record<
     spokenUnavailable: "Ubutumwa bw'ijwi ntibishobora gusoma ururimi rw'ubu mu ijwi, ibisobanuro byandikwa hano ariko. Abafasha bandika hasi bashobora gukora muri bururimi.",
     notices: {
       unconfigured: "Umufasha w'ijwi ntarashyirwaho kuri seriveri (nta API key). Amakuru ari hejuru n'abafasha bandika baracyaboneka.",
-      failed: "Umufasha w'ijwi ntiyashoboye gusubiza ubu. Ongera ugerageze.",
       empty: "Nta gisubizo cyatanzwe. Ongera ugerageze uhindure ikibazo.",
       unsupported: "Iyi porogaramu ntishobora gufata ijwi. Nyamara wandike ikibazo cyawe.",
       denied: "Kwinjira muri mikoro byanzwe. Emerera mikoro cyangwa wandike ikibazo cyawe.",
@@ -209,7 +206,6 @@ export const voiceCopy: Record<
     spokenUnavailable: "Le service vocal ne peut pas lire cette langue à voix haute : les réponses restent écrites ici. Les assistants écrits ci-dessous fonctionnent dans toutes les langues.",
     notices: {
       unconfigured: "L'assistance vocale n'est pas encore configurée sur le serveur (aucune clé API). Le guide ci-dessus et les assistants écrits restent disponibles.",
-      failed: "L'assistant vocal n'a pas pu répondre pour l'instant. Veuillez réessayer.",
       empty: "Aucune réponse n'a été renvoyée. Reformulez votre question.",
       unsupported: "Ce navigateur ne peut pas enregistrer l'audio. Écrivez plutôt votre question.",
       denied: "L'accès au microphone a été bloqué. Autorisez le microphone ou écrivez votre question.",
