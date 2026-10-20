@@ -6,18 +6,23 @@
 //
 // Usage:
 //   1. Start the speech backend (local speech server, or configure a provider)
-//   2. Start the dev server:            npm run dev
+//   2. Start the app:                    npm run dev   (or a deployed URL)
 //   3. Run this check:                  node scripts\test-app-ai-e2e.mjs
 //
-// Set APP_URL to point at a different dev server (default http://localhost:5173).
+// Set APP_URL to point at a different server (default http://localhost:5173).
+// A deployed build and a dev server address the server functions differently,
+// so the check works out which one it is talking to.
 
+import { createHash } from "node:crypto";
 import { toJSONAsync, fromCrossJSON } from "seroval";
 import { createDefaultSerovalPlugins } from "@tanstack/router-core/ssr/client";
 
 const APP_URL = (process.env.APP_URL ?? "http://localhost:5173").replace(/\/+$/, "");
 const plugins = createDefaultSerovalPlugins();
 
-function fnId(file, exportName) {
+// A dev server addresses a server function by the encoded module it was split
+// from. A built server addresses it by a hash of the file and export name.
+function devFnId(file, exportName) {
   const spec = {
     file: `/src/lib/${file}?tss-serverfn-split`,
     export: `${exportName}_createServerFn_handler`,
@@ -25,11 +30,30 @@ function fnId(file, exportName) {
   return Buffer.from(JSON.stringify(spec), "utf8").toString("base64url");
 }
 
+function prodFnId(file, exportName) {
+  const entry = `src/lib/${file}--${exportName}_createServerFn_handler`;
+  return createHash("sha256").update(entry).digest("hex");
+}
+
+let useProdIds = false;
+
+// Free chat backends often allow one request every 30 seconds per address.
+// Spacing the calls keeps the check from tripping that limit, so a failure
+// means the backend is broken rather than throttled.
+const CHAT_SPACING_MS = Number(process.env.CHAT_SPACING_MS ?? 32000);
+let lastChatAt = 0;
+
+async function waitForChatSlot() {
+  if (!CHAT_SPACING_MS) return;
+  const wait = lastChatAt + CHAT_SPACING_MS - Date.now();
+  if (wait > 0) await new Promise((resolve) => setTimeout(resolve, wait));
+  lastChatAt = Date.now();
+}
+
 // Mirrors the browser's client-RPC transport: a seroval cross-JSON body, the
 // server-function marker header, and a same-origin Origin so the app's CSRF
 // middleware accepts the request.
 async function call(file, exportName, data, method = "POST") {
-  const url = `${APP_URL}/_serverFn/${fnId(file, exportName)}`;
   const headers = {
     "x-tsr-serverFn": "true",
     accept: "application/x-ndjson, application/json",
@@ -40,9 +64,15 @@ async function call(file, exportName, data, method = "POST") {
     headers["content-type"] = "application/json";
     body = JSON.stringify(await toJSONAsync(data === undefined ? {} : { data }, { plugins }));
   }
-  const response = await fetch(url, { method, headers, body });
+  const id = useProdIds ? prodFnId(file, exportName) : devFnId(file, exportName);
+  const response = await fetch(`${APP_URL}/_serverFn/${id}`, { method, headers, body });
   const text = await response.text();
   if (!response.ok) {
+    // A built server only knows the hashed ids, so retry once with them.
+    if (!useProdIds) {
+      useProdIds = true;
+      return call(file, exportName, data, method);
+    }
     throw new Error(`${response.status} ${response.statusText}: ${text.slice(0, 400)}`);
   }
   const contentType = response.headers.get("content-type") ?? "";
@@ -94,6 +124,7 @@ check(
 );
 
 console.log("2/5 Farmer Q&A (English)");
+await waitForChatSlot();
 const english = await call("farmer-chat.functions.ts", "askFarmerAssistant", {
   district: "Musanze",
   soil: "Volcanic",
@@ -104,6 +135,7 @@ check("answer returned", Boolean(english?.answer), english?.answer?.slice(0, 80)
 check("no error reported", english?.error === null, english?.error ?? "");
 
 console.log("3/5 Farmer Q&A (Kinyarwanda)");
+await waitForChatSlot();
 const kinyarwanda = await call("farmer-chat.functions.ts", "askFarmerAssistant", {
   district: "Musanze",
   soil: "Volcanic",
@@ -114,6 +146,7 @@ check("answer returned", Boolean(kinyarwanda?.answer), kinyarwanda?.answer?.slic
 check("no error reported", kinyarwanda?.error === null, kinyarwanda?.error ?? "");
 
 console.log("4/5 Season explanation");
+await waitForChatSlot();
 const season = await call("season-assistant.functions.ts", "explainSeason", {
   district: "Musanze",
   month: 3,

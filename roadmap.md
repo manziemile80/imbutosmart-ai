@@ -18,4 +18,5 @@
 - [x] Verify the app's own server functions on that free local stack (farmer Q&A, season advice, speech round trip) with a repeatable check script.
 - [x] Stop season advice from inventing rainfall figures: an explanation that states a measurement falls back to the deterministic reference.
 - [x] Add ElevenLabs as a speech backend behind a provider-agnostic gateway, with the spoken languages it can really produce reported to the page.
+- [x] Deploy the app with working AI assistance: farmer Q&A in English and Kinyarwanda, season advice, and ElevenLabs transcription.
 - [ ] Populate real district land shares (blocked by district crops/pasture/fallow aggregate data; supplied PDF has only national totals).

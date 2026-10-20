@@ -73,6 +73,8 @@ async function collectText(result: ReturnType<typeof streamText>): Promise<strin
 
 // Answers a farmer/season request with the configured backend, degrading to a
 // stable error code so the UI can keep deterministic reference guidance visible.
+// A blank completion is retried once: a throttled or flaky backend usually
+// answers on the second try, and an empty answer tells the farmer nothing.
 export async function answerWithAi(
   signal: AbortSignal | undefined,
   system: string,
@@ -80,12 +82,18 @@ export async function answerWithAi(
 ): Promise<AiAnswer> {
   const config = getChatConfig();
   if (!config) return { answer: "", error: "unconfigured" };
-  try {
-    const result = createChatStream(signal, config, messages, system);
-    const answer = await collectText(result);
-    return { answer, error: answer ? null : "empty" };
-  } catch (error) {
-    console.error("[ai] request failed", error);
-    return { answer: "", error: "failed" };
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      const result = createChatStream(signal, config, messages, system);
+      const answer = await collectText(result);
+      if (answer) return { answer, error: null };
+      if (attempt === 0) continue;
+      return { answer: "", error: "empty" };
+    } catch (error) {
+      console.error("[ai] request failed", error);
+      if (attempt === 0) continue;
+      return { answer: "", error: "failed" };
+    }
   }
+  return { answer: "", error: "empty" };
 }
