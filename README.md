@@ -100,21 +100,23 @@ AI_TTS_MODEL=pyttsx3
 
 `av<19` is required: faster-whisper 1.2.1 still passes `metadata_errors` to `av.open`, which PyAV 19 removed. Pin until faster-whisper ships the upstream fix.
 
-### Voice with ElevenLabs
-ElevenLabs has its own speech API, so it is selected by name and keeps its credential in its own variable. The chat backend is unaffected.
+### Voice with Groq
+Groq serves an OpenAI-compatible speech API, so the same key covers chat, transcription and spoken answers. Point the speech variables at it:
 
 ```
-AI_SPEECH_PROVIDER=elevenlabs
-ELEVENLABS_API_KEY=your-elevenlabs-key
-ELEVENLABS_TTS_MODEL=eleven_multilingual_v2
-ELEVENLABS_STT_MODEL=scribe_v2
-ELEVENLABS_VOICE_ID=21m00Tcm4TlvDq8ikWAM
+AI_SPEECH_BASE_URL=https://api.groq.com/openai/v1
+AI_STT_MODEL=whisper-large-v3-turbo
+AI_TTS_MODEL=canopylabs/orpheus-v1-english
+AI_TTS_VOICE=hannah
+AI_TTS_FORMAT=wav
+AI_TTS_MAX_CHARS=200
+AI_SPEECH_LANGUAGES=en
 ```
 
-- Speech-to-text uses `scribe_v2` and transcribes English and French well. Kinyarwanda is not in ElevenLabs' supported languages, so no language hint is sent for it and the model detects the language itself.
-- Reading answers aloud needs a plan that includes the API: a free account can transcribe but is refused library voices, and a plan with credits (or a voice you created in the account) is needed for `text-to-speech`. When the backend refuses for that reason the app says so calmly and keeps the answer written out instead of showing an error.
-- `ELEVENLABS_VOICE_ID` selects the voice. Run `node scripts\list-elevenlabs-voices.mjs` to see the voices the account can use (the key needs the `voices_read` permission).
-- The server tells the page which of the app's languages the backend can actually speak, so a language it cannot read is offered as writing only rather than spoken badly.
+- **Transcription** uses `whisper-large-v3-turbo`, which is multilingual and handles the browser's webm/opus recording.
+- **Spoken answers** use Orpheus, which only accepts `wav` and at most 200 characters per request, so the answer is split into clips that are played in order. `AI_TTS_MAX_CHARS` sets that limit and `AI_TTS_FORMAT` the audio format.
+- Orpheus voices are `autumn`, `diana`, `hannah`, `austin`, `daniel` and `troy`.
+- Groq's speech models speak **English only**, so `AI_SPEECH_LANGUAGES=en` is declared. The server tells the page which languages the backend can really speak, so Kinyarwanda and French answers are offered as writing rather than spoken badly.
 
 Restart the dev server after changing `.env`: the server-side variables are read when the server starts, and a reload does not always pick them up.
 

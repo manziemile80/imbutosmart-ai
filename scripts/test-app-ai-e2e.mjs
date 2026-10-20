@@ -176,10 +176,11 @@ if (spoken?.error === "unavailable") {
   console.log("      the configured speech plan does not include reading answers aloud");
   console.log("      transcription could not be checked without a spoken clip");
 } else {
-  const audioBytes = spoken?.audio ? Buffer.from(spoken.audio, "base64").length : 0;
-  check("speech synthesised", audioBytes > 0, `${audioBytes} bytes, ${spoken?.mimeType}`);
+  const clips = spoken?.audios ?? [];
+  const audioBytes = clips.reduce((total, clip) => total + Buffer.from(clip, "base64").length, 0);
+  check("speech synthesised", audioBytes > 0, `${clips.length} clip(s), ${audioBytes} bytes, ${spoken?.mimeType}`);
   const transcript = await call("voice-assistant.functions.ts", "transcribeFarmerSpeech", {
-    audioBase64: spoken?.audio,
+    audioBase64: clips[0],
     mimeType: spoken?.mimeType,
     language: "en",
   });

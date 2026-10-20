@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { farmerChatInputSchema, recentHistory } from "./farmer-chat";
 import { buildVoiceSystemPrompt, speechInputSchema, synthesisInputSchema } from "./voice-assistant";
 import type { AiAnswer } from "./ai/error-codes";
-import type { SpeechAudio, SpeechConfigStatus, SpeechResult, SpeechVoice } from "./ai/speech";
+import type { SpeechAudio, SpeechConfigStatus, SpeechResult } from "./ai/speech";
 
 // Voice assistant server functions. They reuse the text assistant's input
 // contract for the spoken Q&A and add speech-to-text / text-to-speech endpoints
@@ -15,16 +15,6 @@ export const getVoiceConfigStatus = createServerFn({ method: "GET" }).handler(
   async (): Promise<SpeechConfigStatus> => {
     const { getSpeechConfig } = await import("./ai/speech.server");
     return getSpeechConfig() ?? { configured: false, spokenLanguages: [] };
-  },
-);
-
-// Lists the voices the operator can pick from, so one can be set as
-// ELEVENLABS_VOICE_ID. Only identifiers and labels are returned.
-export const listVoiceOptions = createServerFn({ method: "GET" }).handler(
-  async (): Promise<SpeechVoice[]> => {
-    const { getRequest } = await import("@tanstack/react-start/server");
-    const { listSpeechVoices } = await import("./ai/speech.server");
-    return listSpeechVoices(getRequest()?.signal);
   },
 );
 

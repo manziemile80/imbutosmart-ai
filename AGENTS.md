@@ -3,7 +3,7 @@
 - The season guide holds no measurements, so a season explanation that states a figure was invented and is replaced by the deterministic reference summary.
 - The farmer Q&A assistant keeps a conversation thread in the page but sends only the most recent turns to the server; keep its contract, suggested prompts, and copy in a shared browser-safe module.
 - All AI runs against an OpenAI-compatible backend configured by `AI_API_KEY`, `AI_BASE_URL`, and `AI_MODEL`; never hardcode a provider, gateway, or credential, and keep the deterministic guidance visible when AI is unavailable.
-- The speech backend is selected by `AI_SPEECH_PROVIDER` and keeps its own credential variables; providers with their own API live behind the server-side gateway, never in the browser.
+- The speech backend is an OpenAI-compatible endpoint configured by `AI_SPEECH_BASE_URL` and the shared credential, behind the server-side gateway and never in the browser.
 - The server reports which app languages the speech backend can speak aloud, and a language it cannot read is offered as writing only rather than spoken badly.
 - Keep farmer translations in a shared browser-safe catalog and pass a validated language code to season explanations, so UI and AI advice use the same language without changing model selection.
 - Automatic crop requests are debounced and discard superseded responses; preserve entered weather values and do not fabricate district climate data.

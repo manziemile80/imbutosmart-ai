@@ -5,7 +5,10 @@ import type { VoiceLanguage } from "../voice-assistant";
 // shapes; every provider name, endpoint and credential stays on the server.
 
 export type SpeechResult = { text: string; error: SpeechErrorCode | null };
-export type SpeechAudio = { audio: string; mimeType: string; error: SpeechErrorCode | null };
+
+// One answer can need several clips: some speech models cap how much text they
+// accept at once, so the answer is split and the clips are played in order.
+export type SpeechAudio = { audios: string[]; mimeType: string; error: SpeechErrorCode | null };
 
 // "unavailable" means the backend is reachable but cannot serve the request,
 // for example a provider plan that does not include the requested feature. It
@@ -17,7 +20,3 @@ export type SpeechErrorCode = AiErrorCode | "unavailable";
 // configured at all, and which of the app's languages it can actually speak
 // aloud. A backend that cannot speak a language must not pretend to.
 export type SpeechConfigStatus = { configured: boolean; spokenLanguages: VoiceLanguage[] };
-
-// A voice the operator can pick from. Only the identifier and the label
-// travel to the browser, never the credential that listed it.
-export type SpeechVoice = { id: string; name: string; detail: string };

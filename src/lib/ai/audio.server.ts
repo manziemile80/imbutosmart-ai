@@ -1,14 +1,15 @@
 import { DEFAULT_AI_BASE_URL } from "./chat.server";
 import type { SpeechAudio, SpeechResult } from "./speech";
 
-// Server-only transport for any OpenAI-compatible speech endpoint. A second
-// provider with its own API (see ./elevenlabs.server.ts) lives behind the
-// dispatcher in ./speech.server.ts, which picks one from the environment. No
-// provider, gateway, or credential is baked in here.
+// Server-only transport for an OpenAI-compatible speech endpoint, which serves
+// speech-to-text at /audio/transcriptions and text-to-speech at /audio/speech.
+// Every value comes from the environment, so no provider, gateway, or
+// credential is baked in here.
 
 export const DEFAULT_STT_MODEL = "whisper-1";
 export const DEFAULT_TTS_MODEL = "tts-1";
 export const DEFAULT_TTS_VOICE = "alloy";
+export const DEFAULT_TTS_FORMAT = "mp3";
 
 export type SpeechConfig = {
   baseURL: string;
@@ -16,6 +17,7 @@ export type SpeechConfig = {
   sttModel: string;
   ttsModel: string;
   ttsVoice: string;
+  ttsFormat: string;
 };
 
 export function getOpenAiSpeechConfig(): SpeechConfig | null {
@@ -36,7 +38,9 @@ export function getOpenAiSpeechConfig(): SpeechConfig | null {
   const sttModel = process.env["AI_STT_MODEL"]?.trim() || DEFAULT_STT_MODEL;
   const ttsModel = process.env["AI_TTS_MODEL"]?.trim() || DEFAULT_TTS_MODEL;
   const ttsVoice = process.env["AI_TTS_VOICE"]?.trim() || DEFAULT_TTS_VOICE;
-  return { baseURL, apiKey: apiKey || "not-needed", sttModel, ttsModel, ttsVoice };
+  // Some speech models only accept one audio format, so it is configurable.
+  const ttsFormat = process.env["AI_TTS_FORMAT"]?.trim() || DEFAULT_TTS_FORMAT;
+  return { baseURL, apiKey: apiKey || "not-needed", sttModel, ttsModel, ttsVoice, ttsFormat };
 }
 
 // Transcribes a short recording into text. The audio arrives base64-encoded from
@@ -76,12 +80,13 @@ export async function transcribeOpenAiAudio(
   }
 }
 
-// Renders text as speech and returns the audio as base64 for the browser to play.
+// Renders one piece of text as speech and returns the audio as base64 for the
+// browser to play.
 export async function synthesizeOpenAiSpeech(
   signal: AbortSignal | undefined,
   text: string,
   language: string,
-): Promise<SpeechAudio> {
+): Promise<{ audio: string; mimeType: string; error: SpeechAudio["error"] }> {
   const config = getOpenAiSpeechConfig();
   if (!config) return { audio: "", mimeType: "", error: "unconfigured" };
   try {
@@ -92,7 +97,7 @@ export async function synthesizeOpenAiSpeech(
         model: config.ttsModel,
         voice: config.ttsVoice,
         input: text,
-        response_format: "mp3",
+        response_format: config.ttsFormat,
         // OpenAI-compatible servers ignore unknown fields; language is a hint.
         language,
       }),

@@ -186,6 +186,18 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
     setStatus((current) => (current === "speaking" ? "idle" : current));
   }, []);
 
+  // Plays one clip and resolves when it ends. Returns false when playback
+  // fails, so the caller can report it instead of leaving the page speaking.
+  const playClip = useCallback((clip: string, mimeType: string) => {
+    return new Promise<boolean>((resolve) => {
+      const audio = new Audio(`data:${mimeType};base64,${clip}`);
+      audioRef.current = audio;
+      audio.onended = () => resolve(true);
+      audio.onerror = () => resolve(false);
+      audio.play().catch(() => resolve(false));
+    });
+  }, []);
+
   const speakText = useCallback(
     async (text: string) => {
       const trimmed = text.trim();
@@ -202,23 +214,23 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
       try {
         const result = await speak({ data: { language, text: trimmed } });
         if (!activeRef.current) return;
-        if (result.error || !result.audio) {
+        if (result.error || !result.audios?.length) {
           setNotice(result.error ?? "empty");
           setStatus("idle");
           return;
         }
-        const audio = new Audio(`data:${result.mimeType};base64,${result.audio}`);
-        audioRef.current = audio;
-        audio.onended = () => {
-          if (activeRef.current) setStatus("idle");
-        };
-        audio.onerror = () => {
-          if (activeRef.current) {
+        // An answer can come back as several clips when the speech model caps
+        // how much text it accepts, so they are played one after the other.
+        for (const clip of result.audios) {
+          if (!activeRef.current) return;
+          const played = await playClip(clip, result.mimeType);
+          if (!played) {
             setNotice("failed");
             setStatus("idle");
+            return;
           }
-        };
-        await audio.play();
+        }
+        if (activeRef.current) setStatus("idle");
       } catch {
         if (activeRef.current) {
           setNotice("failed");

@@ -1,45 +1,45 @@
-import type { SpeechAudio, SpeechConfigStatus, SpeechResult, SpeechVoice } from "./speech";
-import { VOICE_LANGUAGES } from "../voice-assistant";
-import {
-  getOpenAiSpeechConfig,
-  synthesizeOpenAiSpeech,
-  transcribeOpenAiAudio,
-} from "./audio.server";
-import {
-  ELEVENLABS_SPOKEN_LANGUAGES,
-  getElevenLabsConfig,
-  listElevenLabsVoices,
-  synthesizeElevenLabsSpeech,
-  transcribeElevenLabsAudio,
-} from "./elevenlabs.server";
+import type { SpeechAudio, SpeechConfigStatus, SpeechResult } from "./speech";
+import { VOICE_LANGUAGES, type VoiceLanguage } from "../voice-assistant";
+import { getOpenAiSpeechConfig, synthesizeOpenAiSpeech, transcribeOpenAiAudio } from "./audio.server";
 
-// Server-only speech gateway. The backend is chosen by AI_SPEECH_PROVIDER:
-//   openai      -> any OpenAI-compatible /audio/transcriptions + /audio/speech
-//   elevenlabs  -> the ElevenLabs native speech endpoints
-// Both read their endpoint, model and credential from the environment only,
-// and the page only ever learns whether speech is configured and which
-// languages it can speak aloud.
+// Server-only speech gateway. The backend is any OpenAI-compatible endpoint
+// that serves /audio/transcriptions and /audio/speech, configured entirely
+// through environment variables. The page only ever learns whether speech is
+// configured and which languages it can speak aloud.
 
-export type SpeechProvider = "openai" | "elevenlabs";
-
-export function getSpeechProvider(): SpeechProvider {
-  const configured = process.env["AI_SPEECH_PROVIDER"]?.trim().toLowerCase();
-  return configured === "elevenlabs" ? "elevenlabs" : "openai";
+export function getSpeechConfig(): SpeechConfigStatus | null {
+  if (!getOpenAiSpeechConfig()) return null;
+  return { configured: true, spokenLanguages: spokenLanguages() };
 }
 
-// Reports what the browser needs to know: whether speech is set up, and which
-// of the app's languages this backend can actually speak. A backend that
-// cannot speak a language must not pretend to, so the answer is written out
-// instead of being spoken badly.
-export function getSpeechConfig(): SpeechConfigStatus | null {
-  if (getSpeechProvider() === "elevenlabs") {
-    if (!getElevenLabsConfig()) return null;
-    return { configured: true, spokenLanguages: ELEVENLABS_SPOKEN_LANGUAGES };
+// Some speech models only speak certain languages, so the deployment declares
+// them. Without a declaration every farmer language stays available, which is
+// right for a self-hosted server that voices each language itself.
+function spokenLanguages() {
+  const declared = process.env["AI_SPEECH_LANGUAGES"]?.trim();
+  if (!declared) return [...VOICE_LANGUAGES];
+  const languages = declared
+    .split(",")
+    .map((value) => value.trim().toLowerCase())
+    .filter((value): value is VoiceLanguage => (VOICE_LANGUAGES as readonly string[]).includes(value));
+  return languages;
+}
+
+// Some speech models accept only a limited amount of text per request, so a
+// longer answer is split into pieces that are spoken in order.
+function splitForSpeech(text: string, limit: number): string[] {
+  const trimmed = text.trim();
+  if (!limit || trimmed.length <= limit) return trimmed ? [trimmed] : [];
+  const pieces: string[] = [];
+  let rest = trimmed;
+  while (rest.length > limit) {
+    let cut = rest.lastIndexOf(" ", limit);
+    if (cut < limit / 2) cut = limit;
+    pieces.push(rest.slice(0, cut).trim());
+    rest = rest.slice(cut).trim();
   }
-  if (!getOpenAiSpeechConfig()) return null;
-  // An OpenAI-compatible backend does not advertise its languages, so every
-  // farmer language stays available, exactly as before.
-  return { configured: true, spokenLanguages: [...VOICE_LANGUAGES] };
+  if (rest) pieces.push(rest);
+  return pieces.filter(Boolean);
 }
 
 export async function transcribeAudio(
@@ -48,9 +48,6 @@ export async function transcribeAudio(
   mimeType: string,
   language: string,
 ): Promise<SpeechResult> {
-  if (getSpeechProvider() === "elevenlabs") {
-    return transcribeElevenLabsAudio(signal, audioBase64, mimeType, language);
-  }
   return transcribeOpenAiAudio(signal, audioBase64, mimeType, language);
 }
 
@@ -59,16 +56,13 @@ export async function synthesizeSpeech(
   text: string,
   language: string,
 ): Promise<SpeechAudio> {
-  if (getSpeechProvider() === "elevenlabs") {
-    return synthesizeElevenLabsSpeech(signal, text);
-  }
-  return synthesizeOpenAiSpeech(signal, text, language);
-}
-
-// The voices the operator can choose from. Identifiers and labels only.
-export async function listSpeechVoices(signal: AbortSignal | undefined): Promise<SpeechVoice[]> {
-  if (getSpeechProvider() === "elevenlabs") {
-    return listElevenLabsVoices(signal);
-  }
-  return [];
+  const limit = Number(process.env["AI_TTS_MAX_CHARS"]?.trim() || 0);
+  const pieces = splitForSpeech(text, Number.isFinite(limit) && limit > 0 ? limit : 0);
+  if (pieces.length === 0) return { audios: [], mimeType: "", error: "empty" };
+  // The clips are requested together so a long answer is not spoken one piece
+  // at a time with a wait between each.
+  const clips = await Promise.all(pieces.map((piece) => synthesizeOpenAiSpeech(signal, piece, language)));
+  const failed = clips.find((clip) => clip.error || !clip.audio);
+  if (failed) return { audios: [], mimeType: "", error: failed.error ?? "empty" };
+  return { audios: clips.map((clip) => clip.audio), mimeType: clips[0]?.mimeType ?? "", error: null };
 }
