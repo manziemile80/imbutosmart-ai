@@ -36,8 +36,8 @@ npm install && npm run dev
 - Before deployment, supply `backend/nisr_real_data.csv` with real district/crop/soil/weather/yield observations, or train privately and supply the four `backend/models/*.joblib` artifacts. Never commit confidential survey microdata to a public repository. Without these inputs `/health` can respond, but `/predict`, `/meta`, and `/stats` return 503: no trained model.
 - `/stats` also needs the original CSV even when trained artifacts are supplied; artifacts alone support `/predict` and `/meta`, not historical yield comparisons.
 - After deployment, verify `/meta` and a real `/predict` request (not just `/health`), then set the frontend `VITE_API_URL` to the HTTPS Render service address. `/stats` supplies held-out test accuracy and yield MAE in t/ha; historical comparison charts are in-sample, not test results.
-- **Frontend:** set `VITE_API_URL` to the Render URL and publish to any static/edge host (such as Vercel, Netlify, or Render).
-- **AI variables on the host:** the chat and speech backends are configured with server-only environment variables, so set them on the host rather than in the repository: `AI_BASE_URL`/`AI_MODEL` (or `AI_PROVIDER=vercel-gateway`), `AI_SPEECH_PROVIDER`, and the `ELEVENLABS_*` values. Keep them as secrets.
+- **Frontend:** set `VITE_API_URL` to the Render URL and publish to any static/edge host (such as Vercel, Netlify, or Render). The app is live at **https://abahinzismart.vercel.app** (also `imbutosmart.vercel.app`).
+- **AI variables on the host:** the chat and speech backends are configured with server-only environment variables, so set them on the host rather than in the repository: `AI_BASE_URL`, `AI_MODEL` and `AI_API_KEY` for chat, and `AI_SPEECH_BASE_URL`, `AI_STT_MODEL`, `AI_TTS_MODEL`, `AI_TTS_VOICE`, `AI_TTS_FORMAT`, `AI_TTS_MAX_CHARS` and `AI_SPEECH_LANGUAGES` for voice. Keep them as secrets.
 - **Verify the deployment:** `node scripts\test-app-ai-e2e.mjs` checks the deployed app's server functions the same way it checks a dev server, so a live deployment can be confirmed without a browser. Point it at the deployment with `APP_URL`.
 
 ## District land-use map
