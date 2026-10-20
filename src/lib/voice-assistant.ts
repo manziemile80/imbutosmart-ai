@@ -47,7 +47,9 @@ export type SynthesisInput = z.infer<typeof synthesisInputSchema>;
 
 // Client-side status codes the UI maps to copy. Server-side failures reuse the
 // shared AiErrorCode so both assistants speak the same language about outages.
-export type VoiceNotice = AiErrorCode | "unsupported" | "denied" | "no-speech" | "not-spoken" | "unavailable";
+// A speech backend that cannot serve requests is not a notice at all: the
+// answer stays written and nothing is shown.
+export type VoiceNotice = AiErrorCode | "unsupported" | "denied" | "no-speech" | "not-spoken";
 
 export type VoiceGuideItem = { title: string; detail: string };
 
@@ -147,7 +149,6 @@ export const voiceCopy: Record<
       denied: "Microphone access was blocked. Allow the microphone or type your question instead.",
       "no-speech": "We did not hear anything. Please try again and speak a little closer to the microphone.",
       "not-spoken": "The voice service cannot read this language aloud. The answer is written above.",
-      unavailable: "The voice service cannot serve requests on the current plan, so answers stay written here. The text assistants still work.",
     },
   },
   rw: {
@@ -181,7 +182,6 @@ export const voiceCopy: Record<
       denied: "Kwinjira muri mikoro byanzwe. Emerera mikoro cyangwa wandike ikibazo cyawe.",
       "no-speech": "Nta jwi twumvise. Ongera ugerageze uvuge hafi ya mikoro.",
       "not-spoken": "Ubutumwa bw'ijwi ntibishobora gusoma ururimi rw'ubu mu ijwi. Igisubizo cyandikwe hejuru.",
-      unavailable: "Ubutumwa bw'ijwi ntibushobora gutanga ibisobanuro ku gahunda y'ubu. Ibisobanuro birandikwa hano ariko. Abafasha bandika hasi baracyakora.",
     },
   },
   fr: {
@@ -215,7 +215,6 @@ export const voiceCopy: Record<
       denied: "L'accès au microphone a été bloqué. Autorisez le microphone ou écrivez votre question.",
       "no-speech": "Nous n'avons rien entendu. Réessayez en parlant plus près du microphone.",
       "not-spoken": "Le service vocal ne peut pas lire cette langue à voix haute. La réponse est écrite ci-dessus.",
-      unavailable: "Le service vocal ne peut pas traiter les demandes avec la formule actuelle : les réponses restent écrites ici. Les assistants écrits fonctionnent toujours.",
     },
   },
 };

@@ -170,10 +170,12 @@ const spoken = await call("voice-assistant.functions.ts", "speakFarmerText", {
   language: "en",
 });
 if (spoken?.error === "unavailable") {
-  // The backend is reachable but the configured plan does not include reading
-  // answers aloud. The app reports that calmly instead of failing.
-  check("app reports spoken output as unavailable instead of failing", true);
-  console.log("      the configured speech plan does not include reading answers aloud");
+  // The backend is reachable but cannot serve spoken output, for example a plan
+  // or terms limit. The server reports it, and the page shows no error: the
+  // answer simply stays written.
+  check("backend reports spoken output as unavailable rather than failing", true);
+  console.log("      the backend cannot read answers aloud on this plan");
+  console.log("      the page shows no error; answers stay written");
   console.log("      transcription could not be checked without a spoken clip");
 } else {
   const clips = spoken?.audios ?? [];

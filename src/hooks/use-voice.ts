@@ -109,7 +109,9 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
         const result = await transcribe({ data: { language, mimeType: mimeType || "audio/webm", audioBase64 } });
         if (!activeRef.current) return;
         if (result.error) {
-          setNotice(result.error);
+          // A backend that cannot serve requests is not an error the farmer
+          // needs to see: nothing is transcribed and nothing is shown.
+          if (result.error !== "unavailable") setNotice(result.error);
         } else {
           onTranscriptRef.current(result.text);
         }
@@ -215,7 +217,10 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
         const result = await speak({ data: { language, text: trimmed } });
         if (!activeRef.current) return;
         if (result.error || !result.audios?.length) {
-          setNotice(result.error ?? "empty");
+          // A backend that cannot serve spoken output, for example one whose
+          // plan or terms do not cover it, is not an error the farmer needs to
+          // see: the answer simply stays written.
+          if (result.error !== "unavailable") setNotice(result.error ?? "empty");
           setStatus("idle");
           return;
         }

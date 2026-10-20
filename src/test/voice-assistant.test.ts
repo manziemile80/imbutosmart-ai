@@ -43,16 +43,15 @@ describe("voice assistant contract", () => {
       expect(voiceGuide(language).length).toBeGreaterThan(0);
       expect(voiceCopy[language].heading.length).toBeGreaterThan(0);
       expect(Object.keys(voiceCopy[language].notices).sort()).toEqual(
-        ["denied", "empty", "failed", "no-speech", "not-spoken", "unavailable", "unconfigured", "unsupported"],
+        ["denied", "empty", "failed", "no-speech", "not-spoken", "unconfigured", "unsupported"],
       );
     }
   });
 
-  it("explains in every language when speech cannot be read aloud or is unavailable", () => {
+  it("explains in every language when speech cannot be read aloud", () => {
     for (const language of VOICE_LANGUAGES) {
       expect(voiceCopy[language].spokenUnavailable.length).toBeGreaterThan(0);
       expect(voiceCopy[language].notices["not-spoken"].length).toBeGreaterThan(0);
-      expect(voiceCopy[language].notices.unavailable.length).toBeGreaterThan(0);
     }
   });
 
