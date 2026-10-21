@@ -32,6 +32,8 @@ python ml_pipeline.py          # trains + prints metrics, writes models/
 uvicorn main:app --reload --port 8000
 ```
 
+Preview a production build of the web app with `node .output/server/index.mjs` after `npm run build` (the Nitro output in `.output`, not `vite preview`).
+
 ## The training data
 The models are fitted on the **NISR Seasonal Agricultural Survey 2025** microdata (Seasons A, B and C), which records every crop a household planted: the district, the crop, the area, what was harvested and the sampling weight.
 

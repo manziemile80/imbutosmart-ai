@@ -28,6 +28,7 @@
 - [x] Apply a structured design system: tokens, panels, callouts and status pills shared by the farmer page and the dashboard, in English, Kinyarwanda and French.
 - [x] Fill the rain and temperature from the selected district's own climate record and live forecast, so the figures follow the location.
 - [x] Train the models on the NISR Seasonal Agricultural Survey 2025 microdata: district, season and weather, with the survey's sampling weights.
+- [x] Fix the deployed app's server functions: a missing Supabase configuration made every call from the browser fail, so the assistants were dead on the live site.
 - [x] Wait before retrying a chat request that did not reach the backend, so a busy or weak connection still gives the farmer an answer.
 - [x] Deploy the design system and the retry fix, and verify the live app's record, transcribe and answer path.
 - [ ] Read answers aloud on the deployed app (blocked by accepting the Groq speech model's terms in the provider console — the app-level check now reports this as the refusal reason — or by pointing the host at a speech backend the deployment can reach).
