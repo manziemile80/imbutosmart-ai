@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { LoaderCircle, Sprout, Wifi, WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Callout, StatusPill } from "@/components/ui/callout";
+import { Panel, PanelBody, PanelHeader } from "@/components/ui/panel";
 import { CROP_NAMES, knowledgeCropLabel } from "@/lib/crop-knowledge";
 import { recommendationCopy } from "@/lib/recommendation-copy";
 import { recommendOffline } from "@/lib/recommendation-engine";
@@ -177,258 +179,264 @@ export function CropRecommendation({ district, soil, rain, temp, language = "en"
   const inherited = `${district} · ${soilLabel(soil, language)} · ${rain} mm · ${temp} °C`;
 
   return (
-    <section aria-labelledby="crop-recommendation-title" data-testid="crop-recommendation">
-      <div className="flex items-center gap-2 text-primary-text">
-        <Sprout className="size-5" aria-hidden="true" />
-        <p className="eyebrow">{t.form.heading}</p>
-      </div>
-      <h2 id="crop-recommendation-title" className="mt-2 font-display text-2xl">
-        {t.form.heading}
-      </h2>
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t.form.intro}</p>
-
-      <p
-        role="status"
-        data-testid="recommendation-mode"
-        className={`mt-4 inline-flex flex-wrap items-center gap-2 rounded-full border px-4 py-2 text-xs font-medium ${offline ? "border-amber-400/60 bg-amber-50 text-amber-900" : "border-emerald-500/40 bg-emerald-50 text-emerald-900"}`}
-      >
-        {offline ? (
-          <WifiOff className="size-4" aria-hidden="true" />
-        ) : (
-          <Wifi className="size-4" aria-hidden="true" />
-        )}
-        <span className="uppercase tracking-wide">{offline ? t.mode.offline : t.mode.online}</span>
-        <span className="font-normal">{offline ? t.mode.offlineNote : t.mode.onlineNote}</span>
-      </p>
-
-      <form onSubmit={onSubmit} className="mt-5 grid gap-4">
-        <p className="text-xs text-muted-foreground">
-          {t.form.context} <span className="font-medium text-foreground">{inherited}</span>
-        </p>
-        <div className="grid gap-3 sm:grid-cols-2">
-          <label className="grid gap-1.5">
-            <span className="text-sm font-medium">{t.form.soilPh}</span>
-            <input
-              className="field"
-              type="number"
-              inputMode="decimal"
-              min={3}
-              max={10}
-              step={0.1}
-              placeholder={t.form.phHint}
-              value={soilPh}
-              disabled={loading}
-              onChange={(event) => setSoilPh(event.target.value)}
-            />
-          </label>
-          <label className="grid gap-1.5">
-            <span className="text-sm font-medium">{t.form.landSize}</span>
-            <input
-              className="field"
-              type="number"
-              inputMode="decimal"
-              min={0.01}
-              max={1000}
-              step={0.01}
-              placeholder={t.form.landHint}
-              value={landSize}
-              disabled={loading}
-              onChange={(event) => setLandSize(event.target.value)}
-            />
-          </label>
-          <label className="grid gap-1.5">
-            <span className="text-sm font-medium">{t.form.season}</span>
-            <select
-              className="field"
-              value={season}
-              disabled={loading}
-              onChange={(event) => setSeason(event.target.value as "" | "A" | "B" | "C")}
-            >
-              <option value="">{t.form.seasonAny}</option>
-              <option value="A">{t.form.seasonA}</option>
-              <option value="B">{t.form.seasonB}</option>
-              <option value="C">{t.form.seasonC}</option>
-            </select>
-          </label>
-          <label className="grid gap-1.5">
-            <span className="text-sm font-medium">{t.form.water}</span>
-            <select
-              className="field"
-              value={water}
-              disabled={loading}
-              onChange={(event) => setWater(event.target.value)}
-            >
-              <option value="">{t.form.waterUnknown}</option>
-              <option value="rainfed">{t.form.rainfed}</option>
-              <option value="irrigated">{t.form.irrigated}</option>
-              <option value="limited">{t.form.limited}</option>
-            </select>
-          </label>
-          <label className="grid gap-1.5">
-            <span className="text-sm font-medium">{t.form.experience}</span>
-            <select
-              className="field"
-              value={experience}
-              disabled={loading}
-              onChange={(event) => setExperience(event.target.value)}
-            >
-              <option value="">{t.form.experienceUnknown}</option>
-              <option value="new">{t.form.expNew}</option>
-              <option value="some">{t.form.expSome}</option>
-              <option value="experienced">{t.form.expExperienced}</option>
-            </select>
-          </label>
-          <label className="grid gap-1.5">
-            <span className="text-sm font-medium">{t.form.preference}</span>
-            <select
-              className="field"
-              value={preference}
-              disabled={loading}
-              onChange={(event) => setPreference(event.target.value)}
-            >
-              <option value="">{t.form.noPreference}</option>
-              {CROP_NAMES.map((crop) => (
-                <option key={crop} value={crop}>
-                  {knowledgeCropLabel(crop, language)}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <Button
-          type="submit"
-          disabled={loading}
-          className="h-14 w-full text-base sm:w-auto sm:px-8"
-        >
-          {loading ? (
-            <LoaderCircle className="animate-spin motion-reduce:animate-none" aria-hidden="true" />
-          ) : (
-            <Sprout aria-hidden="true" />
-          )}
-          {loading ? t.result.loading : t.form.submit}
-        </Button>
-      </form>
-
-      {loading && (
-        <p role="status" className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
-          <LoaderCircle
-            className="size-4 animate-spin motion-reduce:animate-none"
-            aria-hidden="true"
-          />
-          {t.result.loading}
-        </p>
-      )}
-      {error && (
-        <p role="alert" className="mt-4 text-sm text-destructive">
-          {t.result.failed}
-        </p>
-      )}
-
-      {result && (
-        <div aria-live="polite" data-testid="hybrid-recommendation" className="result-card mt-6">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div>
-              <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground">
-                {t.result.recommended}
-              </p>
-              <p className="font-display text-2xl font-semibold">
-                {knowledgeCropLabel(result.crop, language)}
-              </p>
-              <p className="mt-1 text-sm font-medium text-primary-text">
-                {t.result.band[result.band]}
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-4xl font-bold text-primary-text">{result.score}%</p>
-              <p className="text-xs text-muted-foreground">{t.result.score}</p>
-            </div>
-          </div>
-          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
-            <span>
-              {result.source === "online-ai" ? t.result.onlineBadge : t.result.offlineBadge}
-            </span>
-          </div>
-
-          <div className="mt-5 grid gap-5">
-            <div>
-              <h3 className="text-sm font-semibold">{t.result.why}</h3>
-              <ul className="mt-2 grid gap-1.5 text-sm leading-relaxed">
-                {result.reasons.map((reason) => (
-                  <li key={reason}>• {reason}</li>
+    <Panel aria-labelledby="crop-recommendation-title" data-testid="crop-recommendation">
+      <PanelHeader
+        icon={<Sprout className="size-5" aria-hidden="true" />}
+        title={t.form.heading}
+        titleId="crop-recommendation-title"
+        description={t.form.intro}
+        meta={
+          <StatusPill
+            role="status"
+            data-testid="recommendation-mode"
+            tone={offline ? "warning" : "success"}
+            icon={
+              offline ? (
+                <WifiOff className="size-3.5" aria-hidden="true" />
+              ) : (
+                <Wifi className="size-3.5" aria-hidden="true" />
+              )
+            }
+          >
+            {offline ? t.mode.offlineNote : t.mode.onlineNote}
+          </StatusPill>
+        }
+      />
+      <PanelBody>
+        <form onSubmit={onSubmit} className="grid gap-4">
+          <p className="text-xs text-muted-foreground">
+            {t.form.context} <span className="font-medium text-foreground">{inherited}</span>
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="grid gap-1.5">
+              <span className="field-label">{t.form.soilPh}</span>
+              <input
+                className="field"
+                type="number"
+                inputMode="decimal"
+                min={3}
+                max={10}
+                step={0.1}
+                placeholder={t.form.phHint}
+                value={soilPh}
+                disabled={loading}
+                onChange={(event) => setSoilPh(event.target.value)}
+              />
+            </label>
+            <label className="grid gap-1.5">
+              <span className="field-label">{t.form.landSize}</span>
+              <input
+                className="field"
+                type="number"
+                inputMode="decimal"
+                min={0.01}
+                max={1000}
+                step={0.01}
+                placeholder={t.form.landHint}
+                value={landSize}
+                disabled={loading}
+                onChange={(event) => setLandSize(event.target.value)}
+              />
+            </label>
+            <label className="grid gap-1.5">
+              <span className="field-label">{t.form.season}</span>
+              <select
+                className="field"
+                value={season}
+                disabled={loading}
+                onChange={(event) => setSeason(event.target.value as "" | "A" | "B" | "C")}
+              >
+                <option value="">{t.form.seasonAny}</option>
+                <option value="A">{t.form.seasonA}</option>
+                <option value="B">{t.form.seasonB}</option>
+                <option value="C">{t.form.seasonC}</option>
+              </select>
+            </label>
+            <label className="grid gap-1.5">
+              <span className="field-label">{t.form.water}</span>
+              <select
+                className="field"
+                value={water}
+                disabled={loading}
+                onChange={(event) => setWater(event.target.value)}
+              >
+                <option value="">{t.form.waterUnknown}</option>
+                <option value="rainfed">{t.form.rainfed}</option>
+                <option value="irrigated">{t.form.irrigated}</option>
+                <option value="limited">{t.form.limited}</option>
+              </select>
+            </label>
+            <label className="grid gap-1.5">
+              <span className="field-label">{t.form.experience}</span>
+              <select
+                className="field"
+                value={experience}
+                disabled={loading}
+                onChange={(event) => setExperience(event.target.value)}
+              >
+                <option value="">{t.form.experienceUnknown}</option>
+                <option value="new">{t.form.expNew}</option>
+                <option value="some">{t.form.expSome}</option>
+                <option value="experienced">{t.form.expExperienced}</option>
+              </select>
+            </label>
+            <label className="grid gap-1.5">
+              <span className="field-label">{t.form.preference}</span>
+              <select
+                className="field"
+                value={preference}
+                disabled={loading}
+                onChange={(event) => setPreference(event.target.value)}
+              >
+                <option value="">{t.form.noPreference}</option>
+                {CROP_NAMES.map((crop) => (
+                  <option key={crop} value={crop}>
+                    {knowledgeCropLabel(crop, language)}
+                  </option>
                 ))}
-              </ul>
-            </div>
-            <div className="grid gap-3 border-y border-border py-4 text-sm sm:grid-cols-2">
-              <div>
-                <p className="text-xs text-muted-foreground">{t.result.soilConditions}</p>
-                <p className="mt-1 font-medium">{result.soilConditions}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">{t.result.waterNeeds}</p>
-                <p className="mt-1 font-medium">{result.waterNeeds}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">{t.result.growingPeriod}</p>
-                <p className="mt-1 font-medium">{result.growingPeriod}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">{t.result.plantingSeason}</p>
-                <p className="mt-1 font-medium">{result.plantingSeason}</p>
-              </div>
-            </div>
-            {result.considerations.length > 0 && (
-              <div>
-                <h3 className="text-sm font-semibold">{t.result.considerations}</h3>
-                <ul className="mt-2 grid gap-1.5 text-sm leading-relaxed">
-                  {result.considerations.map((item) => (
-                    <li key={item}>• {item}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {result.risks.length > 0 && (
-              <div>
-                <h3 className="text-sm font-semibold">{t.result.risks}</h3>
-                <ul className="mt-2 grid gap-1.5 text-sm leading-relaxed">
-                  {result.risks.map((item) => (
-                    <li key={item}>• {item}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {result.alternatives.length > 0 && (
-              <div>
-                <h3 className="text-sm font-semibold">{t.result.alternatives}</h3>
-                <ul className="mt-2 grid gap-1.5 text-sm">
-                  {result.alternatives.map((item) => (
-                    <li
-                      key={item.crop}
-                      className="flex items-center justify-between gap-3 border-b border-border pb-1.5 last:border-b-0"
-                    >
-                      <span>{knowledgeCropLabel(item.crop, language)}</span>
-                      <span className="text-muted-foreground">
-                        {item.score}% · {t.result.band[item.band]}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            <p className="rounded-xl border border-border bg-muted/40 p-3 text-xs leading-relaxed text-muted-foreground">
-              {t.result.warning}
-            </p>
-            {syncNote && (
-              <p className="text-xs text-muted-foreground">
-                {syncNote === "synced"
-                  ? t.result.synced
-                  : syncNote === "saved"
-                    ? t.result.savedLocal
-                    : t.result.pendingSync}
-              </p>
-            )}
+              </select>
+            </label>
           </div>
-        </div>
-      )}
-    </section>
+          <Button
+            type="submit"
+            disabled={loading}
+            className="h-14 w-full text-base sm:w-auto sm:px-8"
+          >
+            {loading ? (
+              <LoaderCircle
+                className="animate-spin motion-reduce:animate-none"
+                aria-hidden="true"
+              />
+            ) : (
+              <Sprout aria-hidden="true" />
+            )}
+            {loading ? t.result.loading : t.form.submit}
+          </Button>
+        </form>
+
+        {loading && (
+          <p role="status" className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
+            <LoaderCircle
+              className="size-4 animate-spin motion-reduce:animate-none"
+              aria-hidden="true"
+            />
+            {t.result.loading}
+          </p>
+        )}
+        {error && (
+          <Callout tone="danger" role="alert" className="mt-4">
+            {t.result.failed}
+          </Callout>
+        )}
+
+        {result && (
+          <div aria-live="polite" data-testid="hybrid-recommendation" className="result-card mt-6">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground">
+                  {t.result.recommended}
+                </p>
+                <p className="font-display mt-1 text-2xl font-semibold text-foreground">
+                  {knowledgeCropLabel(result.crop, language)}
+                </p>
+                <p className="mt-1 text-sm font-medium text-primary-text">
+                  {t.result.band[result.band]}
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="tabular text-4xl font-bold text-primary-text">{result.score}%</p>
+                <p className="text-xs text-muted-foreground">{t.result.score}</p>
+              </div>
+            </div>
+            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+              <span>
+                {result.source === "online-ai" ? t.result.onlineBadge : t.result.offlineBadge}
+              </span>
+            </div>
+
+            <div className="mt-5 grid gap-5">
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">{t.result.why}</h3>
+                <ul className="mt-2 grid gap-1.5 text-sm leading-relaxed">
+                  {result.reasons.map((reason) => (
+                    <li key={reason}>• {reason}</li>
+                  ))}
+                </ul>
+              </div>
+              <dl className="grid gap-4 border-y border-border/70 py-4 text-sm sm:grid-cols-2">
+                <div>
+                  <dt className="text-xs text-muted-foreground">{t.result.soilConditions}</dt>
+                  <dd className="mt-1 font-medium text-foreground">{result.soilConditions}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs text-muted-foreground">{t.result.waterNeeds}</dt>
+                  <dd className="mt-1 font-medium text-foreground">{result.waterNeeds}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs text-muted-foreground">{t.result.growingPeriod}</dt>
+                  <dd className="mt-1 font-medium text-foreground">{result.growingPeriod}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs text-muted-foreground">{t.result.plantingSeason}</dt>
+                  <dd className="mt-1 font-medium text-foreground">{result.plantingSeason}</dd>
+                </div>
+              </dl>
+              {result.considerations.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-semibold text-foreground">
+                    {t.result.considerations}
+                  </h3>
+                  <ul className="mt-2 grid gap-1.5 text-sm leading-relaxed">
+                    {result.considerations.map((item) => (
+                      <li key={item}>• {item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {result.risks.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-semibold text-foreground">{t.result.risks}</h3>
+                  <ul className="mt-2 grid gap-1.5 text-sm leading-relaxed">
+                    {result.risks.map((item) => (
+                      <li key={item}>• {item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {result.alternatives.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-semibold text-foreground">{t.result.alternatives}</h3>
+                  <ul className="mt-2 grid gap-1.5 text-sm">
+                    {result.alternatives.map((item) => (
+                      <li
+                        key={item.crop}
+                        className="flex items-center justify-between gap-3 border-b border-border/70 pb-1.5 last:border-b-0"
+                      >
+                        <span>{knowledgeCropLabel(item.crop, language)}</span>
+                        <span className="tabular text-muted-foreground">
+                          {item.score}% · {t.result.band[item.band]}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <p className="rounded-xl border border-border bg-card/70 p-3 text-xs leading-relaxed text-muted-foreground">
+                {t.result.warning}
+              </p>
+              {syncNote && (
+                <p className="text-xs text-muted-foreground">
+                  {syncNote === "synced"
+                    ? t.result.synced
+                    : syncNote === "saved"
+                      ? t.result.savedLocal
+                      : t.result.pendingSync}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+      </PanelBody>
+    </Panel>
   );
 }

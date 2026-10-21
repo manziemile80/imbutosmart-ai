@@ -100,6 +100,23 @@ function check(label, condition, detail) {
   console.log(`  [${status}] ${label}${detail ? ` — ${detail}` : ""}`);
 }
 
+// A call that fails because the backend was busy or the connection dropped is
+// tried once more, so a hiccup is not reported as a broken app. The app
+// itself already retries inside the server function, and a rate-limited
+// provider asks for a few seconds.
+async function callChat(file, exportName, data, attempts = 2) {
+  let result = null;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    result = await call(file, exportName, data);
+    if (result?.error !== "failed") return result;
+    if (attempt < attempts) {
+      console.log("      the backend did not answer, trying once more");
+      await new Promise((resolve) => setTimeout(resolve, 8000));
+    }
+  }
+  return result;
+}
+
 console.log(`Checking the ImbutoSmart AI app at ${APP_URL}\n`);
 
 try {
@@ -134,7 +151,7 @@ check(
 
 console.log("2/5 Farmer Q&A (English)");
 await waitForChatSlot();
-const english = await call("farmer-chat.functions.ts", "askFarmerAssistant", {
+const english = await callChat("farmer-chat.functions.ts", "askFarmerAssistant", {
   district: "Musanze",
   soil: "Volcanic",
   language: "en",
@@ -145,7 +162,7 @@ check("no error reported", english?.error === null, english?.error ?? "");
 
 console.log("3/5 Farmer Q&A (Kinyarwanda)");
 await waitForChatSlot();
-const kinyarwanda = await call("farmer-chat.functions.ts", "askFarmerAssistant", {
+const kinyarwanda = await callChat("farmer-chat.functions.ts", "askFarmerAssistant", {
   district: "Musanze",
   soil: "Volcanic",
   language: "rw",
@@ -156,7 +173,7 @@ check("no error reported", kinyarwanda?.error === null, kinyarwanda?.error ?? ""
 
 console.log("4/5 Season explanation");
 await waitForChatSlot();
-const season = await call("season-assistant.functions.ts", "explainSeason", {
+const season = await callChat("season-assistant.functions.ts", "explainSeason", {
   district: "Musanze",
   month: 3,
   rainfall_mm: 120,
@@ -234,7 +251,7 @@ check("transcript mentions drainage", /drain/i.test(transcript?.text ?? ""));
 // The transcribed question is answered by the voice assistant, so the whole
 // spoken path a farmer uses is checked: record, transcribe, answer.
 await waitForChatSlot();
-const voiceAnswer = await call("voice-assistant.functions.ts", "askVoiceAssistant", {
+const voiceAnswer = await callChat("voice-assistant.functions.ts", "askVoiceAssistant", {
   district: "Musanze",
   soil: "Volcanic",
   language: "en",

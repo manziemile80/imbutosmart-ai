@@ -14,6 +14,15 @@ backend/   FastAPI + scikit-learn (data_processor.py, ml_pipeline.py, main.py, D
 src/       Web app: Farmer Advisory (/) and Agronomist Dashboard (/dashboard)
 ```
 
+## Design system
+The interface is built from one system, in three layers, so every page looks like the same product.
+
+1. **Tokens** (`src/styles.css`): brand palette, surfaces, status colours (success, warning, info, danger), borders and elevation, each with a light and a dark value in `oklch`.
+2. **Components**: `.panel`, `.callout`, `.status-pill`, `.stat`, `.field`, `.option-card`, `.chip`, `.result-card`. Status colours are tokens, so a message reads the same in every language and in dark mode.
+3. **Layout**: `.page`, `.page-header`, `.page-title`, `.page-lede`, `.page-section`.
+
+The React primitives in `src/components/ui` (`Panel`, `Callout`, `StatusPill`, `Stat`) wrap those classes. Every farmer-facing block is a panel: a `<section>` with `aria-labelledby`, so each topic is a landmark a screen reader can jump to. Add new blocks with the primitives rather than ad-hoc colours or spacing.
+
 ## Run the backend
 ```bash
 cd backend

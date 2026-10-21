@@ -3,6 +3,7 @@ export type FarmerLanguage = "en" | "rw" | "fr";
 export const farmerCopy = {
   en: {
     farmer: "Farmer", agronomist: "Agronomist", language: "Language", advisory: "Farmer Advisory",
+    field: "Your field",
     title: "What should I plant this season?", intro: "Crop estimates use general growing conditions until a trained prediction server is connected. Enter your rainfall and temperature forecast; these values are not live weather.",
     district: "District", soil: "Soil type", rain: "Forecast rain (mm)", temp: "Forecast temp (°C)",
     analysing: "Analysing…", recommended: "Recommended crop", confidence: "Suitability estimate", yield: "Estimated yield", alternatives: "Other crops",
@@ -14,6 +15,7 @@ export const farmerCopy = {
   },
   fr: {
     farmer: "Agriculteur", agronomist: "Agronome", language: "Langue", advisory: "Conseils agricoles",
+    field: "Votre champ",
     title: "Que planter cette saison ?", intro: "Les estimations reposent sur les conditions générales de culture tant qu’un modèle entraîné n’est pas connecté. Saisissez les prévisions de pluie et de température ; ce ne sont pas des observations en temps réel.",
     district: "District", soil: "Type de sol", rain: "Pluie prévue (mm)", temp: "Température prévue (°C)",
     analysing: "Analyse en cours…", recommended: "Culture recommandée", confidence: "Aptitude estimée", yield: "Rendement estimé", alternatives: "Autres cultures",
@@ -25,6 +27,7 @@ export const farmerCopy = {
   },
   rw: {
     farmer: "Umuhinzi", agronomist: "Impuguke", language: "Ururimi", advisory: "Inama ku muhinzi",
+    field: "Umurima wawe",
     title: "Nahinga iki muri iki gihembwe?", intro: "Ibigereranyo by’ibihingwa bishingiye ku bumenyi rusange bw’ubuhinzi kugeza seriveri yatojwe ihujwe. Andika imvura n’ubushyuhe byitezwe; si amakuru y’ikirere y’ako kanya.",
     district: "Akarere", soil: "Ubwoko bw’ubutaka", rain: "Imvura yitezwe (mm)", temp: "Ubushyuhe bwitezwe (°C)",
     analysing: "Turasesengura…", recommended: "Igihingwa gisabwa", confidence: "Ikigereranyo cyo kuberanya", yield: "Umusaruro ugereranyijwe", alternatives: "Ibindi bihingwa",

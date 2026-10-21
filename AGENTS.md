@@ -19,3 +19,4 @@
 - Check the farmer's recorded question through the app's server functions even when the speech backend cannot read answers aloud, so a deployment proves the whole spoken path; the committed sample in `scripts/fixtures` keeps that check repeatable.
 - Keep insurance coverage preferences separate from policy enrolment; stable coverage IDs preserve session choices across language changes without implying purchase or availability.
 - Use the shared native-input Checkbox for coverage selection, avoiding a separate provider dependency while retaining accessible form behavior.
+- Build every farmer-facing block as a labelled panel from the shared primitives in `src/components/ui`, and keep the design system in `src/styles.css` layered as tokens, components and layout; a status colour or surface never comes from an ad-hoc utility in a component.
