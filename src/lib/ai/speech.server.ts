@@ -56,13 +56,25 @@ export async function synthesizeSpeech(
   text: string,
   language: string,
 ): Promise<SpeechAudio> {
+  // The backend must not read a language it cannot really speak: the request
+  // is refused instead of returning audio in the wrong language.
+  if (!spokenLanguages().includes(language as VoiceLanguage)) {
+    return { audios: [], mimeType: "", error: "unavailable", refusal: null };
+  }
   const limit = Number(process.env["AI_TTS_MAX_CHARS"]?.trim() || 0);
   const pieces = splitForSpeech(text, Number.isFinite(limit) && limit > 0 ? limit : 0);
-  if (pieces.length === 0) return { audios: [], mimeType: "", error: "empty" };
+  if (pieces.length === 0) return { audios: [], mimeType: "", error: "empty", refusal: null };
   // The clips are requested together so a long answer is not spoken one piece
   // at a time with a wait between each.
-  const clips = await Promise.all(pieces.map((piece) => synthesizeOpenAiSpeech(signal, piece, language)));
+  const clips = await Promise.all(pieces.map((piece) => synthesizeOpenAiSpeech(signal, piece)));
   const failed = clips.find((clip) => clip.error || !clip.audio);
-  if (failed) return { audios: [], mimeType: "", error: failed.error ?? "empty" };
-  return { audios: clips.map((clip) => clip.audio), mimeType: clips[0]?.mimeType ?? "", error: null };
+  if (failed) {
+    return { audios: [], mimeType: "", error: failed.error ?? "empty", refusal: failed.refusal };
+  }
+  return {
+    audios: clips.map((clip) => clip.audio),
+    mimeType: clips[0]?.mimeType ?? "",
+    error: null,
+    refusal: null,
+  };
 }

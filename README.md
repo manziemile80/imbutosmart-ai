@@ -92,9 +92,13 @@ AI_MODEL=qwen2.5:3b
 AI_SPEECH_BASE_URL=http://127.0.0.1:8000/v1
 AI_STT_MODEL=Systran/faster-whisper-tiny
 AI_TTS_MODEL=pyttsx3
+AI_TTS_FORMAT=wav
+AI_SPEECH_LANGUAGES=en
 ```
 
 `AI_SPEECH_BASE_URL` points voice at its own OpenAI-compatible backend, so speech keeps working even when chat uses a different provider; it falls back to `AI_BASE_URL` when unset. A dedicated speech URL with no key sends a harmless placeholder, so a local server that ignores auth needs no credential. Verify the whole loop with `powershell -ExecutionPolicy Bypass -File scripts\test-voice-e2e.ps1`.
+
+The local stack speaks with the voices installed on the machine, which is English only unless more are added, so `AI_SPEECH_LANGUAGES=en` is the honest declaration: Kinyarwanda and French answers stay written instead of being read aloud badly.
 
 `node scripts\test-app-ai-e2e.mjs` is the app-level check: it calls the server functions the browser calls (farmer Q&A, season advice, speech round trip), so it also covers request validation, prompting and error handling. It needs the dev server running (`npm run dev`).
 
@@ -117,6 +121,9 @@ AI_SPEECH_LANGUAGES=en
 - **Spoken answers** use Orpheus, which only accepts `wav` and at most 200 characters per request, so the answer is split into clips that are played in order. `AI_TTS_MAX_CHARS` sets that limit and `AI_TTS_FORMAT` the audio format.
 - Orpheus voices are `autumn`, `diana`, `hannah`, `austin`, `daniel` and `troy`.
 - Groq's speech models speak **English only**, so `AI_SPEECH_LANGUAGES=en` is declared. The server tells the page which languages the backend can really speak, so Kinyarwanda and French answers are offered as writing rather than spoken badly.
+- **Orpheus is gated.** It answers `model_terms_required` until the org admin accepts its terms at `https://console.groq.com/playground?model=canopylabs%2Forpheus-v1-english`, and the older `playai-tts` model has been decommissioned. Until the terms are accepted the page keeps every answer written and stops offering the spoken button; `scripts/test-app-ai-e2e.mjs` prints the refusal reason (`terms`, `plan`, `auth`, `model` or `request`) so the host can be fixed. The free local speech server above needs no account at all.
+
+The speech request carries only the standard OpenAI speech fields (`model`, `voice`, `input`, `response_format`): a strict endpoint rejects anything else with `unknown field`, and the language is chosen by the voice the model is asked for.
 
 Restart the dev server after changing `.env`: the server-side variables are read when the server starts, and a reload does not always pick them up.
 

@@ -114,6 +114,7 @@ export const voiceCopy: Record<
     disclaimer: string;
     configNote: string;
     spokenUnavailable: string;
+    speechUnavailable: string;
     notices: Record<VoiceNotice, string>;
   }
 > = {
@@ -140,6 +141,7 @@ export const voiceCopy: Record<
     disclaimer: "Spoken guidance is general only — not live weather, a diagnosis, or a guarantee. Confirm with a local agronomist and Meteo Rwanda before acting.",
     configNote: "Voice isn't switched on yet — the server still needs an API key. You can read the guide and use the text assistants below in the meantime.",
     spokenUnavailable: "The voice service cannot read this language aloud, so answers are written here instead. The text assistants below work in every language.",
+    speechUnavailable: "The voice service is not reading answers aloud at the moment, so every answer stays written here. The text assistants below work in every language.",
     notices: {
       unconfigured: "Voice assistance isn't configured on the server yet (no API key). The guide above and the text assistants remain available.",
       empty: "No answer was returned. Please try rephrasing your question.",
@@ -171,7 +173,8 @@ export const voiceCopy: Record<
     clear: "Gusiba",
     disclaimer: "Inama mu ijwi ni rusange gusa — si amakuru y'ikirere ariho, isuzuma, cyangwa isezerano. Emeza n'impuguke mu buhinzi na Meteo Rwanda mbere yo kubikora.",
     configNote: "Umufasha w'ijwi nta kurahura — seriveri incyo ifite API key. Mu gihe cy'ubu, usome amakuru hanyuma uboneshe abafasha bandika hasi.",
-    spokenUnavailable: "Ubutumwa bw'ijwi ntibishobora gusoma ururimi rw'ubu mu ijwi, ibisobanuro byandikwa hano ariko. Abafasha bandika hasi bashobora gukora muri bururimi.",
+    spokenUnavailable: "Ubutumwa bw’ijwi ntibishobora gusoma ururimi rw’ubu mu ijwi, ibisobanuro byandikwa hano ariko. Abafasha bandika hasi bashobora gukora muri bururimi.",
+    speechUnavailable: "Ubutumwa bw’ijwi ntiburisanya gusoma ibisubizo mu ijwi ubu, ibisobanuro byandikwa hano ariko byose. Abafasha bandika hasi bashobora gukora muri bururimi.",
     notices: {
       unconfigured: "Umufasha w'ijwi ntarashyirwaho kuri seriveri (nta API key). Amakuru ari hejuru n'abafasha bandika baracyaboneka.",
       empty: "Nta gisubizo cyatanzwe. Ongera ugerageze uhindure ikibazo.",
@@ -204,6 +207,7 @@ export const voiceCopy: Record<
     disclaimer: "Les conseils vocaux sont généraux uniquement — pas de météo en direct, de diagnostic ni de garantie. Confirmez avec un agronome local et Meteo Rwanda avant d'agir.",
     configNote: "La voix n'est pas encore activée — le serveur a besoin d'une clé API. En attendant, consultez le guide et utilisez les assistants écrits ci-dessous.",
     spokenUnavailable: "Le service vocal ne peut pas lire cette langue à voix haute : les réponses restent écrites ici. Les assistants écrits ci-dessous fonctionnent dans toutes les langues.",
+    speechUnavailable: "Le service vocal ne lit pas les réponses à voix haute pour le moment : toutes les réponses restent écrites ici. Les assistants écrits ci-dessous fonctionnent dans toutes les langues.",
     notices: {
       unconfigured: "L'assistance vocale n'est pas encore configurée sur le serveur (aucune clé API). Le guide ci-dessus et les assistants écrits restent disponibles.",
       empty: "Aucune réponse n'a été renvoyée. Reformulez votre question.",

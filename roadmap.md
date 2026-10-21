@@ -21,4 +21,7 @@
 - [x] Replace the ElevenLabs speech backend with Groq, so one key covers chat, transcription and spoken answers.
 - [x] Split a long answer into clips when the speech model caps how much text it accepts, and play them in order.
 - [x] Deploy the app with working AI assistance: farmer Q&A in English and Kinyarwanda, season advice, and ElevenLabs transcription.
+- [x] Serve spoken answers from the free local speech stack, and send only the standard speech fields a strict endpoint accepts.
+- [x] Keep the voice panel calm when the backend cannot read aloud: the answer stays written and the spoken button is not offered again.
+- [ ] Read answers aloud on the deployed app (blocked by accepting the Groq speech model's terms, or by pointing the host at a speech backend the deployment can reach).
 - [ ] Populate real district land shares (blocked by district crops/pasture/fallow aggregate data; supplied PDF has only national totals).

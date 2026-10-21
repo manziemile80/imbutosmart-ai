@@ -44,6 +44,9 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
   const [recordingSupported, setRecordingSupported] = useState(true);
   const [configured, setConfigured] = useState<boolean | null>(null);
   const [spokenLanguages, setSpokenLanguages] = useState<VoiceLanguage[] | null>(null);
+  // A backend that cannot serve spoken output is remembered for the rest of
+  // the visit, so the page stops offering a button that would stay silent.
+  const [speechUnavailable, setSpeechUnavailable] = useState(false);
 
   const voiceConfigStatus = useServerFn(getVoiceConfigStatus);
 
@@ -224,6 +227,7 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
           // plan or terms do not cover it, is not an error the farmer needs to
           // see: the answer simply stays written.
           if (result.error === "unconfigured") setNotice("unconfigured");
+          if (result.error === "unavailable") setSpeechUnavailable(true);
           setStatus("idle");
           return;
         }
@@ -249,5 +253,17 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
 
   const clearNotice = useCallback(() => setNotice(null), []);
 
-  return { status, notice, recordingSupported, configured, canSpeak, startRecording, stopRecording, speakText, stopSpeaking, clearNotice };
+  return {
+    status,
+    notice,
+    recordingSupported,
+    configured,
+    canSpeak,
+    speechUnavailable,
+    startRecording,
+    stopRecording,
+    speakText,
+    stopSpeaking,
+    clearNotice,
+  };
 }

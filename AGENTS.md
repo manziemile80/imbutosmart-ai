@@ -4,8 +4,10 @@
 - The farmer Q&A assistant keeps a conversation thread in the page but sends only the most recent turns to the server; keep its contract, suggested prompts, and copy in a shared browser-safe module.
 - All AI runs against an OpenAI-compatible backend configured by `AI_API_KEY`, `AI_BASE_URL`, and `AI_MODEL`; never hardcode a provider, gateway, or credential, and keep the deterministic guidance visible when AI is unavailable.
 - The speech backend is an OpenAI-compatible endpoint configured by `AI_SPEECH_BASE_URL` and the shared credential, behind the server-side gateway and never in the browser.
-- The server reports which app languages the speech backend can speak aloud, and a language it cannot read is offered as writing only rather than spoken badly.
+- The speech request carries only the standard OpenAI speech fields, because a strict endpoint rejects anything else with `unknown field`; the language is chosen by the voice the model is asked for.
+- The server reports which app languages the speech backend can speak aloud, and a language it cannot read is offered as writing only rather than spoken badly. The server refuses a language it cannot speak instead of returning audio in the wrong one.
 - A speech backend that cannot serve requests, for example one whose plan or terms do not cover it, is not shown as an error: the answer stays written and the page stays calm.
+- A backend that cannot read aloud at all is remembered for the visit: the panel says so calmly and stops offering a spoken button, and the refusal reason is reported to whoever runs the deployment.
 - The voice panel shows only the problems a farmer can act on, such as a blocked microphone or a language the backend cannot read aloud. A request that simply fails is left unanswered rather than shown as an error.
 - Keep farmer translations in a shared browser-safe catalog and pass a validated language code to season explanations, so UI and AI advice use the same language without changing model selection.
 - Automatic crop requests are debounced and discard superseded responses; preserve entered weather values and do not fabricate district climate data.

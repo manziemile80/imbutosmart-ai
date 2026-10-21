@@ -3,11 +3,16 @@ import { useServerFn } from "@tanstack/react-start";
 import { AlertCircle, LoaderCircle, Mic, Sparkles, Square, Trash2, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { soilLabel, type FarmerLanguage } from "@/lib/farmer-language";
-import { guideSpokenText, voiceCopy, voiceGuide } from "@/lib/voice-assistant";
+import { guideSpokenText, voiceCopy, voiceGuide, type VoiceNotice } from "@/lib/voice-assistant";
 import type { FarmerChatMessage } from "@/lib/farmer-chat";
 import type { AiErrorCode } from "@/lib/ai/error-codes";
 import { askVoiceAssistant } from "@/lib/voice-assistant.functions";
 import { useVoice } from "@/hooks/use-voice";
+
+// A notice the farmer cannot act on stays a calm status: the answer is simply
+// written. Only a blocked microphone, a missing recording or an empty answer
+// is worth an alert.
+const calmNotices: VoiceNotice[] = ["unconfigured", "not-spoken"];
 
 export function VoiceAssistant({
   district,
@@ -92,6 +97,16 @@ export function VoiceAssistant({
         </p>
       )}
 
+      {voice.speechUnavailable && (
+        <p
+          role="status"
+          className="mt-3 flex items-start gap-2 rounded-md border border-amber-400/60 bg-amber-50 p-3 text-sm leading-relaxed text-amber-900"
+        >
+          <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+          <span>{t.speechUnavailable}</span>
+        </p>
+      )}
+
       <div className="mt-5 rounded-md border border-border bg-card p-4">
         <p className="font-semibold">{t.guideTitle}</p>
         <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{t.guideIntro}</p>
@@ -103,7 +118,7 @@ export function VoiceAssistant({
             </li>
           ))}
         </ul>
-        {voice.canSpeak && (
+        {voice.canSpeak && !voice.speechUnavailable && (
           <Button
             type="button"
             variant="outline"
@@ -139,7 +154,7 @@ export function VoiceAssistant({
                 <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed">
                   {message.content}
                 </p>
-                {message.role === "assistant" && (
+                {message.role === "assistant" && !voice.speechUnavailable && (
                   <button
                     type="button"
                     className="mt-2 inline-flex items-center gap-1 text-xs text-primary-text underline"
@@ -167,9 +182,9 @@ export function VoiceAssistant({
         )}
         {voice.notice && (
           <p
-            role={voice.notice === "unconfigured" ? "status" : "alert"}
+            role={calmNotices.includes(voice.notice) ? "status" : "alert"}
             className={
-              voice.notice === "unconfigured"
+              calmNotices.includes(voice.notice)
                 ? "mt-3 text-sm text-muted-foreground"
                 : "mt-3 text-sm text-destructive"
             }

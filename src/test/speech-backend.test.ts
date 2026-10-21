@@ -13,6 +13,8 @@ afterEach(() => {
   delete process.env["AI_SPEECH_LANGUAGES"];
   delete process.env["AI_TTS_FORMAT"];
   delete process.env["AI_TTS_MAX_CHARS"];
+  delete process.env["AI_TTS_MODEL"];
+  delete process.env["AI_TTS_VOICE"];
   vi.restoreAllMocks();
 });
 
@@ -87,5 +89,90 @@ describe("speech gateway", () => {
     const result = await synthesizeSpeech(undefined, "A short answer.", "en");
     expect(result.error).toBe("failed");
     expect(result.audios).toHaveLength(0);
+  });
+
+  it("sends only the standard speech fields, so a strict endpoint does not reject them", async () => {
+    // A strict OpenAI-compatible endpoint answers 400 "unknown field" when the
+    // request carries anything outside the speech contract.
+    process.env["AI_SPEECH_BASE_URL"] = "https://api.groq.com/openai/v1";
+    const bodies: Record<string, unknown>[] = [];
+    globalThis.fetch = (async (_url: unknown, init: RequestInit) => {
+      bodies.push(JSON.parse(String(init.body)) as Record<string, unknown>);
+      return new Response(new Uint8Array([1]), {
+        status: 200,
+        headers: { "content-type": "audio/wav" },
+      });
+    }) as typeof fetch;
+
+    const { synthesizeSpeech } = await import("../lib/ai/speech.server");
+    await synthesizeSpeech(undefined, "A short answer.", "en");
+    expect(bodies[0]).toEqual({
+      model: "tts-1",
+      voice: "alloy",
+      input: "A short answer.",
+      response_format: "mp3",
+    });
+    expect(Object.keys(bodies[0] ?? {})).not.toContain("language");
+  });
+
+  it("names the reason the backend refused, so the host can be fixed", async () => {
+    process.env["AI_SPEECH_BASE_URL"] = "https://api.groq.com/openai/v1";
+    globalThis.fetch = (async () =>
+      new Response(
+        JSON.stringify({
+          error: {
+            message: "The model `canopylabs/orpheus-v1-english` requires terms acceptance.",
+          },
+        }),
+        { status: 400 },
+      )) as typeof fetch;
+
+    const { synthesizeSpeech } = await import("../lib/ai/speech.server");
+    const result = await synthesizeSpeech(undefined, "A short answer.", "en");
+    expect(result.error).toBe("unavailable");
+    expect(result.refusal).toBe("terms");
+  });
+
+  it("reports a refused credential and a plan without speech apart from a bad request", async () => {
+    process.env["AI_SPEECH_BASE_URL"] = "https://api.groq.com/openai/v1";
+    const { synthesizeSpeech } = await import("../lib/ai/speech.server");
+
+    globalThis.fetch = (async () => new Response("nope", { status: 401 })) as typeof fetch;
+    expect((await synthesizeSpeech(undefined, "A short answer.", "en")).refusal).toBe("auth");
+
+    globalThis.fetch = (async () => new Response("nope", { status: 402 })) as typeof fetch;
+    expect((await synthesizeSpeech(undefined, "A short answer.", "en")).refusal).toBe("plan");
+
+    globalThis.fetch = (async () => new Response("nope", { status: 400 })) as typeof fetch;
+    expect((await synthesizeSpeech(undefined, "A short answer.", "en")).refusal).toBe("request");
+  });
+
+  it("reports a speech model the endpoint does not serve as unavailable", async () => {
+    process.env["AI_SPEECH_BASE_URL"] = "https://api.groq.com/openai/v1";
+    globalThis.fetch = (async () => new Response("no such model", { status: 404 })) as typeof fetch;
+
+    const { synthesizeSpeech } = await import("../lib/ai/speech.server");
+    const result = await synthesizeSpeech(undefined, "A short answer.", "en");
+    expect(result.error).toBe("unavailable");
+    expect(result.refusal).toBe("model");
+  });
+
+  it("refuses to read a language the backend cannot speak", async () => {
+    process.env["AI_SPEECH_BASE_URL"] = "https://api.groq.com/openai/v1";
+    process.env["AI_SPEECH_LANGUAGES"] = "en";
+    let calls = 0;
+    globalThis.fetch = (async () => {
+      calls += 1;
+      return new Response(new Uint8Array([1]), {
+        status: 200,
+        headers: { "content-type": "audio/wav" },
+      });
+    }) as typeof fetch;
+
+    const { synthesizeSpeech } = await import("../lib/ai/speech.server");
+    const result = await synthesizeSpeech(undefined, "Esekeza umugunda w’ibigega?", "rw");
+    expect(result.error).toBe("unavailable");
+    expect(result.audios).toHaveLength(0);
+    expect(calls).toBe(0);
   });
 });

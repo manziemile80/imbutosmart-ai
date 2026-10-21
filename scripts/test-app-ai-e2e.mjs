@@ -172,10 +172,21 @@ const spoken = await call("voice-assistant.functions.ts", "speakFarmerText", {
 if (spoken?.error === "unavailable") {
   // The backend is reachable but cannot serve spoken output, for example a plan
   // or terms limit. The server reports it, and the page shows no error: the
-  // answer simply stays written.
+  // answer simply stays written. The refusal says what to fix on the host.
   check("backend reports spoken output as unavailable rather than failing", true);
-  console.log("      the backend cannot read answers aloud on this plan");
+  console.log(`      the backend cannot read answers aloud${spoken?.refusal ? ` (reason: ${spoken.refusal})` : ""}`);
   console.log("      the page shows no error; answers stay written");
+  if (spoken?.refusal === "terms") {
+    console.log("      the speech model's terms are not accepted yet in the provider console");
+  } else if (spoken?.refusal === "plan") {
+    console.log("      the provider plan does not include speech");
+  } else if (spoken?.refusal === "auth") {
+    console.log("      the provider refused the credential");
+  } else if (spoken?.refusal === "model") {
+    console.log("      the provider does not serve that speech model name");
+  } else if (spoken?.refusal === "request") {
+    console.log("      the speech endpoint rejected the request; check the model and voice names");
+  }
   console.log("      transcription could not be checked without a spoken clip");
 } else {
   const clips = spoken?.audios ?? [];

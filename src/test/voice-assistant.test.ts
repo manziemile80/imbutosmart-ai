@@ -69,8 +69,17 @@ describe("voice assistant contract", () => {
   it("explains in every language when speech cannot be read aloud", () => {
     for (const language of VOICE_LANGUAGES) {
       expect(voiceCopy[language].spokenUnavailable.length).toBeGreaterThan(0);
+      expect(voiceCopy[language].speechUnavailable.length).toBeGreaterThan(0);
       expect(voiceCopy[language].notices["not-spoken"].length).toBeGreaterThan(0);
     }
+  });
+
+  it("tells every reader that a silent voice service leaves the answer written", () => {
+    // A backend that cannot serve spoken output is not an error the farmer can
+    // act on, so the note says the answer stays written.
+    expect(voiceCopy.en.speechUnavailable).toMatch(/written/i);
+    expect(voiceCopy.rw.speechUnavailable).toMatch(/andik/i);
+    expect(voiceCopy.fr.speechUnavailable).toMatch(/écrites/i);
   });
 
   it("tells Kinyarwanda readers the answer stays written when speech cannot read it", () => {
