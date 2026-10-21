@@ -84,7 +84,8 @@ describe("chat gateway", () => {
     expect(calls).toBe(2);
   });
 
-  it("reports a stable error when the backend cannot be reached at all", async () => {    configured();
+  it("reports a stable error when the backend cannot be reached at all", async () => {
+    configured();
     globalThis.fetch = (async () => {
       throw new TypeError("fetch failed");
     }) as typeof fetch;
