@@ -16,5 +16,6 @@
 - Bundle openly licensed district boundaries with attribution; missing district measurements stay unavailable rather than being inferred from national totals.
 - Keep insurance guidance in a browser-safe multilingual catalog; district and soil provide field context, never fabricated risk scores, eligibility, premiums or insurer rankings. Link official program information and require policy confirmation.
 - Verify the free local AI stack through the app's own server functions with `scripts/test-app-ai-e2e.mjs`, not only through the raw OpenAI-compatible endpoints.
+- Check the farmer's recorded question through the app's server functions even when the speech backend cannot read answers aloud, so a deployment proves the whole spoken path; the committed sample in `scripts/fixtures` keeps that check repeatable.
 - Keep insurance coverage preferences separate from policy enrolment; stable coverage IDs preserve session choices across language changes without implying purchase or availability.
 - Use the shared native-input Checkbox for coverage selection, avoiding a separate provider dependency while retaining accessible form behavior.

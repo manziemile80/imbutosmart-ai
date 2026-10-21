@@ -4,6 +4,10 @@
 // this drives the same server functions the browser calls, so it covers the
 // app's validation, prompting and error handling too.
 //
+// The spoken path is checked in both directions: the backend reads an answer
+// aloud when it can, and a recorded question is transcribed either way, so a
+// deployment that cannot speak still proves the farmer's recording works.
+//
 // Usage:
 //   1. Start the speech backend (local speech server, or configure a provider)
 //   2. Start the app:                    npm run dev   (or a deployed URL)
@@ -14,11 +18,16 @@
 // so the check works out which one it is talking to.
 
 import { createHash } from "node:crypto";
+import { readFile } from "node:fs/promises";
 import { toJSONAsync, fromCrossJSON } from "seroval";
 import { createDefaultSerovalPlugins } from "@tanstack/router-core/ssr/client";
 
 const APP_URL = (process.env.APP_URL ?? "http://localhost:5173").replace(/\/+$/, "");
 const plugins = createDefaultSerovalPlugins();
+
+// A spoken sample of the same question, used to check the recording path on a
+// deployment whose speech backend cannot read answers aloud.
+const SAMPLE_FILE = new URL("./fixtures/speech-sample.wav", import.meta.url);
 
 // A dev server addresses a server function by the encoded module it was split
 // from. A built server addresses it by a hash of the file and export name.
@@ -169,12 +178,18 @@ const spoken = await call("voice-assistant.functions.ts", "speakFarmerText", {
   text: "Maize needs good drainage after heavy rain.",
   language: "en",
 });
+// The clip to transcribe: the answer the backend just spoke, or the committed
+// sample when the backend cannot read aloud. Either way the farmer's recording
+// is checked through the app's own server function.
+let clip = null;
 if (spoken?.error === "unavailable") {
   // The backend is reachable but cannot serve spoken output, for example a plan
   // or terms limit. The server reports it, and the page shows no error: the
   // answer simply stays written. The refusal says what to fix on the host.
   check("backend reports spoken output as unavailable rather than failing", true);
-  console.log(`      the backend cannot read answers aloud${spoken?.refusal ? ` (reason: ${spoken.refusal})` : ""}`);
+  console.log(
+    `      the backend cannot read answers aloud${spoken?.refusal ? ` (reason: ${spoken.refusal})` : ""}`,
+  );
   console.log("      the page shows no error; answers stay written");
   if (spoken?.refusal === "terms") {
     console.log("      the speech model's terms are not accepted yet in the provider console");
@@ -187,21 +202,48 @@ if (spoken?.error === "unavailable") {
   } else if (spoken?.refusal === "request") {
     console.log("      the speech endpoint rejected the request; check the model and voice names");
   }
-  console.log("      transcription could not be checked without a spoken clip");
 } else {
   const clips = spoken?.audios ?? [];
-  const audioBytes = clips.reduce((total, clip) => total + Buffer.from(clip, "base64").length, 0);
-  check("speech synthesised", audioBytes > 0, `${clips.length} clip(s), ${audioBytes} bytes, ${spoken?.mimeType}`);
-  const transcript = await call("voice-assistant.functions.ts", "transcribeFarmerSpeech", {
-    audioBase64: clips[0],
-    mimeType: spoken?.mimeType,
-    language: "en",
-  });
-  check("speech transcribed", Boolean(transcript?.text), transcript?.text);
-  // The tiny local ASR model can mishear a word, so match on a word it rarely
-  // gets wrong rather than on the crop name.
-  check("transcript mentions drainage", /drain/i.test(transcript?.text ?? ""));
+  const audioBytes = clips.reduce((total, piece) => total + Buffer.from(piece, "base64").length, 0);
+  check(
+    "speech synthesised",
+    audioBytes > 0,
+    `${clips.length} clip(s), ${audioBytes} bytes, ${spoken?.mimeType}`,
+  );
+  clip = { audioBase64: clips[0], mimeType: spoken?.mimeType };
 }
+
+// A farmer's recorded question must be transcribed even when the backend
+// cannot read answers aloud, so the sample the backend could not speak is used
+// instead.
+if (!clip) {
+  const sample = await readFile(SAMPLE_FILE);
+  clip = { audioBase64: sample.toString("base64"), mimeType: "audio/wav" };
+  console.log("      the recorded sample is transcribed instead of a spoken answer");
+}
+const transcript = await call("voice-assistant.functions.ts", "transcribeFarmerSpeech", {
+  audioBase64: clip.audioBase64,
+  mimeType: clip.mimeType,
+  language: "en",
+});
+check("speech transcribed", Boolean(transcript?.text), transcript?.text);
+// The tiny local ASR model can mishear a word, so match on a word it rarely
+// gets wrong rather than on the crop name.
+check("transcript mentions drainage", /drain/i.test(transcript?.text ?? ""));
+
+// The transcribed question is answered by the voice assistant, so the whole
+// spoken path a farmer uses is checked: record, transcribe, answer.
+await waitForChatSlot();
+const voiceAnswer = await call("voice-assistant.functions.ts", "askVoiceAssistant", {
+  district: "Musanze",
+  soil: "Volcanic",
+  language: "en",
+  messages: [
+    { role: "user", content: transcript?.text ?? "Maize needs good drainage after heavy rain." },
+  ],
+});
+check("voice answer returned", Boolean(voiceAnswer?.answer), voiceAnswer?.answer?.slice(0, 80));
+check("no error reported", voiceAnswer?.error === null, voiceAnswer?.error ?? "");
 
 console.log("");
 if (failures > 0) {

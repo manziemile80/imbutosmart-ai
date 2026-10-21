@@ -24,6 +24,7 @@
 - [x] Serve spoken answers from the free local speech stack, and send only the standard speech fields a strict endpoint accepts.
 - [x] Keep the voice panel calm when the backend cannot read aloud: the answer stays written and the spoken button is not offered again.
 - [x] Deploy the current build to `imbutosmart.vercel.app` (sprout favicon, NAIS link fix, speech fixes).
-- [ ] Read answers aloud on the deployed app (blocked by accepting the Groq speech model's terms, or by pointing the host at a speech backend the deployment can reach).
+- [x] Verify the farmer's recorded question on the deployed app: transcribed and answered, even though the backend cannot read aloud yet.
+- [ ] Read answers aloud on the deployed app (blocked by accepting the Groq speech model's terms in the provider console — the app-level check now reports this as the refusal reason — or by pointing the host at a speech backend the deployment can reach).
 - [ ] Update `abahinzismart.vercel.app` (a separate Vercel project, outside this workspace's account).
 - [ ] Populate real district land shares (blocked by district crops/pasture/fallow aggregate data; supplied PDF has only national totals).
