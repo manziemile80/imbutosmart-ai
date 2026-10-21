@@ -19,7 +19,8 @@ export function useDistrictWeather(district: string) {
       .then((result) => {
         if (active) setWeather(result);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error("[weather] call failed", error);
         if (active) setWeather(null);
       })
       .finally(() => {

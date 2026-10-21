@@ -71,7 +71,8 @@ export function FarmerAssistant({
       } else {
         setMessages([...next, { role: "assistant", content: response.answer }]);
       }
-    } catch {
+    } catch (error) {
+      console.error("[farmer-chat] call failed", error);
       setAiError("failed");
     } finally {
       setLoading(false);
