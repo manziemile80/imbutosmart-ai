@@ -1,16 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SiteShell } from "@/components/SiteShell";
 import { SeasonAssistant } from "@/components/SeasonAssistant";
 import { FarmerAssistant } from "@/components/FarmerAssistant";
 import { VoiceAssistant } from "@/components/VoiceAssistant";
 import { InsuranceGuidance } from "@/components/InsuranceGuidance";
 import { CropRecommendation } from "@/components/CropRecommendation";
+import { DistrictWeatherCard } from "@/components/DistrictWeatherCard";
 import { Panel, PanelBody, PanelHeader } from "@/components/ui/panel";
 import { Callout } from "@/components/ui/callout";
 import { API_URL, DISTRICTS, SOILS } from "@/lib/api";
 import { farmerCopy, cropLabel, soilLabel, type FarmerLanguage } from "@/lib/farmer-language";
+import { monthTempC, seasonForMonth, seasonRainMm } from "@/lib/weather";
 import { useAutoPrediction } from "@/hooks/use-auto-prediction";
+import { useDistrictWeather } from "@/hooks/use-district-weather";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -40,8 +43,26 @@ function Advisory() {
   const [rain, setRain] = useState("450");
   const [temp, setTemp] = useState("19");
   const [language, setLanguage] = useState<FarmerLanguage>("en");
+  // A figure the farmer typed is never overwritten by the district's figures.
+  const [rainEdited, setRainEdited] = useState(false);
+  const [tempEdited, setTempEdited] = useState(false);
   const t = farmerCopy[language];
-  const { result, loading, error } = useAutoPrediction(district, soil, rain, temp);
+  const month = new Date().getMonth() + 1;
+  const season = seasonForMonth(month);
+  const { result, loading, error } = useAutoPrediction(district, soil, rain, temp, season);
+  const { weather, loading: weatherLoading } = useDistrictWeather(district);
+
+  // The district's own record fills the season figures, so they follow the
+  // location the farmer chose. A figure the farmer entered stays as entered.
+  useEffect(() => {
+    const climate = weather?.climate;
+    if (!climate) return;
+    if (season && !rainEdited) setRain(String(Math.round(seasonRainMm(climate, season))));
+    if (!tempEdited) {
+      const usual = monthTempC(climate, month);
+      if (usual != null) setTemp(usual.toFixed(1));
+    }
+  }, [weather, season, month, rainEdited, tempEdited]);
 
   return (
     <SiteShell language={language}>
@@ -106,7 +127,10 @@ function Advisory() {
                       max={5000}
                       required
                       value={rain}
-                      onChange={(e) => setRain(e.target.value)}
+                      onChange={(e) => {
+                        setRain(e.target.value);
+                        setRainEdited(true);
+                      }}
                     />
                   </Field>
                   <Field label={t.temp}>
@@ -119,11 +143,16 @@ function Advisory() {
                       step="0.1"
                       required
                       value={temp}
-                      onChange={(e) => setTemp(e.target.value)}
+                      onChange={(e) => {
+                        setTemp(e.target.value);
+                        setTempEdited(true);
+                      }}
                     />
                   </Field>
                 </div>
               </form>
+
+              <DistrictWeatherCard weather={weather} loading={weatherLoading} language={language} />
 
               {loading && (
                 <p role="status" className="mt-5 text-sm text-muted-foreground">
@@ -160,6 +189,9 @@ function Advisory() {
                   </div>
                   <p className="mt-4 text-xs text-muted-foreground">
                     {district} · {soilLabel(soil, language)}
+                    {result.observations
+                      ? ` · ${t.observations.replace("{n}", String(result.observations))}`
+                      : ""}
                   </p>
                   {!API_URL && (
                     <p className="mt-3 text-xs leading-relaxed text-muted-foreground">

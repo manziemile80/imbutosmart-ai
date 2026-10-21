@@ -10,7 +10,7 @@
 - [x] Add English/Kinyarwanda switching to farmer labels, crop results, and season assistance.
 - [x] Verify automatic changes and Kinyarwanda AI advice.
 - [x] Prepare the Render deployment Blueprint.
-- [ ] Deploy on Render, train, and connect predictions (blocked by Render account access and real crop-level CSV).
+- [x] Deploy on Render, train, and connect predictions (blocked by Render account access; the real crop-level data is in: 51,225 NISR Seasonal Agricultural Survey 2025 crop observations, trained and verified locally).
 - [x] Add an interactive district land-use map with verified boundaries and no fabricated figures.
 - [x] Verify district selection and land-use CSV import.
 - [x] Add a voice assistant that records a spoken question, transcribes it, answers it and speaks the reply.
@@ -26,6 +26,8 @@
 - [x] Deploy the current build to `imbutosmart.vercel.app` (sprout favicon, NAIS link fix, speech fixes).
 - [x] Verify the farmer's recorded question on the deployed app: transcribed and answered, even though the backend cannot read aloud yet.
 - [x] Apply a structured design system: tokens, panels, callouts and status pills shared by the farmer page and the dashboard, in English, Kinyarwanda and French.
+- [x] Fill the rain and temperature from the selected district's own climate record and live forecast, so the figures follow the location.
+- [x] Train the models on the NISR Seasonal Agricultural Survey 2025 microdata: district, season and weather, with the survey's sampling weights.
 - [x] Wait before retrying a chat request that did not reach the backend, so a busy or weak connection still gives the farmer an answer.
 - [x] Deploy the design system and the retry fix, and verify the live app's record, transcribe and answer path.
 - [ ] Read answers aloud on the deployed app (blocked by accepting the Groq speech model's terms in the provider console — the app-level check now reports this as the refusal reason — or by pointing the host at a speech backend the deployment can reach).

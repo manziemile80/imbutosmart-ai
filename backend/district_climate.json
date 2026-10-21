@@ -1,0 +1,2102 @@
+{
+  "Bugesera": {
+    "annualRainMm": 1290.9,
+    "months": {
+      "APR": {
+        "rainMm": 177.9,
+        "tempC": 19.54
+      },
+      "AUG": {
+        "rainMm": 56.1,
+        "tempC": 20.12
+      },
+      "DEC": {
+        "rainMm": 109.1,
+        "tempC": 19.71
+      },
+      "FEB": {
+        "rainMm": 101.7,
+        "tempC": 20.75
+      },
+      "JAN": {
+        "rainMm": 96.4,
+        "tempC": 20.26
+      },
+      "JUL": {
+        "rainMm": 31.3,
+        "tempC": 19.01
+      },
+      "JUN": {
+        "rainMm": 49.8,
+        "tempC": 18.8
+      },
+      "MAR": {
+        "rainMm": 153.5,
+        "tempC": 20.25
+      },
+      "MAY": {
+        "rainMm": 138.6,
+        "tempC": 19.16
+      },
+      "NOV": {
+        "rainMm": 159.6,
+        "tempC": 19.43
+      },
+      "OCT": {
+        "rainMm": 128.7,
+        "tempC": 20.11
+      },
+      "SEP": {
+        "rainMm": 88.2,
+        "tempC": 20.52
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 411.6,
+        "tempC": 20.94
+      },
+      "B": {
+        "rainMm": 352.2,
+        "tempC": 20.21
+      },
+      "C": {
+        "rainMm": 194.9,
+        "tempC": 20.36
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Burera": {
+    "annualRainMm": 1502.0,
+    "months": {
+      "APR": {
+        "rainMm": 192.9,
+        "tempC": 17.5
+      },
+      "AUG": {
+        "rainMm": 75.0,
+        "tempC": 17.36
+      },
+      "DEC": {
+        "rainMm": 125.9,
+        "tempC": 17.67
+      },
+      "FEB": {
+        "rainMm": 107.9,
+        "tempC": 18.48
+      },
+      "JAN": {
+        "rainMm": 100.4,
+        "tempC": 17.97
+      },
+      "JUL": {
+        "rainMm": 45.9,
+        "tempC": 16.48
+      },
+      "JUN": {
+        "rainMm": 67.2,
+        "tempC": 16.52
+      },
+      "MAR": {
+        "rainMm": 173.0,
+        "tempC": 18.16
+      },
+      "MAY": {
+        "rainMm": 163.7,
+        "tempC": 17.04
+      },
+      "NOV": {
+        "rainMm": 176.4,
+        "tempC": 17.51
+      },
+      "OCT": {
+        "rainMm": 160.3,
+        "tempC": 17.79
+      },
+      "SEP": {
+        "rainMm": 113.4,
+        "tempC": 17.88
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 547.2,
+        "tempC": 18.48
+      },
+      "B": {
+        "rainMm": 506.9,
+        "tempC": 17.86
+      },
+      "C": {
+        "rainMm": 360.4,
+        "tempC": 17.54
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Gakenke": {
+    "annualRainMm": 1502.0,
+    "months": {
+      "APR": {
+        "rainMm": 192.9,
+        "tempC": 17.5
+      },
+      "AUG": {
+        "rainMm": 75.0,
+        "tempC": 17.36
+      },
+      "DEC": {
+        "rainMm": 125.9,
+        "tempC": 17.67
+      },
+      "FEB": {
+        "rainMm": 107.9,
+        "tempC": 18.48
+      },
+      "JAN": {
+        "rainMm": 100.4,
+        "tempC": 17.97
+      },
+      "JUL": {
+        "rainMm": 45.9,
+        "tempC": 16.48
+      },
+      "JUN": {
+        "rainMm": 67.2,
+        "tempC": 16.52
+      },
+      "MAR": {
+        "rainMm": 173.0,
+        "tempC": 18.16
+      },
+      "MAY": {
+        "rainMm": 163.7,
+        "tempC": 17.04
+      },
+      "NOV": {
+        "rainMm": 176.4,
+        "tempC": 17.51
+      },
+      "OCT": {
+        "rainMm": 160.3,
+        "tempC": 17.79
+      },
+      "SEP": {
+        "rainMm": 113.4,
+        "tempC": 17.88
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 547.2,
+        "tempC": 18.48
+      },
+      "B": {
+        "rainMm": 506.9,
+        "tempC": 17.86
+      },
+      "C": {
+        "rainMm": 360.4,
+        "tempC": 17.54
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Gasabo": {
+    "annualRainMm": 1290.9,
+    "months": {
+      "APR": {
+        "rainMm": 177.9,
+        "tempC": 19.54
+      },
+      "AUG": {
+        "rainMm": 56.1,
+        "tempC": 20.12
+      },
+      "DEC": {
+        "rainMm": 109.1,
+        "tempC": 19.71
+      },
+      "FEB": {
+        "rainMm": 101.7,
+        "tempC": 20.75
+      },
+      "JAN": {
+        "rainMm": 96.4,
+        "tempC": 20.26
+      },
+      "JUL": {
+        "rainMm": 31.3,
+        "tempC": 19.01
+      },
+      "JUN": {
+        "rainMm": 49.8,
+        "tempC": 18.8
+      },
+      "MAR": {
+        "rainMm": 153.5,
+        "tempC": 20.25
+      },
+      "MAY": {
+        "rainMm": 138.6,
+        "tempC": 19.16
+      },
+      "NOV": {
+        "rainMm": 159.6,
+        "tempC": 19.43
+      },
+      "OCT": {
+        "rainMm": 128.7,
+        "tempC": 20.11
+      },
+      "SEP": {
+        "rainMm": 88.2,
+        "tempC": 20.52
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 411.6,
+        "tempC": 20.94
+      },
+      "B": {
+        "rainMm": 352.2,
+        "tempC": 20.21
+      },
+      "C": {
+        "rainMm": 194.9,
+        "tempC": 20.36
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Gatsibo": {
+    "annualRainMm": 1137.2,
+    "months": {
+      "APR": {
+        "rainMm": 153.6,
+        "tempC": 20.57
+      },
+      "AUG": {
+        "rainMm": 49.6,
+        "tempC": 21.49
+      },
+      "DEC": {
+        "rainMm": 91.8,
+        "tempC": 20.86
+      },
+      "FEB": {
+        "rainMm": 80.2,
+        "tempC": 22.17
+      },
+      "JAN": {
+        "rainMm": 78.1,
+        "tempC": 21.54
+      },
+      "JUL": {
+        "rainMm": 30.1,
+        "tempC": 20.71
+      },
+      "JUN": {
+        "rainMm": 43.2,
+        "tempC": 20.4
+      },
+      "MAR": {
+        "rainMm": 138.6,
+        "tempC": 21.47
+      },
+      "MAY": {
+        "rainMm": 121.2,
+        "tempC": 20.29
+      },
+      "NOV": {
+        "rainMm": 138.3,
+        "tempC": 20.55
+      },
+      "OCT": {
+        "rainMm": 124.0,
+        "tempC": 21.23
+      },
+      "SEP": {
+        "rainMm": 88.5,
+        "tempC": 21.59
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 434.3,
+        "tempC": 22.14
+      },
+      "B": {
+        "rainMm": 376.4,
+        "tempC": 21.39
+      },
+      "C": {
+        "rainMm": 231.7,
+        "tempC": 21.8
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Gicumbi": {
+    "annualRainMm": 1502.0,
+    "months": {
+      "APR": {
+        "rainMm": 192.9,
+        "tempC": 17.5
+      },
+      "AUG": {
+        "rainMm": 75.0,
+        "tempC": 17.36
+      },
+      "DEC": {
+        "rainMm": 125.9,
+        "tempC": 17.67
+      },
+      "FEB": {
+        "rainMm": 107.9,
+        "tempC": 18.48
+      },
+      "JAN": {
+        "rainMm": 100.4,
+        "tempC": 17.97
+      },
+      "JUL": {
+        "rainMm": 45.9,
+        "tempC": 16.48
+      },
+      "JUN": {
+        "rainMm": 67.2,
+        "tempC": 16.52
+      },
+      "MAR": {
+        "rainMm": 173.0,
+        "tempC": 18.16
+      },
+      "MAY": {
+        "rainMm": 163.7,
+        "tempC": 17.04
+      },
+      "NOV": {
+        "rainMm": 176.4,
+        "tempC": 17.51
+      },
+      "OCT": {
+        "rainMm": 160.3,
+        "tempC": 17.79
+      },
+      "SEP": {
+        "rainMm": 113.4,
+        "tempC": 17.88
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 547.2,
+        "tempC": 18.48
+      },
+      "B": {
+        "rainMm": 506.9,
+        "tempC": 17.86
+      },
+      "C": {
+        "rainMm": 360.4,
+        "tempC": 17.54
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Gisagara": {
+    "annualRainMm": 1268.9,
+    "months": {
+      "APR": {
+        "rainMm": 169.5,
+        "tempC": 20.17
+      },
+      "AUG": {
+        "rainMm": 42.2,
+        "tempC": 20.87
+      },
+      "DEC": {
+        "rainMm": 131.1,
+        "tempC": 20.42
+      },
+      "FEB": {
+        "rainMm": 107.1,
+        "tempC": 21.22
+      },
+      "JAN": {
+        "rainMm": 119.0,
+        "tempC": 20.86
+      },
+      "JUL": {
+        "rainMm": 20.2,
+        "tempC": 19.52
+      },
+      "JUN": {
+        "rainMm": 35.7,
+        "tempC": 19.29
+      },
+      "MAR": {
+        "rainMm": 154.4,
+        "tempC": 20.78
+      },
+      "MAY": {
+        "rainMm": 101.4,
+        "tempC": 19.72
+      },
+      "NOV": {
+        "rainMm": 191.1,
+        "tempC": 20.24
+      },
+      "OCT": {
+        "rainMm": 123.7,
+        "tempC": 21.11
+      },
+      "SEP": {
+        "rainMm": 73.5,
+        "tempC": 21.69
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 422.4,
+        "tempC": 21.71
+      },
+      "B": {
+        "rainMm": 349.7,
+        "tempC": 20.57
+      },
+      "C": {
+        "rainMm": 164.3,
+        "tempC": 20.76
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Huye": {
+    "annualRainMm": 1268.9,
+    "months": {
+      "APR": {
+        "rainMm": 169.5,
+        "tempC": 20.17
+      },
+      "AUG": {
+        "rainMm": 42.2,
+        "tempC": 20.87
+      },
+      "DEC": {
+        "rainMm": 131.1,
+        "tempC": 20.42
+      },
+      "FEB": {
+        "rainMm": 107.1,
+        "tempC": 21.22
+      },
+      "JAN": {
+        "rainMm": 119.0,
+        "tempC": 20.86
+      },
+      "JUL": {
+        "rainMm": 20.2,
+        "tempC": 19.52
+      },
+      "JUN": {
+        "rainMm": 35.7,
+        "tempC": 19.29
+      },
+      "MAR": {
+        "rainMm": 154.4,
+        "tempC": 20.78
+      },
+      "MAY": {
+        "rainMm": 101.4,
+        "tempC": 19.72
+      },
+      "NOV": {
+        "rainMm": 191.1,
+        "tempC": 20.24
+      },
+      "OCT": {
+        "rainMm": 123.7,
+        "tempC": 21.11
+      },
+      "SEP": {
+        "rainMm": 73.5,
+        "tempC": 21.69
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 422.4,
+        "tempC": 21.71
+      },
+      "B": {
+        "rainMm": 349.7,
+        "tempC": 20.57
+      },
+      "C": {
+        "rainMm": 164.3,
+        "tempC": 20.76
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Kamonyi": {
+    "annualRainMm": 1290.9,
+    "months": {
+      "APR": {
+        "rainMm": 177.9,
+        "tempC": 19.54
+      },
+      "AUG": {
+        "rainMm": 56.1,
+        "tempC": 20.12
+      },
+      "DEC": {
+        "rainMm": 109.1,
+        "tempC": 19.71
+      },
+      "FEB": {
+        "rainMm": 101.7,
+        "tempC": 20.75
+      },
+      "JAN": {
+        "rainMm": 96.4,
+        "tempC": 20.26
+      },
+      "JUL": {
+        "rainMm": 31.3,
+        "tempC": 19.01
+      },
+      "JUN": {
+        "rainMm": 49.8,
+        "tempC": 18.8
+      },
+      "MAR": {
+        "rainMm": 153.5,
+        "tempC": 20.25
+      },
+      "MAY": {
+        "rainMm": 138.6,
+        "tempC": 19.16
+      },
+      "NOV": {
+        "rainMm": 159.6,
+        "tempC": 19.43
+      },
+      "OCT": {
+        "rainMm": 128.7,
+        "tempC": 20.11
+      },
+      "SEP": {
+        "rainMm": 88.2,
+        "tempC": 20.52
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 411.6,
+        "tempC": 20.94
+      },
+      "B": {
+        "rainMm": 352.2,
+        "tempC": 20.21
+      },
+      "C": {
+        "rainMm": 194.9,
+        "tempC": 20.36
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Karongi": {
+    "annualRainMm": 1586.5,
+    "months": {
+      "APR": {
+        "rainMm": 191.4,
+        "tempC": 19.81
+      },
+      "AUG": {
+        "rainMm": 80.0,
+        "tempC": 20.14
+      },
+      "DEC": {
+        "rainMm": 148.8,
+        "tempC": 20.05
+      },
+      "FEB": {
+        "rainMm": 132.5,
+        "tempC": 20.88
+      },
+      "JAN": {
+        "rainMm": 126.2,
+        "tempC": 20.37
+      },
+      "JUL": {
+        "rainMm": 37.5,
+        "tempC": 19.23
+      },
+      "JUN": {
+        "rainMm": 60.9,
+        "tempC": 18.99
+      },
+      "MAR": {
+        "rainMm": 190.7,
+        "tempC": 20.53
+      },
+      "MAY": {
+        "rainMm": 141.0,
+        "tempC": 19.32
+      },
+      "NOV": {
+        "rainMm": 195.9,
+        "tempC": 19.88
+      },
+      "OCT": {
+        "rainMm": 163.7,
+        "tempC": 20.31
+      },
+      "SEP": {
+        "rainMm": 117.9,
+        "tempC": 20.63
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 424.3,
+        "tempC": 21.39
+      },
+      "B": {
+        "rainMm": 339.8,
+        "tempC": 20.45
+      },
+      "C": {
+        "rainMm": 182.4,
+        "tempC": 20.82
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Kayonza": {
+    "annualRainMm": 1207.2,
+    "months": {
+      "APR": {
+        "rainMm": 167.4,
+        "tempC": 20.41
+      },
+      "AUG": {
+        "rainMm": 46.8,
+        "tempC": 21.01
+      },
+      "DEC": {
+        "rainMm": 102.9,
+        "tempC": 20.51
+      },
+      "FEB": {
+        "rainMm": 89.0,
+        "tempC": 21.55
+      },
+      "JAN": {
+        "rainMm": 93.3,
+        "tempC": 21.05
+      },
+      "JUL": {
+        "rainMm": 26.3,
+        "tempC": 19.94
+      },
+      "JUN": {
+        "rainMm": 41.7,
+        "tempC": 19.87
+      },
+      "MAR": {
+        "rainMm": 144.8,
+        "tempC": 21.08
+      },
+      "MAY": {
+        "rainMm": 127.4,
+        "tempC": 20.16
+      },
+      "NOV": {
+        "rainMm": 156.6,
+        "tempC": 20.24
+      },
+      "OCT": {
+        "rainMm": 124.6,
+        "tempC": 20.89
+      },
+      "SEP": {
+        "rainMm": 86.4,
+        "tempC": 21.31
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 483.7,
+        "tempC": 21.6
+      },
+      "B": {
+        "rainMm": 368.4,
+        "tempC": 20.96
+      },
+      "C": {
+        "rainMm": 203.2,
+        "tempC": 21.06
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Kicukiro": {
+    "annualRainMm": 1290.9,
+    "months": {
+      "APR": {
+        "rainMm": 177.9,
+        "tempC": 19.54
+      },
+      "AUG": {
+        "rainMm": 56.1,
+        "tempC": 20.12
+      },
+      "DEC": {
+        "rainMm": 109.1,
+        "tempC": 19.71
+      },
+      "FEB": {
+        "rainMm": 101.7,
+        "tempC": 20.75
+      },
+      "JAN": {
+        "rainMm": 96.4,
+        "tempC": 20.26
+      },
+      "JUL": {
+        "rainMm": 31.3,
+        "tempC": 19.01
+      },
+      "JUN": {
+        "rainMm": 49.8,
+        "tempC": 18.8
+      },
+      "MAR": {
+        "rainMm": 153.5,
+        "tempC": 20.25
+      },
+      "MAY": {
+        "rainMm": 138.6,
+        "tempC": 19.16
+      },
+      "NOV": {
+        "rainMm": 159.6,
+        "tempC": 19.43
+      },
+      "OCT": {
+        "rainMm": 128.7,
+        "tempC": 20.11
+      },
+      "SEP": {
+        "rainMm": 88.2,
+        "tempC": 20.52
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 411.6,
+        "tempC": 20.94
+      },
+      "B": {
+        "rainMm": 352.2,
+        "tempC": 20.21
+      },
+      "C": {
+        "rainMm": 194.9,
+        "tempC": 20.36
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Kirehe": {
+    "annualRainMm": 1207.2,
+    "months": {
+      "APR": {
+        "rainMm": 167.4,
+        "tempC": 20.41
+      },
+      "AUG": {
+        "rainMm": 46.8,
+        "tempC": 21.01
+      },
+      "DEC": {
+        "rainMm": 102.9,
+        "tempC": 20.51
+      },
+      "FEB": {
+        "rainMm": 89.0,
+        "tempC": 21.55
+      },
+      "JAN": {
+        "rainMm": 93.3,
+        "tempC": 21.05
+      },
+      "JUL": {
+        "rainMm": 26.3,
+        "tempC": 19.94
+      },
+      "JUN": {
+        "rainMm": 41.7,
+        "tempC": 19.87
+      },
+      "MAR": {
+        "rainMm": 144.8,
+        "tempC": 21.08
+      },
+      "MAY": {
+        "rainMm": 127.4,
+        "tempC": 20.16
+      },
+      "NOV": {
+        "rainMm": 156.6,
+        "tempC": 20.24
+      },
+      "OCT": {
+        "rainMm": 124.6,
+        "tempC": 20.89
+      },
+      "SEP": {
+        "rainMm": 86.4,
+        "tempC": 21.31
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 483.7,
+        "tempC": 21.6
+      },
+      "B": {
+        "rainMm": 368.4,
+        "tempC": 20.96
+      },
+      "C": {
+        "rainMm": 203.2,
+        "tempC": 21.06
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Muhanga": {
+    "annualRainMm": 1290.9,
+    "months": {
+      "APR": {
+        "rainMm": 177.9,
+        "tempC": 19.54
+      },
+      "AUG": {
+        "rainMm": 56.1,
+        "tempC": 20.12
+      },
+      "DEC": {
+        "rainMm": 109.1,
+        "tempC": 19.71
+      },
+      "FEB": {
+        "rainMm": 101.7,
+        "tempC": 20.75
+      },
+      "JAN": {
+        "rainMm": 96.4,
+        "tempC": 20.26
+      },
+      "JUL": {
+        "rainMm": 31.3,
+        "tempC": 19.01
+      },
+      "JUN": {
+        "rainMm": 49.8,
+        "tempC": 18.8
+      },
+      "MAR": {
+        "rainMm": 153.5,
+        "tempC": 20.25
+      },
+      "MAY": {
+        "rainMm": 138.6,
+        "tempC": 19.16
+      },
+      "NOV": {
+        "rainMm": 159.6,
+        "tempC": 19.43
+      },
+      "OCT": {
+        "rainMm": 128.7,
+        "tempC": 20.11
+      },
+      "SEP": {
+        "rainMm": 88.2,
+        "tempC": 20.52
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 411.6,
+        "tempC": 20.94
+      },
+      "B": {
+        "rainMm": 352.2,
+        "tempC": 20.21
+      },
+      "C": {
+        "rainMm": 194.9,
+        "tempC": 20.36
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Musanze": {
+    "annualRainMm": 1692.8,
+    "months": {
+      "APR": {
+        "rainMm": 182.7,
+        "tempC": 17.51
+      },
+      "AUG": {
+        "rainMm": 91.5,
+        "tempC": 17.39
+      },
+      "DEC": {
+        "rainMm": 153.5,
+        "tempC": 17.15
+      },
+      "FEB": {
+        "rainMm": 126.8,
+        "tempC": 17.98
+      },
+      "JAN": {
+        "rainMm": 126.5,
+        "tempC": 17.33
+      },
+      "JUL": {
+        "rainMm": 44.6,
+        "tempC": 16.68
+      },
+      "JUN": {
+        "rainMm": 73.5,
+        "tempC": 16.65
+      },
+      "MAR": {
+        "rainMm": 206.2,
+        "tempC": 17.96
+      },
+      "MAY": {
+        "rainMm": 141.7,
+        "tempC": 17.16
+      },
+      "NOV": {
+        "rainMm": 217.5,
+        "tempC": 17.19
+      },
+      "OCT": {
+        "rainMm": 189.7,
+        "tempC": 17.42
+      },
+      "SEP": {
+        "rainMm": 138.6,
+        "tempC": 17.66
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 552.4,
+        "tempC": 17.86
+      },
+      "B": {
+        "rainMm": 521.3,
+        "tempC": 17.69
+      },
+      "C": {
+        "rainMm": 342.7,
+        "tempC": 17.49
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Ngoma": {
+    "annualRainMm": 1207.2,
+    "months": {
+      "APR": {
+        "rainMm": 167.4,
+        "tempC": 20.41
+      },
+      "AUG": {
+        "rainMm": 46.8,
+        "tempC": 21.01
+      },
+      "DEC": {
+        "rainMm": 102.9,
+        "tempC": 20.51
+      },
+      "FEB": {
+        "rainMm": 89.0,
+        "tempC": 21.55
+      },
+      "JAN": {
+        "rainMm": 93.3,
+        "tempC": 21.05
+      },
+      "JUL": {
+        "rainMm": 26.3,
+        "tempC": 19.94
+      },
+      "JUN": {
+        "rainMm": 41.7,
+        "tempC": 19.87
+      },
+      "MAR": {
+        "rainMm": 144.8,
+        "tempC": 21.08
+      },
+      "MAY": {
+        "rainMm": 127.4,
+        "tempC": 20.16
+      },
+      "NOV": {
+        "rainMm": 156.6,
+        "tempC": 20.24
+      },
+      "OCT": {
+        "rainMm": 124.6,
+        "tempC": 20.89
+      },
+      "SEP": {
+        "rainMm": 86.4,
+        "tempC": 21.31
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 483.7,
+        "tempC": 21.6
+      },
+      "B": {
+        "rainMm": 368.4,
+        "tempC": 20.96
+      },
+      "C": {
+        "rainMm": 203.2,
+        "tempC": 21.06
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Ngororero": {
+    "annualRainMm": 1586.5,
+    "months": {
+      "APR": {
+        "rainMm": 191.4,
+        "tempC": 19.81
+      },
+      "AUG": {
+        "rainMm": 80.0,
+        "tempC": 20.14
+      },
+      "DEC": {
+        "rainMm": 148.8,
+        "tempC": 20.05
+      },
+      "FEB": {
+        "rainMm": 132.5,
+        "tempC": 20.88
+      },
+      "JAN": {
+        "rainMm": 126.2,
+        "tempC": 20.37
+      },
+      "JUL": {
+        "rainMm": 37.5,
+        "tempC": 19.23
+      },
+      "JUN": {
+        "rainMm": 60.9,
+        "tempC": 18.99
+      },
+      "MAR": {
+        "rainMm": 190.7,
+        "tempC": 20.53
+      },
+      "MAY": {
+        "rainMm": 141.0,
+        "tempC": 19.32
+      },
+      "NOV": {
+        "rainMm": 195.9,
+        "tempC": 19.88
+      },
+      "OCT": {
+        "rainMm": 163.7,
+        "tempC": 20.31
+      },
+      "SEP": {
+        "rainMm": 117.9,
+        "tempC": 20.63
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 424.3,
+        "tempC": 21.39
+      },
+      "B": {
+        "rainMm": 339.8,
+        "tempC": 20.45
+      },
+      "C": {
+        "rainMm": 182.4,
+        "tempC": 20.82
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Nyabihu": {
+    "annualRainMm": 1692.8,
+    "months": {
+      "APR": {
+        "rainMm": 182.7,
+        "tempC": 17.51
+      },
+      "AUG": {
+        "rainMm": 91.5,
+        "tempC": 17.39
+      },
+      "DEC": {
+        "rainMm": 153.5,
+        "tempC": 17.15
+      },
+      "FEB": {
+        "rainMm": 126.8,
+        "tempC": 17.98
+      },
+      "JAN": {
+        "rainMm": 126.5,
+        "tempC": 17.33
+      },
+      "JUL": {
+        "rainMm": 44.6,
+        "tempC": 16.68
+      },
+      "JUN": {
+        "rainMm": 73.5,
+        "tempC": 16.65
+      },
+      "MAR": {
+        "rainMm": 206.2,
+        "tempC": 17.96
+      },
+      "MAY": {
+        "rainMm": 141.7,
+        "tempC": 17.16
+      },
+      "NOV": {
+        "rainMm": 217.5,
+        "tempC": 17.19
+      },
+      "OCT": {
+        "rainMm": 189.7,
+        "tempC": 17.42
+      },
+      "SEP": {
+        "rainMm": 138.6,
+        "tempC": 17.66
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 552.4,
+        "tempC": 17.86
+      },
+      "B": {
+        "rainMm": 521.3,
+        "tempC": 17.69
+      },
+      "C": {
+        "rainMm": 342.7,
+        "tempC": 17.49
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Nyagatare": {
+    "annualRainMm": 1137.2,
+    "months": {
+      "APR": {
+        "rainMm": 153.6,
+        "tempC": 20.57
+      },
+      "AUG": {
+        "rainMm": 49.6,
+        "tempC": 21.49
+      },
+      "DEC": {
+        "rainMm": 91.8,
+        "tempC": 20.86
+      },
+      "FEB": {
+        "rainMm": 80.2,
+        "tempC": 22.17
+      },
+      "JAN": {
+        "rainMm": 78.1,
+        "tempC": 21.54
+      },
+      "JUL": {
+        "rainMm": 30.1,
+        "tempC": 20.71
+      },
+      "JUN": {
+        "rainMm": 43.2,
+        "tempC": 20.4
+      },
+      "MAR": {
+        "rainMm": 138.6,
+        "tempC": 21.47
+      },
+      "MAY": {
+        "rainMm": 121.2,
+        "tempC": 20.29
+      },
+      "NOV": {
+        "rainMm": 138.3,
+        "tempC": 20.55
+      },
+      "OCT": {
+        "rainMm": 124.0,
+        "tempC": 21.23
+      },
+      "SEP": {
+        "rainMm": 88.5,
+        "tempC": 21.59
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 434.3,
+        "tempC": 22.14
+      },
+      "B": {
+        "rainMm": 376.4,
+        "tempC": 21.39
+      },
+      "C": {
+        "rainMm": 231.7,
+        "tempC": 21.8
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Nyamagabe": {
+    "annualRainMm": 1507.1,
+    "months": {
+      "APR": {
+        "rainMm": 175.8,
+        "tempC": 18.71
+      },
+      "AUG": {
+        "rainMm": 65.1,
+        "tempC": 19.04
+      },
+      "DEC": {
+        "rainMm": 152.2,
+        "tempC": 18.94
+      },
+      "FEB": {
+        "rainMm": 125.4,
+        "tempC": 19.57
+      },
+      "JAN": {
+        "rainMm": 137.0,
+        "tempC": 19.24
+      },
+      "JUL": {
+        "rainMm": 28.5,
+        "tempC": 17.9
+      },
+      "JUN": {
+        "rainMm": 49.5,
+        "tempC": 17.72
+      },
+      "MAR": {
+        "rainMm": 178.2,
+        "tempC": 19.27
+      },
+      "MAY": {
+        "rainMm": 108.2,
+        "tempC": 18.23
+      },
+      "NOV": {
+        "rainMm": 223.8,
+        "tempC": 18.82
+      },
+      "OCT": {
+        "rainMm": 156.9,
+        "tempC": 19.46
+      },
+      "SEP": {
+        "rainMm": 106.5,
+        "tempC": 19.82
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 446.5,
+        "tempC": 20.4
+      },
+      "B": {
+        "rainMm": 304.5,
+        "tempC": 19.31
+      },
+      "C": {
+        "rainMm": 147.8,
+        "tempC": 19.56
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Nyamasheke": {
+    "annualRainMm": 1507.1,
+    "months": {
+      "APR": {
+        "rainMm": 175.8,
+        "tempC": 18.71
+      },
+      "AUG": {
+        "rainMm": 65.1,
+        "tempC": 19.04
+      },
+      "DEC": {
+        "rainMm": 152.2,
+        "tempC": 18.94
+      },
+      "FEB": {
+        "rainMm": 125.4,
+        "tempC": 19.57
+      },
+      "JAN": {
+        "rainMm": 137.0,
+        "tempC": 19.24
+      },
+      "JUL": {
+        "rainMm": 28.5,
+        "tempC": 17.9
+      },
+      "JUN": {
+        "rainMm": 49.5,
+        "tempC": 17.72
+      },
+      "MAR": {
+        "rainMm": 178.2,
+        "tempC": 19.27
+      },
+      "MAY": {
+        "rainMm": 108.2,
+        "tempC": 18.23
+      },
+      "NOV": {
+        "rainMm": 223.8,
+        "tempC": 18.82
+      },
+      "OCT": {
+        "rainMm": 156.9,
+        "tempC": 19.46
+      },
+      "SEP": {
+        "rainMm": 106.5,
+        "tempC": 19.82
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 446.5,
+        "tempC": 20.4
+      },
+      "B": {
+        "rainMm": 304.5,
+        "tempC": 19.31
+      },
+      "C": {
+        "rainMm": 147.8,
+        "tempC": 19.56
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Nyanza": {
+    "annualRainMm": 1268.9,
+    "months": {
+      "APR": {
+        "rainMm": 169.5,
+        "tempC": 20.17
+      },
+      "AUG": {
+        "rainMm": 42.2,
+        "tempC": 20.87
+      },
+      "DEC": {
+        "rainMm": 131.1,
+        "tempC": 20.42
+      },
+      "FEB": {
+        "rainMm": 107.1,
+        "tempC": 21.22
+      },
+      "JAN": {
+        "rainMm": 119.0,
+        "tempC": 20.86
+      },
+      "JUL": {
+        "rainMm": 20.2,
+        "tempC": 19.52
+      },
+      "JUN": {
+        "rainMm": 35.7,
+        "tempC": 19.29
+      },
+      "MAR": {
+        "rainMm": 154.4,
+        "tempC": 20.78
+      },
+      "MAY": {
+        "rainMm": 101.4,
+        "tempC": 19.72
+      },
+      "NOV": {
+        "rainMm": 191.1,
+        "tempC": 20.24
+      },
+      "OCT": {
+        "rainMm": 123.7,
+        "tempC": 21.11
+      },
+      "SEP": {
+        "rainMm": 73.5,
+        "tempC": 21.69
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 422.4,
+        "tempC": 21.71
+      },
+      "B": {
+        "rainMm": 349.7,
+        "tempC": 20.57
+      },
+      "C": {
+        "rainMm": 164.3,
+        "tempC": 20.76
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Nyarugenge": {
+    "annualRainMm": 1290.9,
+    "months": {
+      "APR": {
+        "rainMm": 177.9,
+        "tempC": 19.54
+      },
+      "AUG": {
+        "rainMm": 56.1,
+        "tempC": 20.12
+      },
+      "DEC": {
+        "rainMm": 109.1,
+        "tempC": 19.71
+      },
+      "FEB": {
+        "rainMm": 101.7,
+        "tempC": 20.75
+      },
+      "JAN": {
+        "rainMm": 96.4,
+        "tempC": 20.26
+      },
+      "JUL": {
+        "rainMm": 31.3,
+        "tempC": 19.01
+      },
+      "JUN": {
+        "rainMm": 49.8,
+        "tempC": 18.8
+      },
+      "MAR": {
+        "rainMm": 153.5,
+        "tempC": 20.25
+      },
+      "MAY": {
+        "rainMm": 138.6,
+        "tempC": 19.16
+      },
+      "NOV": {
+        "rainMm": 159.6,
+        "tempC": 19.43
+      },
+      "OCT": {
+        "rainMm": 128.7,
+        "tempC": 20.11
+      },
+      "SEP": {
+        "rainMm": 88.2,
+        "tempC": 20.52
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 411.6,
+        "tempC": 20.94
+      },
+      "B": {
+        "rainMm": 352.2,
+        "tempC": 20.21
+      },
+      "C": {
+        "rainMm": 194.9,
+        "tempC": 20.36
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Nyaruguru": {
+    "annualRainMm": 1507.1,
+    "months": {
+      "APR": {
+        "rainMm": 175.8,
+        "tempC": 18.71
+      },
+      "AUG": {
+        "rainMm": 65.1,
+        "tempC": 19.04
+      },
+      "DEC": {
+        "rainMm": 152.2,
+        "tempC": 18.94
+      },
+      "FEB": {
+        "rainMm": 125.4,
+        "tempC": 19.57
+      },
+      "JAN": {
+        "rainMm": 137.0,
+        "tempC": 19.24
+      },
+      "JUL": {
+        "rainMm": 28.5,
+        "tempC": 17.9
+      },
+      "JUN": {
+        "rainMm": 49.5,
+        "tempC": 17.72
+      },
+      "MAR": {
+        "rainMm": 178.2,
+        "tempC": 19.27
+      },
+      "MAY": {
+        "rainMm": 108.2,
+        "tempC": 18.23
+      },
+      "NOV": {
+        "rainMm": 223.8,
+        "tempC": 18.82
+      },
+      "OCT": {
+        "rainMm": 156.9,
+        "tempC": 19.46
+      },
+      "SEP": {
+        "rainMm": 106.5,
+        "tempC": 19.82
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 446.5,
+        "tempC": 20.4
+      },
+      "B": {
+        "rainMm": 304.5,
+        "tempC": 19.31
+      },
+      "C": {
+        "rainMm": 147.8,
+        "tempC": 19.56
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Rubavu": {
+    "annualRainMm": 1692.8,
+    "months": {
+      "APR": {
+        "rainMm": 182.7,
+        "tempC": 17.51
+      },
+      "AUG": {
+        "rainMm": 91.5,
+        "tempC": 17.39
+      },
+      "DEC": {
+        "rainMm": 153.5,
+        "tempC": 17.15
+      },
+      "FEB": {
+        "rainMm": 126.8,
+        "tempC": 17.98
+      },
+      "JAN": {
+        "rainMm": 126.5,
+        "tempC": 17.33
+      },
+      "JUL": {
+        "rainMm": 44.6,
+        "tempC": 16.68
+      },
+      "JUN": {
+        "rainMm": 73.5,
+        "tempC": 16.65
+      },
+      "MAR": {
+        "rainMm": 206.2,
+        "tempC": 17.96
+      },
+      "MAY": {
+        "rainMm": 141.7,
+        "tempC": 17.16
+      },
+      "NOV": {
+        "rainMm": 217.5,
+        "tempC": 17.19
+      },
+      "OCT": {
+        "rainMm": 189.7,
+        "tempC": 17.42
+      },
+      "SEP": {
+        "rainMm": 138.6,
+        "tempC": 17.66
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 552.4,
+        "tempC": 17.86
+      },
+      "B": {
+        "rainMm": 521.3,
+        "tempC": 17.69
+      },
+      "C": {
+        "rainMm": 342.7,
+        "tempC": 17.49
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Ruhango": {
+    "annualRainMm": 1290.9,
+    "months": {
+      "APR": {
+        "rainMm": 177.9,
+        "tempC": 19.54
+      },
+      "AUG": {
+        "rainMm": 56.1,
+        "tempC": 20.12
+      },
+      "DEC": {
+        "rainMm": 109.1,
+        "tempC": 19.71
+      },
+      "FEB": {
+        "rainMm": 101.7,
+        "tempC": 20.75
+      },
+      "JAN": {
+        "rainMm": 96.4,
+        "tempC": 20.26
+      },
+      "JUL": {
+        "rainMm": 31.3,
+        "tempC": 19.01
+      },
+      "JUN": {
+        "rainMm": 49.8,
+        "tempC": 18.8
+      },
+      "MAR": {
+        "rainMm": 153.5,
+        "tempC": 20.25
+      },
+      "MAY": {
+        "rainMm": 138.6,
+        "tempC": 19.16
+      },
+      "NOV": {
+        "rainMm": 159.6,
+        "tempC": 19.43
+      },
+      "OCT": {
+        "rainMm": 128.7,
+        "tempC": 20.11
+      },
+      "SEP": {
+        "rainMm": 88.2,
+        "tempC": 20.52
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 411.6,
+        "tempC": 20.94
+      },
+      "B": {
+        "rainMm": 352.2,
+        "tempC": 20.21
+      },
+      "C": {
+        "rainMm": 194.9,
+        "tempC": 20.36
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Rulindo": {
+    "annualRainMm": 1502.0,
+    "months": {
+      "APR": {
+        "rainMm": 192.9,
+        "tempC": 17.5
+      },
+      "AUG": {
+        "rainMm": 75.0,
+        "tempC": 17.36
+      },
+      "DEC": {
+        "rainMm": 125.9,
+        "tempC": 17.67
+      },
+      "FEB": {
+        "rainMm": 107.9,
+        "tempC": 18.48
+      },
+      "JAN": {
+        "rainMm": 100.4,
+        "tempC": 17.97
+      },
+      "JUL": {
+        "rainMm": 45.9,
+        "tempC": 16.48
+      },
+      "JUN": {
+        "rainMm": 67.2,
+        "tempC": 16.52
+      },
+      "MAR": {
+        "rainMm": 173.0,
+        "tempC": 18.16
+      },
+      "MAY": {
+        "rainMm": 163.7,
+        "tempC": 17.04
+      },
+      "NOV": {
+        "rainMm": 176.4,
+        "tempC": 17.51
+      },
+      "OCT": {
+        "rainMm": 160.3,
+        "tempC": 17.79
+      },
+      "SEP": {
+        "rainMm": 113.4,
+        "tempC": 17.88
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 547.2,
+        "tempC": 18.48
+      },
+      "B": {
+        "rainMm": 506.9,
+        "tempC": 17.86
+      },
+      "C": {
+        "rainMm": 360.4,
+        "tempC": 17.54
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Rusizi": {
+    "annualRainMm": 1507.1,
+    "months": {
+      "APR": {
+        "rainMm": 175.8,
+        "tempC": 18.71
+      },
+      "AUG": {
+        "rainMm": 65.1,
+        "tempC": 19.04
+      },
+      "DEC": {
+        "rainMm": 152.2,
+        "tempC": 18.94
+      },
+      "FEB": {
+        "rainMm": 125.4,
+        "tempC": 19.57
+      },
+      "JAN": {
+        "rainMm": 137.0,
+        "tempC": 19.24
+      },
+      "JUL": {
+        "rainMm": 28.5,
+        "tempC": 17.9
+      },
+      "JUN": {
+        "rainMm": 49.5,
+        "tempC": 17.72
+      },
+      "MAR": {
+        "rainMm": 178.2,
+        "tempC": 19.27
+      },
+      "MAY": {
+        "rainMm": 108.2,
+        "tempC": 18.23
+      },
+      "NOV": {
+        "rainMm": 223.8,
+        "tempC": 18.82
+      },
+      "OCT": {
+        "rainMm": 156.9,
+        "tempC": 19.46
+      },
+      "SEP": {
+        "rainMm": 106.5,
+        "tempC": 19.82
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 446.5,
+        "tempC": 20.4
+      },
+      "B": {
+        "rainMm": 304.5,
+        "tempC": 19.31
+      },
+      "C": {
+        "rainMm": 147.8,
+        "tempC": 19.56
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Rutsiro": {
+    "annualRainMm": 1586.5,
+    "months": {
+      "APR": {
+        "rainMm": 191.4,
+        "tempC": 19.81
+      },
+      "AUG": {
+        "rainMm": 80.0,
+        "tempC": 20.14
+      },
+      "DEC": {
+        "rainMm": 148.8,
+        "tempC": 20.05
+      },
+      "FEB": {
+        "rainMm": 132.5,
+        "tempC": 20.88
+      },
+      "JAN": {
+        "rainMm": 126.2,
+        "tempC": 20.37
+      },
+      "JUL": {
+        "rainMm": 37.5,
+        "tempC": 19.23
+      },
+      "JUN": {
+        "rainMm": 60.9,
+        "tempC": 18.99
+      },
+      "MAR": {
+        "rainMm": 190.7,
+        "tempC": 20.53
+      },
+      "MAY": {
+        "rainMm": 141.0,
+        "tempC": 19.32
+      },
+      "NOV": {
+        "rainMm": 195.9,
+        "tempC": 19.88
+      },
+      "OCT": {
+        "rainMm": 163.7,
+        "tempC": 20.31
+      },
+      "SEP": {
+        "rainMm": 117.9,
+        "tempC": 20.63
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 424.3,
+        "tempC": 21.39
+      },
+      "B": {
+        "rainMm": 339.8,
+        "tempC": 20.45
+      },
+      "C": {
+        "rainMm": 182.4,
+        "tempC": 20.82
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  },
+  "Rwamagana": {
+    "annualRainMm": 1207.2,
+    "months": {
+      "APR": {
+        "rainMm": 167.4,
+        "tempC": 20.41
+      },
+      "AUG": {
+        "rainMm": 46.8,
+        "tempC": 21.01
+      },
+      "DEC": {
+        "rainMm": 102.9,
+        "tempC": 20.51
+      },
+      "FEB": {
+        "rainMm": 89.0,
+        "tempC": 21.55
+      },
+      "JAN": {
+        "rainMm": 93.3,
+        "tempC": 21.05
+      },
+      "JUL": {
+        "rainMm": 26.3,
+        "tempC": 19.94
+      },
+      "JUN": {
+        "rainMm": 41.7,
+        "tempC": 19.87
+      },
+      "MAR": {
+        "rainMm": 144.8,
+        "tempC": 21.08
+      },
+      "MAY": {
+        "rainMm": 127.4,
+        "tempC": 20.16
+      },
+      "NOV": {
+        "rainMm": 156.6,
+        "tempC": 20.24
+      },
+      "OCT": {
+        "rainMm": 124.6,
+        "tempC": 20.89
+      },
+      "SEP": {
+        "rainMm": 86.4,
+        "tempC": 21.31
+      }
+    },
+    "period": "2001-2020",
+    "seasons2025": {
+      "A": {
+        "rainMm": 483.7,
+        "tempC": 21.6
+      },
+      "B": {
+        "rainMm": 368.4,
+        "tempC": 20.96
+      },
+      "C": {
+        "rainMm": 203.2,
+        "tempC": 21.06
+      }
+    },
+    "source": "NASA POWER (MERRA-2)",
+    "sourceUrl": "https://power.larc.nasa.gov/"
+  }
+}

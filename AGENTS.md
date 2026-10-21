@@ -20,3 +20,5 @@
 - Keep insurance coverage preferences separate from policy enrolment; stable coverage IDs preserve session choices across language changes without implying purchase or availability.
 - Use the shared native-input Checkbox for coverage selection, avoiding a separate provider dependency while retaining accessible form behavior.
 - Build every farmer-facing block as a labelled panel from the shared primitives in `src/components/ui`, and keep the design system in `src/styles.css` layered as tokens, components and layout; a status colour or surface never comes from an ad-hoc utility in a component.
+- The NISR survey microdata, the training table and the trained models stay out of the repository; the models are fitted from the district, the season and the weather, because the survey records no soil type.
+- A district's rain and temperature come from published records, never from an estimate made in the app, and a figure the farmer typed is never overwritten by a fetched one.

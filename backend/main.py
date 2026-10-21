@@ -18,7 +18,7 @@ from data_processor import CATEGORICAL, NUMERIC, clean, load_raw
 
 MODEL_DIR = Path(__file__).parent / "models"
 
-app = FastAPI(title="ImbutoSmart AI API", version="1.0.0")
+app = FastAPI(title="ImbutoSmart AI API", version="1.1.0")
 
 # Comma-separated list, e.g. "https://imbutosmart.vercel.app,http://localhost:3000"
 origins = os.getenv("ALLOWED_ORIGINS", "*").split(",")
@@ -40,7 +40,7 @@ def models() -> dict:
 
 class PredictRequest(BaseModel):
     district: str
-    soil_type: str
+    season: str = Field(pattern="^[ABC]$")
     forecast_rain_mm: float = Field(ge=0, le=5000)
     forecast_temp_c: float = Field(ge=-5, le=45)
 
@@ -52,9 +52,9 @@ def health():
 
 @app.get("/meta")
 def meta():
-    """Districts, soils and crops seen in training — used to populate the form."""
+    """Districts, crops and seasons seen in training — used to populate the form."""
     m = models()["metadata"]
-    return {k: m[k] for k in ("districts", "soil_types", "crops", "metrics")}
+    return {k: m[k] for k in ("districts", "crops", "seasons", "metrics")}
 
 
 @app.post("/predict")
@@ -65,8 +65,8 @@ def predict(req: PredictRequest):
     # Score every known crop under the farmer's conditions and rank them.
     rows = pd.DataFrame({
         "district": req.district.strip().title(),
-        "soil_type": req.soil_type.strip().title(),
         "crop": crops,
+        "season": req.season.strip().upper(),
         "rain_mm": req.forecast_rain_mm,
         "temp_c": req.forecast_temp_c,
     })[CATEGORICAL + NUMERIC]
@@ -77,10 +77,15 @@ def predict(req: PredictRequest):
     success = proba[:, pos_idx]
     yields = m["regressor"].predict(X)
 
+    # How many farm observations stand behind each crop in this season.
+    support = m["metadata"].get("support", {})
+
     # Expected value = probability of success x predicted yield.
     ranked = sorted(
         [{"crop": c, "success_probability": float(p), "expected_yield_t_ha": float(y),
-          "score": float(p * y)} for c, p, y in zip(crops, success, yields)],
+          "score": float(p * y),
+          "observations": int(support.get(c, {}).get(req.season.strip().upper(), 0))}
+         for c, p, y in zip(crops, success, yields)],
         key=lambda r: r["score"], reverse=True)
 
     best = ranked[0]
@@ -88,13 +93,14 @@ def predict(req: PredictRequest):
         "recommended_crop": best["crop"],
         "confidence": best["success_probability"],
         "expected_yield_t_ha": best["expected_yield_t_ha"],
+        "observations": best["observations"],
         "alternatives": ranked[1:4],
     }
 
 
 @app.get("/stats")
 def stats():
-    """Historical yield per crop (and per year if present) vs. model prediction."""
+    """Historical yield per crop (and per season if present) vs. model prediction."""
     m = models()
     df = clean(load_raw())
     df["predicted"] = m["regressor"].predict(m["preprocessor"].transform(df[CATEGORICAL + NUMERIC]))
@@ -102,7 +108,7 @@ def stats():
     by_crop = (df.groupby("crop")
                .agg(actual=("yield_tons_per_ha", "mean"), predicted=("predicted", "mean"), n=("crop", "size"))
                .round(2).reset_index().to_dict("records"))
-    time_col = "year" if "year" in df else ("season" if "season" in df else None)
+    time_col = "season" if "season" in df else ("year" if "year" in df else None)
     by_time = []
     if time_col:
         by_time = (df.groupby(time_col)

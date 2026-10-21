@@ -27,10 +27,28 @@ The React primitives in `src/components/ui` (`Panel`, `Callout`, `StatusPill`, `
 ```bash
 cd backend
 pip install -r requirements.txt
-cp /path/to/nisr_real_data.csv .
+python prepare_training_data.py --microdata "C:/path/to/Microdata"   # survey -> nisr_real_data.csv
 python ml_pipeline.py          # trains + prints metrics, writes models/
 uvicorn main:app --reload --port 8000
 ```
+
+## The training data
+The models are fitted on the **NISR Seasonal Agricultural Survey 2025** microdata (Seasons A, B and C), which records every crop a household planted: the district, the crop, the area, what was harvested and the sampling weight.
+
+- `prepare_training_data.py` turns the extracted survey files into `backend/nisr_real_data.csv`: 51,225 crop observations over 30 districts, 12 crops and 3 seasons. Crops are mapped onto the crops the app offers (bush, climbing and French beans become beans; paddy rice becomes rice; cooking and dessert bananas become banana).
+- The survey does not record soil type or the weather of the plot, so the training rows carry the **district's own climate** for that season: `build_district_climate.py` writes `backend/district_climate.json` from the published 2001–2020 record (NASA POWER, MERRA-2) at the centre of each district, plus the weather of the 2025 survey year itself.
+- A crop that was planted and produced nothing is an unsuccessful planting. A crop that is normally harvested in a later round (cassava in Season A) contributes only the observations that were harvested, so a long cycle is not counted as a failure.
+- The microdata and the trained models stay out of the repository: both are git-ignored and built locally.
+
+The models work from the **district, the season and the weather**. The soil a farmer reports is used by the app's agronomic suitability engine, which is a separate, knowledge-based path. Measured on a held-out fifth of the survey: classifier AUC 0.94, yield regressor R² 0.81, and a per-crop yield error (maize 0.84 t/ha, beans 0.29 t/ha). 2025 was a below-average rainfall year, so the yields the model learned are from a dry year.
+
+## District weather
+The farmer page fills the rain and temperature from the selected district, so the figures follow the location instead of a fixed guess:
+
+- the **climate** (what the district's rainfall and temperature usually are) from NASA POWER, and
+- the **forecast** (what the coming days are expected to bring) from Open-Meteo, both fetched on the server and shown with their source.
+
+A figure the farmer typed is never overwritten, and the endpoints can be changed with `WEATHER_CLIMATE_URL` and `WEATHER_FORECAST_URL`. When a source cannot be reached the page says so calmly and keeps the figures the farmer entered.
 
 ## Run the frontend
 ```bash
@@ -42,9 +60,9 @@ npm install && npm run dev
 
 ## Deploy
 - **Backend → Render.com:** Connect this repository in Render and create a Blueprint using the root `render.yaml`. Alternatively create a Docker Web Service with root directory `backend`. This workspace has no Render deployment connection; the Blueprint must be launched from your Render account. Render may charge for your chosen service plan.
-- Before deployment, supply `backend/nisr_real_data.csv` with real district/crop/soil/weather/yield observations, or train privately and supply the four `backend/models/*.joblib` artifacts. Never commit confidential survey microdata to a public repository. Without these inputs `/health` can respond, but `/predict`, `/meta`, and `/stats` return 503: no trained model.
-- `/stats` also needs the original CSV even when trained artifacts are supplied; artifacts alone support `/predict` and `/meta`, not historical yield comparisons.
-- After deployment, verify `/meta` and a real `/predict` request (not just `/health`), then set the frontend `VITE_API_URL` to the HTTPS Render service address. `/stats` supplies held-out test accuracy and yield MAE in t/ha; historical comparison charts are in-sample, not test results.
+- Before deployment, build the training table and train privately: `python prepare_training_data.py --microdata <survey folder>` and `python ml_pipeline.py`, then supply the four `backend/models/*.joblib` artifacts to the service. The survey microdata and the training table are confidential and are git-ignored: never commit them. Without trained artifacts `/health` can respond, but `/predict`, `/meta`, and `/stats` return 503: no trained model.
+- `/stats` also needs the original training table even when trained artifacts are supplied; artifacts alone support `/predict` and `/meta`, not historical yield comparisons.
+- After deployment, verify `/meta` and a real `/predict` request (not just `/health`), then set the frontend `VITE_API_URL` to the HTTPS Render service address. `/stats` supplies held-out test accuracy, AUC and yield MAE in t/ha; historical comparison charts are in-sample, not test results.
 - **Frontend:** set `VITE_API_URL` to the Render URL and publish to any static/edge host (such as Vercel, Netlify, or Render). The app is live at **https://imbutosmart.vercel.app**, which is the project this workspace deploys to (`npx vercel deploy --prod`). `abahinzismart.vercel.app` serves the same app from a separate Vercel project that this workspace cannot deploy to, so it can lag behind.
 - **AI variables on the host:** the chat and speech backends are configured with server-only environment variables, so set them on the host rather than in the repository: `AI_BASE_URL`, `AI_MODEL` and `AI_API_KEY` for chat, and `AI_SPEECH_BASE_URL`, `AI_STT_MODEL`, `AI_TTS_MODEL`, `AI_TTS_VOICE`, `AI_TTS_FORMAT`, `AI_TTS_MAX_CHARS` and `AI_SPEECH_LANGUAGES` for voice. Keep them as secrets.
 - **Verify the deployment:** `node scripts\test-app-ai-e2e.mjs` checks the deployed app's server functions the same way it checks a dev server, so a live deployment can be confirmed without a browser. Point it at the deployment with `APP_URL`. It checks the spoken path in both directions: the answer is read aloud when the backend can speak, and a recorded sample (`scripts\fixtures\speech-sample.wav`) is transcribed and answered either way, so a deployment that cannot speak aloud still proves the farmer's recording works.
