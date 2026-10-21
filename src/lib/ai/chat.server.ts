@@ -87,13 +87,38 @@ export async function answerWithAi(
       const result = createChatStream(signal, config, messages, system);
       const answer = await collectText(result);
       if (answer) return { answer, error: null };
-      if (attempt === 0) continue;
+      if (attempt === 0) {
+        await pause();
+        continue;
+      }
       return { answer: "", error: "empty" };
     } catch (error) {
       console.error("[ai] request failed", error);
-      if (attempt === 0) continue;
+      if (attempt === 0) {
+        // A backend that is rate limiting needs a longer pause than a dropped
+        // connection, which usually clears within a moment.
+        await pause(isRateLimited(error) ? RATE_LIMIT_PAUSE_MS : RETRY_PAUSE_MS);
+        continue;
+      }
       return { answer: "", error: "failed" };
     }
   }
   return { answer: "", error: "empty" };
+}
+
+// A rate-limited backend answers 429, and the free tier of a hosted provider
+// limits how many tokens a minute it serves.
+function isRateLimited(error: unknown): boolean {
+  const status = (error as { statusCode?: unknown } | null)?.statusCode;
+  return status === 429;
+}
+
+// Short pause between attempts, long enough for a weak connection to recover.
+const RETRY_PAUSE_MS = 1200;
+// A busy backend needs a little longer, but the farmer should not wait long
+// enough for a request to time out.
+const RATE_LIMIT_PAUSE_MS = 3500;
+
+function pause(ms: number = RETRY_PAUSE_MS): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
