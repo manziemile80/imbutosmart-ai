@@ -1,7 +1,7 @@
 import { createStart, createCsrfMiddleware, createMiddleware } from "@tanstack/react-start";
 
 import { renderErrorPage } from "./lib/error-page";
-import { attachSupabaseAuth } from "@/integrations/supabase/auth-attacher";
+import { supabase } from "./integrations/supabase/client";
 
 const errorMiddleware = createMiddleware().server(async ({ next }) => {
   try {
@@ -25,7 +25,21 @@ const csrfMiddleware = createCsrfMiddleware({
   filter: (ctx) => ctx.handlerType === "serverFn",
 });
 
+// The signed-in farmer's token rides along with every server function call, so
+// the server knows who is asking. A deployment without Supabase configured
+// still works: the assistants do not need a session, so the token is simply
+// left off instead of the call failing.
+const attachAuthSafely = createMiddleware({ type: "function" }).client(async ({ next }) => {
+  try {
+    const { data } = await supabase.auth.getSession();
+    const token = data.session?.access_token;
+    return next({ headers: token ? { Authorization: `Bearer ${token}` } : {} });
+  } catch {
+    return next({ headers: {} });
+  }
+});
+
 export const startInstance = createStart(() => ({
-  functionMiddleware: [attachSupabaseAuth],
+  functionMiddleware: [attachAuthSafely],
   requestMiddleware: [errorMiddleware, csrfMiddleware],
 }));
