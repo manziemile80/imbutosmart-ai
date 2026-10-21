@@ -110,7 +110,7 @@ def main() -> None:
     here = Path(__file__).parent
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--microdata", required=True, help="Folder with the extracted survey files")
-    parser.add_argument("--climate", default=str(here / "district_climate.json"))
+    parser.add_argument("--climate", default=str(here.parent / "src" / "lib" / "district-climate.json"))
     parser.add_argument("--out", default=str(here / "nisr_real_data.csv"))
     args = parser.parse_args()
 

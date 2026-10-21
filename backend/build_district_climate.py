@@ -3,7 +3,7 @@ build_district_climate.py — District climate for the training data.
 
 Fetches the published 20-year climate record of every district (NASA POWER,
 MERRA-2) at the point at the centre of its boundary, plus the weather of the
-survey year itself, and writes both to backend/district_climate.json:
+survey year itself, and writes both to src/lib/district-climate.json:
 
     months            monthly rainfall and temperature normals
     annualRainMm      the normal annual rainfall
@@ -11,10 +11,11 @@ survey year itself, and writes both to backend/district_climate.json:
                       of the 2025 survey year, so a training row carries the
                       weather the farmers actually had
 
-The file holds public climate records, so it is committed and the training run
-never needs the network. Re-run it to refresh the record:
+The file holds public climate records, so it is committed: the app and the
+training run both read it, and neither needs the network. Re-run it to refresh
+the record:
 
-    python build_district_climate.py [--centroids ../src/lib/district-centroids.json] [--out district_climate.json]
+    python build_district_climate.py [--centroids ../src/lib/district-centroids.json] [--out ../src/lib/district-climate.json]
 
 Rainfall in the source is a daily mean in millimetres, so it is turned into a
 monthly total with the average length of the month.
@@ -98,7 +99,7 @@ def main() -> None:
     here = Path(__file__).parent
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--centroids", default=str(here.parent / "src" / "lib" / "district-centroids.json"))
-    parser.add_argument("--out", default=str(here / "district_climate.json"))
+    parser.add_argument("--out", default=str(here.parent / "src" / "lib" / "district-climate.json"))
     args = parser.parse_args()
 
     centroids = json.loads(Path(args.centroids).read_text(encoding="utf-8"))
