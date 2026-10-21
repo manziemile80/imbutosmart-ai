@@ -225,9 +225,10 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
         if (result.error || !result.audios?.length) {
           // A backend that cannot serve spoken output, for example one whose
           // plan or terms do not cover it, is not an error the farmer needs to
-          // see: the answer simply stays written.
+          // see: the answer simply stays written. A refusal without a reason
+          // is only this language, which the page already knows.
           if (result.error === "unconfigured") setNotice("unconfigured");
-          if (result.error === "unavailable") setSpeechUnavailable(true);
+          if (result.error === "unavailable" && result.refusal) setSpeechUnavailable(true);
           setStatus("idle");
           return;
         }

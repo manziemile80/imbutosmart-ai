@@ -3,12 +3,14 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 // The voice panel talks to the server through TanStack Start, so the server
 // functions are replaced with the answers a backend can give.
-const speakFarmerText = vi.fn(async (_input: { data: { language: string; text: string } }) => ({
-  audios: [],
-  mimeType: "",
-  error: "unavailable" as const,
-  refusal: "terms" as const,
-}));
+const speakFarmerText = vi.fn(
+  async (_input: { data: { language: string; text: string } }): Promise<{
+    audios: string[];
+    mimeType: string;
+    error: string | null;
+    refusal: string | null;
+  }> => ({ audios: [], mimeType: "", error: "unavailable", refusal: "terms" }),
+);
 
 vi.mock("@tanstack/react-start", () => ({ useServerFn: (fn: unknown) => fn }));
 vi.mock("@/lib/voice-assistant.functions", () => ({
@@ -39,5 +41,26 @@ describe("voice panel", () => {
     });
     expect(screen.queryByRole("button", { name: /Listen to what you'll need/i })).toBeNull();
     expect(screen.queryByRole("alert")).toBeNull();
+  });
+
+  it("keeps the spoken button when only this language is refused", async () => {
+    // The backend can speak other languages, so one refusal is not a broken
+    // voice service.
+    speakFarmerText.mockResolvedValueOnce({
+      audios: [],
+      mimeType: "",
+      error: "unavailable",
+      refusal: null,
+    });
+
+    render(<VoiceAssistant district="Musanze" soil="Volcanic" language="en" />);
+    const listen = await screen.findByRole("button", { name: /Listen to what you'll need/i });
+    fireEvent.click(listen);
+
+    await waitFor(() => {
+      expect(speakFarmerText).toHaveBeenCalled();
+    });
+    expect(screen.queryByText(/not reading answers aloud/i)).toBeNull();
+    expect(screen.getByRole("button", { name: /Listen to what you'll need/i })).toBeInTheDocument();
   });
 });
