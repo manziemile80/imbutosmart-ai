@@ -23,6 +23,13 @@ dist-ssr
 .env.*
 !.env.example
 
+# The NISR survey microdata and the models trained from it are confidential or
+# derived from confidential data: they are built locally, never committed.
+backend/nisr_real_data.csv
+backend/models/
+__pycache__/
+*.pyc
+
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars

@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Sprout } from "lucide-react";
 import type { ReactNode } from "react";
 import { farmerCopy, type FarmerLanguage } from "@/lib/farmer-language";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function SiteShell({
   children,
@@ -23,23 +24,26 @@ export function SiteShell({
               Imbuto<span className="text-primary-text">Smart</span> AI
             </span>
           </Link>
-          <nav className="flex gap-1 text-sm" aria-label="Primary">
-            <Link
-              to="/"
-              className="nav-link"
-              activeOptions={{ exact: true }}
-              activeProps={{ className: "nav-link-active" }}
-            >
-              {t.farmer}
-            </Link>
-            <Link
-              to="/dashboard"
-              className="nav-link"
-              activeProps={{ className: "nav-link-active" }}
-            >
-              {t.agronomist}
-            </Link>
-          </nav>
+          <div className="flex items-center gap-1.5">
+            <nav className="flex gap-1 text-sm" aria-label="Primary">
+              <Link
+                to="/"
+                className="nav-link"
+                activeOptions={{ exact: true }}
+                activeProps={{ className: "nav-link-active" }}
+              >
+                {t.farmer}
+              </Link>
+              <Link
+                to="/dashboard"
+                className="nav-link"
+                activeProps={{ className: "nav-link-active" }}
+              >
+                {t.agronomist}
+              </Link>
+            </nav>
+            <ThemeToggle language={language} />
+          </div>
         </div>
       </header>
       <main className="flex-1">{children}</main>
