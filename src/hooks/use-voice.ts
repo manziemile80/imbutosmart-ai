@@ -1,7 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { MAX_RECORDING_MS, canSpeakLanguage, type VoiceLanguage, type VoiceNotice } from "@/lib/voice-assistant";
-import { getVoiceConfigStatus, speakFarmerText, transcribeFarmerSpeech } from "@/lib/voice-assistant.functions";
+import {
+  MAX_RECORDING_MS,
+  canSpeakLanguage,
+  type VoiceLanguage,
+  type VoiceNotice,
+} from "@/lib/voice-assistant";
+import {
+  getVoiceConfigStatus,
+  speakFarmerText,
+  transcribeFarmerSpeech,
+} from "@/lib/voice-assistant.functions";
 
 // Browser-only voice hook: records a short clip with MediaRecorder, sends it to
 // the server for transcription, and plays back synthesized speech. All provider
@@ -9,7 +18,12 @@ import { getVoiceConfigStatus, speakFarmerText, transcribeFarmerSpeech } from "@
 
 export type VoiceStatus = "idle" | "recording" | "transcribing" | "speaking";
 
-const MIME_CANDIDATES = ["audio/webm;codecs=opus", "audio/webm", "audio/ogg;codecs=opus", "audio/mp4"];
+const MIME_CANDIDATES = [
+  "audio/webm;codecs=opus",
+  "audio/webm",
+  "audio/ogg;codecs=opus",
+  "audio/mp4",
+];
 
 function pickMimeType(): string | undefined {
   if (typeof MediaRecorder === "undefined") return undefined;
@@ -80,17 +94,30 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
   // language it cannot read is offered as writing only.
   useEffect(() => {
     let cancelled = false;
-    voiceConfigStatus()
-      .then((result) => {
-        if (cancelled) return;
-        setConfigured(Boolean(result?.configured));
-        setSpokenLanguages(result?.spokenLanguages ?? null);
-      })
-      .catch(() => {
-        if (cancelled) return;
-        setConfigured(false);
-        setSpokenLanguages(null);
-      });
+    let attempt = 0;
+    const ask = () => {
+      voiceConfigStatus()
+        .then((result) => {
+          if (cancelled) return;
+          setConfigured(Boolean(result?.configured));
+          setSpokenLanguages(result?.spokenLanguages ?? null);
+        })
+        .catch(() => {
+          if (cancelled) return;
+          attempt += 1;
+          if (attempt < 2) {
+            // A request that fails says nothing about the server, so it is
+            // tried once more before the page draws any conclusion.
+            setTimeout(ask, 1500);
+            return;
+          }
+          // Still unknown: the voice service may be perfectly set up, so no
+          // note is shown. The server reports the truth when it answers.
+          setConfigured(null);
+          setSpokenLanguages(null);
+        });
+    };
+    ask();
     return () => {
       cancelled = true;
     };
@@ -109,7 +136,9 @@ export function useVoice(language: VoiceLanguage, onTranscript: (text: string) =
       setStatus("transcribing");
       try {
         const audioBase64 = await blobToBase64(blob);
-        const result = await transcribe({ data: { language, mimeType: mimeType || "audio/webm", audioBase64 } });
+        const result = await transcribe({
+          data: { language, mimeType: mimeType || "audio/webm", audioBase64 },
+        });
         if (!activeRef.current) return;
         if (result.error) {
           // A backend that cannot serve requests, or one that simply failed, is
