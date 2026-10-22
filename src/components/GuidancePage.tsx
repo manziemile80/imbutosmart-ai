@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { BookOpen, CloudSun, MessageCircleQuestion, Mic, Sprout, Lightbulb } from "lucide-react";
+import {
+  BookOpen,
+  CloudSun,
+  Lightbulb,
+  ListChecks,
+  MessageCircleQuestion,
+  Mic,
+  Package,
+  Sprout,
+} from "lucide-react";
 
 import { SiteShell } from "@/components/SiteShell";
 import { Panel, PanelBody, PanelHeader } from "@/components/ui/panel";
@@ -16,7 +25,6 @@ import { engineInput } from "@/lib/recommendation";
 import { recommendOffline } from "@/lib/recommendation-engine";
 import { districtInputs, inputName } from "@/lib/advice";
 import { buildPlanSummary } from "@/lib/plan-summary";
-import { PlanNotification } from "@/components/PlanNotification";
 import { seasonForMonth, seasonRainMm, seasonTempC } from "@/lib/weather";
 import { useDistrictWeather } from "@/hooks/use-district-weather";
 import { useField } from "@/lib/field";
@@ -26,7 +34,7 @@ const MODE_ICONS: Record<GuidanceMode, typeof MessageCircleQuestion> = {
   question: MessageCircleQuestion,
   voice: Mic,
   season: CloudSun,
-  plan: Sprout,
+  plan: ListChecks,
 };
 
 export function Guidance() {
@@ -159,17 +167,7 @@ export function Guidance() {
             )}
             {mode === "plan" && (
               <>
-                <PlanNotification
-                  summary={summary}
-                  district={district}
-                  soil={soil}
-                  language={language}
-                />
-                <Panel
-                  aria-labelledby="guidance-plan-title"
-                  data-testid="guidance-plan"
-                  className="mt-6"
-                >
+                <Panel aria-labelledby="guidance-plan-title" data-testid="guidance-plan">
                   <PanelHeader
                     icon={<Sprout className="size-5" aria-hidden="true" />}
                     eyebrow={t.eyebrow}
@@ -178,56 +176,29 @@ export function Guidance() {
                     description={t.planBlurb}
                   />
                   <PanelBody>
-                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-                      <Stat label={ft.district} value={district} hint={soilLabel(soil, language)} />
-                      <Stat
-                        label={ft.farming}
-                        value={season ?? "—"}
-                        hint={
-                          climate && season
-                            ? `${Math.round(seasonRainMm(climate, season))} mm · ${(seasonTempC(climate, season) ?? 0).toFixed(1)} °C`
-                            : undefined
-                        }
-                      />
-                      <Stat
-                        label={ft.recommended}
-                        value={knowledgeCropLabel(crops.primary.crop, language)}
-                        hint={`${crops.primary.score}%`}
-                      />
-                    </div>
-
-                    <h3 className="mt-6 text-sm font-semibold text-foreground">
-                      {t.modes.plan.label}
-                    </h3>
-                    <ul className="mt-2 grid gap-1 text-sm text-muted-foreground">
-                      {[crops.primary, ...crops.alternatives].slice(0, 3).map((crop) => (
-                        <li key={crop.crop} className="flex justify-between gap-3">
-                          <span className="text-foreground">
-                            {knowledgeCropLabel(crop.crop, language)}
-                          </span>
-                          <span className="tabular">{crop.score}%</span>
-                        </li>
-                      ))}
+                    <ul className="mt-1 grid gap-2 text-sm text-foreground">
+                      <li className="flex items-start gap-2">
+                        <Sprout
+                          className="mt-0.5 size-4 shrink-0 text-primary-text"
+                          aria-hidden="true"
+                        />
+                        {t.planContains.crops}
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <Package
+                          className="mt-0.5 size-4 shrink-0 text-primary-text"
+                          aria-hidden="true"
+                        />
+                        {t.planContains.inputs}
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CloudSun
+                          className="mt-0.5 size-4 shrink-0 text-primary-text"
+                          aria-hidden="true"
+                        />
+                        {t.planContains.when}
+                      </li>
                     </ul>
-
-                    {topInputs.length > 0 && (
-                      <>
-                        <h3 className="mt-5 text-sm font-semibold text-foreground">
-                          {t.modes.plan.blurb}
-                        </h3>
-                        <ul className="mt-2 grid gap-1 text-sm text-muted-foreground">
-                          {topInputs.map((input) => (
-                            <li key={input.name} className="flex justify-between gap-3">
-                              <span className="text-foreground">
-                                {inputName(input.name, language)}
-                              </span>
-                              <span className="tabular">{Math.round(input.share * 100)}%</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </>
-                    )}
-
                     <Link
                       to="/advice"
                       className="mt-6 inline-flex h-11 items-center gap-2 rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"

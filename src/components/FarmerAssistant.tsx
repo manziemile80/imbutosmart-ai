@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Send, Sparkles, LoaderCircle, Trash2, Mic, Square, Volume2 } from "lucide-react";
+import {
+  LoaderCircle,
+  MessageCircleQuestion,
+  Mic,
+  Send,
+  Square,
+  Trash2,
+  Volume2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Callout } from "@/components/ui/callout";
@@ -82,7 +90,7 @@ export function FarmerAssistant({
   return (
     <Panel aria-labelledby="farmer-assistant-title" data-testid="farmer-assistant">
       <PanelHeader
-        icon={<Sparkles className="size-5" aria-hidden="true" />}
+        icon={<MessageCircleQuestion className="size-5" aria-hidden="true" />}
         eyebrow={t.assistant}
         title={t.heading}
         titleId="farmer-assistant-title"

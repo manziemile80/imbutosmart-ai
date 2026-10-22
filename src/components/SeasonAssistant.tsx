@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { CloudRain, Sprout, LoaderCircle, Info } from "lucide-react";
+import { CalendarDays, CloudRain, LoaderCircle, Info, Sprout } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Panel, PanelBody, PanelFooter, PanelHeader } from "@/components/ui/panel";
 import { Callout } from "@/components/ui/callout";
@@ -55,7 +55,7 @@ export function SeasonAssistant({
   return (
     <Panel aria-labelledby="season-assistant-title">
       <PanelHeader
-        icon={<Sprout className="size-5" aria-hidden="true" />}
+        icon={<CalendarDays className="size-5" aria-hidden="true" />}
         eyebrow={t.assistant}
         title={t.seasons}
         titleId="season-assistant-title"

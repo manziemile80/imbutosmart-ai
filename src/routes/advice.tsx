@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { LoaderCircle, Sprout, Volume2, BookOpen, Sparkles } from "lucide-react";
+import { BookOpen, ListChecks, LoaderCircle, Sparkles, Sprout, Volume2 } from "lucide-react";
 
 import { SiteShell } from "@/components/SiteShell";
 import { Panel, PanelBody, PanelHeader } from "@/components/ui/panel";
@@ -9,7 +9,6 @@ import { Callout } from "@/components/ui/callout";
 import { Button } from "@/components/ui/button";
 import { adviceCopy, districtInputs, explainInput, inputName } from "@/lib/advice";
 import { buildPlanSummary } from "@/lib/plan-summary";
-import { PlanNotification } from "@/components/PlanNotification";
 import { getAdvice } from "@/lib/advice.functions";
 import { DISTRICTS, SOILS } from "@/lib/api";
 import { farmerCopy, soilLabel, type FarmerLanguage } from "@/lib/farmer-language";
@@ -145,10 +144,6 @@ function Advice() {
           </label>
         </header>
 
-        <div className="page-section">
-          <PlanNotification summary={summary} district={district} soil={soil} language={language} />
-        </div>
-
         <div className="page-section grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
           <Panel aria-labelledby="advice-field-title">
             <PanelHeader
@@ -214,7 +209,7 @@ function Advice() {
 
           <Panel aria-labelledby="advice-plan-title">
             <PanelHeader
-              icon={<Sparkles className="size-5" aria-hidden="true" />}
+              icon={<ListChecks className="size-5" aria-hidden="true" />}
               eyebrow={t.eyebrow}
               title={t.planTitle}
               titleId="advice-plan-title"

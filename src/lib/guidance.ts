@@ -19,6 +19,7 @@ export const guidanceCopy: Record<
     guide: string[];
     planLink: string;
     planBlurb: string;
+    planContains: { crops: string; inputs: string; when: string };
     fieldTitle: string;
   }
 > = {
@@ -52,6 +53,11 @@ export const guidanceCopy: Record<
       "The assistant uses general knowledge: confirm anything important with an agronomist and Meteo Rwanda.",
     ],
     planLink: "Open the full plan",
+    planContains: {
+      crops: "The crops that suit your district and soil, and how well each one fits.",
+      inputs: "The inputs farmers around you use, and the rate they applied them at.",
+      when: "The season's usual rainfall and temperature, and the days ahead.",
+    },
     planBlurb:
       "The Advice page has the whole plan: the crops, the inputs farmers in your district used, and when to act.",
     fieldTitle: "Your field",
@@ -86,6 +92,11 @@ export const guidanceCopy: Record<
       "Umufasha akoresha ubumenyi rusange: emeza ibintu bikennye n'impuguke na Meteo Rwanda.",
     ],
     planLink: "Fungura gahunda yose",
+    planContains: {
+      crops: "Ibihingwa bikwiye akarere n'ubutaka wawe, n'ubukere bw'ibyo byose.",
+      inputs: "Ifumbire abahinzi bakoresha hafi yawe, n'ubunini bwabakoresha.",
+      when: "Imvura n'ubushyuhe busanzwe bw'igihembwe, n'iminsi izoze.",
+    },
     planBlurb:
       "Uruhande rw'Inama ruzabikora: ibihingwa, ifumbire abahinzi mu karere kawe bakoreseye, n'igihe cyo gukora.",
     fieldTitle: "Umurima wawe",
@@ -121,6 +132,11 @@ export const guidanceCopy: Record<
       "L'assistant utilise des connaissances générales : confirmez l'important avec un agronome et Meteo Rwanda.",
     ],
     planLink: "Ouvrir le plan complet",
+    planContains: {
+      crops: "Les cultures qui conviennent à votre district et à votre sol, et leur niveau.",
+      inputs: "Les intrants utilisés par vos voisins, et la dose appliquée.",
+      when: "La pluviométrie et la température habituelles de la saison, et les jours à venir.",
+    },
     planBlurb:
       "La page Conseils contient tout le plan : les cultures, les intrants utilisés dans votre district et le moment d'agir.",
     fieldTitle: "Votre champ",

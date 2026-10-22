@@ -70,7 +70,7 @@ function Dashboard() {
           </div>
         </header>
 
-        <div className="page-section grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div className="page-section grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 md:grid-cols-4">
           <Stat label="Total land" value={`${n.totalLand} M ha`} />
           <Stat label="Agricultural land" value={`${n.agriLand} M ha`} hint="59% of the country" />
           <Stat label="Irrigation" value="13.1%" hint="of farmers" />
@@ -165,7 +165,7 @@ function Dashboard() {
 
         {data && (
           <>
-            <div className="page-section grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div className="page-section grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 md:grid-cols-4">
               <Stat label="Training rows" value={data.metrics.rows} />
               <Stat label="Test accuracy" value={pct(data.metrics.test_accuracy)} />
               <Stat label="Yield R²" value={data.metrics.test_r2?.toFixed(2)} />

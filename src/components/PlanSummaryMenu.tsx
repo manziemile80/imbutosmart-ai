@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Bell, BellRing, X } from "lucide-react";
+import { Bell, BellRing, BellOff, Check, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { PlanSummaryBody } from "@/components/PlanSummaryBody";
 import { useField } from "@/lib/field";
-import { buildPlanSummary } from "@/lib/plan-summary";
-import { summaryCopy } from "@/lib/plan-summary";
+import { buildPlanSummary, summaryCopy } from "@/lib/plan-summary";
 import { engineInput } from "@/lib/recommendation";
 import { recommendOffline } from "@/lib/recommendation-engine";
-import { districtInputs } from "@/lib/advice";
+import { districtInputs, inputName } from "@/lib/advice";
 import { seasonForMonth, seasonRainMm, seasonTempC } from "@/lib/weather";
 import { useDistrictWeather } from "@/hooks/use-district-weather";
 import type { FarmerLanguage } from "@/lib/farmer-language";
@@ -20,6 +19,7 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
   const { district, soil, season } = field;
   const t = summaryCopy[language];
   const [open, setOpen] = useState(false);
+  const [sent, setSent] = useState<"sent" | "blocked" | null>(null);
   const wrapper = useRef<HTMLDivElement>(null);
   const { weather } = useDistrictWeather(district);
   const climate = weather?.climate ?? null;
@@ -63,6 +63,46 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
     };
   }, [open]);
 
+  // The same overview, sent to the farmer's phone as a notification.
+  function send() {
+    if (typeof window === "undefined" || !("Notification" in window)) {
+      setSent("blocked");
+      return;
+    }
+    const show = () => {
+      const body = [
+        summary.crops
+          .slice(0, 3)
+          .map((crop) => crop.crop)
+          .join(", "),
+        summary.inputs.length > 0
+          ? summary.inputs
+              .map((input) =>
+                input.rateKgPerHa
+                  ? `${input.name} (${Math.round(input.share * 100)}%, ${Math.round(input.rateKgPerHa)} kg/ha)`
+                  : `${input.name} (${Math.round(input.share * 100)}%)`,
+              )
+              .join(", ")
+          : "",
+        summary.advice[0] ?? "",
+      ]
+        .filter(Boolean)
+        .join(" · ");
+      new Notification(`${t.title} — ${district}`, { body, tag: `plan-${district}` });
+      setSent("sent");
+    };
+    if (Notification.permission === "granted") {
+      show();
+    } else if (Notification.permission === "denied") {
+      setSent("blocked");
+    } else {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") show();
+        else setSent("blocked");
+      });
+    }
+  }
+
   return (
     <div className="relative" ref={wrapper}>
       <Button
@@ -82,7 +122,7 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
         <div
           role="dialog"
           aria-label={t.title}
-          className="absolute right-0 top-full z-30 mt-2 w-[min(92vw,30rem)] rounded-2xl border border-border bg-card p-5 text-left shadow-pop"
+          className="absolute right-0 top-full z-30 mt-2 max-h-[min(80vh,40rem)] w-[min(92vw,30rem)] overflow-y-auto rounded-2xl border border-border bg-card p-5 text-left shadow-pop"
         >
           <div className="flex items-start justify-between gap-3">
             <div>
@@ -101,9 +141,27 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
               <X aria-hidden="true" />
             </Button>
           </div>
+
           <div className="mt-4">
             <PlanSummaryBody summary={summary} language={language} />
           </div>
+
+          <Button
+            type="button"
+            variant="outline"
+            className="mt-5 h-10 w-full"
+            disabled={sent === "sent"}
+            onClick={send}
+          >
+            {sent === "sent" ? (
+              <Check aria-hidden="true" />
+            ) : sent === "blocked" ? (
+              <BellOff aria-hidden="true" />
+            ) : (
+              <Bell aria-hidden="true" />
+            )}
+            {sent === "sent" ? t.notified : sent === "blocked" ? t.notifyBlocked : t.notify}
+          </Button>
         </div>
       )}
     </div>

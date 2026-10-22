@@ -176,7 +176,6 @@ export function CropRecommendation({ district, soil, rain, temp, language = "en"
   }
 
   const offline = network.status === "offline";
-  const inherited = `${district} · ${soilLabel(soil, language)} · ${rain} mm · ${temp} °C`;
 
   return (
     <Panel aria-labelledby="crop-recommendation-title" data-testid="crop-recommendation">
@@ -204,9 +203,6 @@ export function CropRecommendation({ district, soil, rain, temp, language = "en"
       />
       <PanelBody>
         <form onSubmit={onSubmit} className="grid gap-4">
-          <p className="text-xs text-muted-foreground">
-            {t.form.context} <span className="font-medium text-foreground">{inherited}</span>
-          </p>
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="grid gap-1.5">
               <span className="field-label">{t.form.soilPh}</span>

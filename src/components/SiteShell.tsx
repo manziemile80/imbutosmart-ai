@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import { Sprout } from "lucide-react";
 import type { ReactNode } from "react";
 import { farmerCopy, type FarmerLanguage } from "@/lib/farmer-language";
 import { PlanSummaryMenu } from "@/components/PlanSummaryMenu";
@@ -19,9 +18,7 @@ export function SiteShell({
         {/* The title line: the brand, and the farmer's summary at the far end. */}
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 pt-3.5">
           <Link to="/" className="flex items-center gap-2.5 font-display text-lg text-foreground">
-            <span className="flex size-8 items-center justify-center rounded-lg bg-primary/15 text-primary-text">
-              <Sprout className="size-5" aria-hidden="true" />
-            </span>
+            <img src="/logo.svg" alt="" className="size-9 rounded-xl" width={36} height={36} />
             <span>
               Imbuto<span className="text-primary-text">Smart</span> AI
             </span>
@@ -31,7 +28,10 @@ export function SiteShell({
 
         {/* The navigation line, with the theme toggle below the summary. */}
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 pb-3 pt-2">
-          <nav className="flex flex-wrap gap-1 text-sm" aria-label="Primary">
+          <nav
+            className="-mx-1 flex flex-nowrap gap-1 overflow-x-auto px-1 pr-3 text-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            aria-label="Primary"
+          >
             <Link
               to="/"
               className="nav-link"

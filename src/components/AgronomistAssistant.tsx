@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { LoaderCircle, Send, Sparkles, Trash2, Volume2 } from "lucide-react";
+import { ChartColumnBig, LoaderCircle, Send, Sparkles, Trash2, Volume2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -92,7 +92,7 @@ export function AgronomistAssistant({
   return (
     <Panel aria-labelledby="agronomist-assistant-title" data-testid="agronomist-assistant">
       <PanelHeader
-        icon={<Sparkles className="size-5" aria-hidden="true" />}
+        icon={<ChartColumnBig className="size-5" aria-hidden="true" />}
         eyebrow={t.eyebrow}
         title={t.heading}
         titleId="agronomist-assistant-title"
