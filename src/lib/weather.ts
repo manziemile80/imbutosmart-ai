@@ -99,6 +99,17 @@ export function monthTempC(climate: DistrictClimate, month: number): number | nu
   return value == null ? null : value;
 }
 
+// The usual mean temperature of a season, in degrees Celsius.
+export function seasonTempC(climate: DistrictClimate, season: "A" | "B" | "C" | null): number | null {
+  if (!season) return null;
+  const months = SEASON_MONTHS[season];
+  const values = months
+    .map((month) => climate.months[month]?.tempC)
+    .filter((value): value is number => value != null);
+  if (values.length === 0) return null;
+  return values.reduce((total, value) => total + value, 0) / values.length;
+}
+
 // The rain and temperature the coming week is expected to bring, which is the
 // near-term outlook for the field.
 export function forecastSummary(forecast: DistrictForecast): {

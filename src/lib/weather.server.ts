@@ -47,6 +47,12 @@ function climateFor(district: string): DistrictClimate | null {
   };
 }
 
+// The published climate record of a district, for the server functions that
+// need it.
+export async function getDistrictClimate(district: string): Promise<DistrictClimate | null> {
+  return climateFor(district);
+}
+
 async function fetchForecast(district: string): Promise<DistrictForecast | null> {
   const point = pointFor(district);
   if (!point) return null;

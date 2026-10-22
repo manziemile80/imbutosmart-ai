@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   Bar,
@@ -16,6 +17,7 @@ import { SiteShell } from "@/components/SiteShell";
 import { Panel, PanelBody, PanelHeader } from "@/components/ui/panel";
 import { Stat } from "@/components/ui/stat";
 import { Callout } from "@/components/ui/callout";
+import { AgronomistAssistant } from "@/components/AgronomistAssistant";
 import { API_URL, getStats } from "@/lib/api";
 import { NISR_2026B } from "@/lib/local-model";
 import { DistrictLandMap } from "@/components/DistrictLandMap";
@@ -52,6 +54,9 @@ function Dashboard() {
     retry: false,
     enabled: !!API_URL,
   });
+  // The district the map shows and the assistant answers about.
+  const [district, setDistrict] = useState("Musanze");
+  const [season, setSeason] = useState<"A" | "B" | "C" | null>("B");
   const n = NISR_2026B;
 
   return (
@@ -73,7 +78,16 @@ function Dashboard() {
         </div>
 
         <div className="page-section">
-          <DistrictLandMap />
+          <DistrictLandMap district={district} onDistrictChange={setDistrict} />
+        </div>
+
+        <div className="page-section">
+          <AgronomistAssistant
+            district={district}
+            season={season}
+            onSeasonChange={setSeason}
+            stats={data ?? null}
+          />
         </div>
 
         <div className="page-section grid items-start gap-6 lg:grid-cols-2">

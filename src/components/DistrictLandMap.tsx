@@ -24,8 +24,13 @@ const projection = geoMercator().fitExtent(
 const path = geoPath(projection);
 const formatter = new Intl.NumberFormat("en", { maximumFractionDigits: 1 });
 
-export function DistrictLandMap() {
-  const [district, setDistrict] = useState("Musanze");
+export function DistrictLandMap({
+  district,
+  onDistrictChange,
+}: {
+  district: string;
+  onDistrictChange: (district: string) => void;
+}) {
   const [category, setCategory] = useState<LandCategory>("crops_ha");
   const [rows, setRows] = useState<DistrictLand[]>([]);
   const [fileName, setFileName] = useState("");
@@ -134,11 +139,11 @@ export function DistrictLandMap() {
                     aria-label={`${name}: ${share === null ? "data unavailable" : `${(share * 100).toFixed(1)}% ${activeCategory?.label}`}`}
                     aria-pressed={district === name}
                     className="cursor-pointer outline-none focus:stroke-ring focus:stroke-[3]"
-                    onClick={() => setDistrict(name)}
+                    onClick={() => onDistrictChange(name)}
                     onKeyDown={(event) => {
                       if (event.key === "Enter" || event.key === " ") {
                         event.preventDefault();
-                        setDistrict(name);
+                        onDistrictChange(name);
                       }
                     }}
                   />
@@ -171,7 +176,7 @@ export function DistrictLandMap() {
               <select
                 className="field"
                 value={district}
-                onChange={(event) => setDistrict(event.target.value)}
+                onChange={(event) => onDistrictChange(event.target.value)}
               >
                 {DISTRICTS.map((name) => (
                   <option key={name}>{name}</option>

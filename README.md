@@ -81,6 +81,8 @@ The farmer Q&A assistant and the season explanations call any **OpenAI-compatibl
 
 These variables are server-only: the browser never sees the key, and every request is validated before it reaches the model. When no key is set, the assistant reports that it is not configured and the deterministic crop estimates and season guide stay available.
 
+Both portals have AI assistance. The farmer assistant answers agronomic questions in the farmer's language. The agronomist assistant on the dashboard answers from the figures the page is showing: the server builds a digest of the published survey figures, the model report and the district's climate, and the model is told to use nothing else and to say when a figure is missing.
+
 The chat backend is chosen by `AI_PROVIDER`:
 
 - `openai` (default) — any OpenAI-compatible `/chat/completions` endpoint. `AI_BASE_URL` may be set on its own when the endpoint needs no auth.
