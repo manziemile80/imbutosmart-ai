@@ -54,6 +54,7 @@ describe("agronomist digest", () => {
     const prompt = buildAgronomistSystemPrompt("DIGEST");
     expect(prompt).toContain("Use only the figures in the data");
     expect(prompt).toContain("Never state a number that is not there");
+    expect(prompt).toContain("no markdown tables");
     expect(prompt).toContain("DIGEST");
   });
 });
