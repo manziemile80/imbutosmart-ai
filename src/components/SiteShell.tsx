@@ -16,7 +16,8 @@ export function SiteShell({
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <header className="sticky top-0 z-20 border-b border-border bg-background/85 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-3.5">
+        {/* The title line: the brand, and the farmer's summary at the far end. */}
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 pt-3.5">
           <Link to="/" className="flex items-center gap-2.5 font-display text-lg text-foreground">
             <span className="flex size-8 items-center justify-center rounded-lg bg-primary/15 text-primary-text">
               <Sprout className="size-5" aria-hidden="true" />
@@ -25,43 +26,45 @@ export function SiteShell({
               Imbuto<span className="text-primary-text">Smart</span> AI
             </span>
           </Link>
-          <div className="flex items-center gap-1.5">
-            <nav className="flex gap-1 text-sm" aria-label="Primary">
-              <Link
-                to="/"
-                className="nav-link"
-                activeOptions={{ exact: true }}
-                activeProps={{ className: "nav-link-active" }}
-              >
-                {t.farmer}
-              </Link>
-              <Link
-                to="/advice"
-                className="nav-link"
-                activeOptions={{ exact: true }}
-                activeProps={{ className: "nav-link-active" }}
-              >
-                {t.advicePage}
-              </Link>
-              <Link
-                to="/guidance"
-                className="nav-link"
-                activeOptions={{ exact: true }}
-                activeProps={{ className: "nav-link-active" }}
-              >
-                {t.guidancePage}
-              </Link>
-              <Link
-                to="/dashboard"
-                className="nav-link"
-                activeProps={{ className: "nav-link-active" }}
-              >
-                {t.agronomist}
-              </Link>
-            </nav>
-            <PlanSummaryMenu language={language} />
-            <ThemeToggle language={language} />
-          </div>
+          <PlanSummaryMenu language={language} />
+        </div>
+
+        {/* The navigation line, with the theme toggle below the summary. */}
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 pb-3 pt-2">
+          <nav className="flex flex-wrap gap-1 text-sm" aria-label="Primary">
+            <Link
+              to="/"
+              className="nav-link"
+              activeOptions={{ exact: true }}
+              activeProps={{ className: "nav-link-active" }}
+            >
+              {t.farmer}
+            </Link>
+            <Link
+              to="/advice"
+              className="nav-link"
+              activeOptions={{ exact: true }}
+              activeProps={{ className: "nav-link-active" }}
+            >
+              {t.advicePage}
+            </Link>
+            <Link
+              to="/guidance"
+              className="nav-link"
+              activeOptions={{ exact: true }}
+              activeProps={{ className: "nav-link-active" }}
+            >
+              {t.guidancePage}
+            </Link>
+            <Link
+              to="/dashboard"
+              className="nav-link"
+              activeProps={{ className: "nav-link-active" }}
+            >
+              {t.agronomist}
+            </Link>
+          </nav>
+          <ThemeToggle language={language} />
         </div>
       </header>
       <main className="flex-1">{children}</main>
