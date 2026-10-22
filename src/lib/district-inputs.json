@@ -15,6 +15,11 @@
       "Green manure": 0.101,
       "Manure": 0.505
     },
+    "rates": {
+      "DAP": 116.0,
+      "NPK 17-17-17": 90.6,
+      "Urea": 89.8
+    },
     "segments": 198,
     "topCrop": "Paddy rice",
     "usedShare": 0.652
@@ -33,6 +38,11 @@
       "Green manure": 0.317,
       "Manure": 0.635
     },
+    "rates": {
+      "DAP": 60.2,
+      "NPK 17-17-17": 150.0,
+      "Urea": 45.2
+    },
     "segments": 104,
     "topCrop": "Irish potato",
     "usedShare": 0.952
@@ -49,6 +59,11 @@
     "organic": {
       "Compost": 0.018,
       "Manure": 0.917
+    },
+    "rates": {
+      "DAP": 41.1,
+      "NPK 17-17-17": 67.5,
+      "Urea": 27.0
     },
     "segments": 109,
     "topCrop": "Climbing bean",
@@ -69,6 +84,11 @@
       "Compost": 0.043,
       "Green manure": 0.011,
       "Manure": 0.766
+    },
+    "rates": {
+      "DAP": 169.3,
+      "NPK 17-17-17": 160.0,
+      "Urea": 66.7
     },
     "segments": 94,
     "topCrop": "Maize",
@@ -91,6 +111,11 @@
       "Compost": 0.104,
       "Manure": 0.694
     },
+    "rates": {
+      "DAP": 69.1,
+      "NPK 17-17-17": 73.4,
+      "Urea": 63.0
+    },
     "segments": 183,
     "topCrop": "Maize",
     "usedShare": 0.798
@@ -107,6 +132,11 @@
     "organic": {
       "Compost": 0.034,
       "Manure": 0.915
+    },
+    "rates": {
+      "DAP": 39.0,
+      "NPK 17-17-17": 83.3,
+      "Urea": 47.3
     },
     "segments": 118,
     "topCrop": "Irish potato",
@@ -126,6 +156,11 @@
     "organic": {
       "Compost": 0.048,
       "Manure": 0.719
+    },
+    "rates": {
+      "DAP": 44.1,
+      "NPK 17-17-17": 54.0,
+      "Urea": 49.7
     },
     "segments": 146,
     "topCrop": "Paddy rice",
@@ -149,6 +184,11 @@
       "Green manure": 0.014,
       "Manure": 0.718
     },
+    "rates": {
+      "DAP": 29.7,
+      "NPK 17-17-17": 62.5,
+      "Urea": 37.7
+    },
     "segments": 142,
     "topCrop": "Paddy rice",
     "usedShare": 0.838
@@ -168,6 +208,11 @@
       "Compost": 0.056,
       "Manure": 0.794
     },
+    "rates": {
+      "DAP": 23.5,
+      "NPK 17-17-17": 66.7,
+      "Urea": 21.0
+    },
     "segments": 126,
     "topCrop": "Maize",
     "usedShare": 0.857
@@ -183,6 +228,11 @@
     "irrigatedShare": 0.087,
     "organic": {
       "Manure": 0.883
+    },
+    "rates": {
+      "DAP": 68.5,
+      "NPK 17-17-17": 176.5,
+      "Urea": 54.4
     },
     "segments": 103,
     "topCrop": "Climbing bean",
@@ -203,6 +253,11 @@
       "Compost": 0.059,
       "Manure": 0.606
     },
+    "rates": {
+      "DAP": 83.0,
+      "NPK 17-17-17": 237.4,
+      "Urea": 85.7
+    },
     "segments": 170,
     "topCrop": "Maize",
     "usedShare": 0.665
@@ -220,6 +275,10 @@
     "organic": {
       "Compost": 0.085,
       "Manure": 0.511
+    },
+    "rates": {
+      "DAP": 55.6,
+      "Urea": 53.4
     },
     "segments": 47,
     "topCrop": "Maize",
@@ -241,6 +300,10 @@
       "Green manure": 0.014,
       "Manure": 0.676
     },
+    "rates": {
+      "DAP": 107.9,
+      "Urea": 119.0
+    },
     "segments": 142,
     "topCrop": "Maize",
     "usedShare": 0.754
@@ -256,6 +319,11 @@
     "irrigatedShare": 0.227,
     "organic": {
       "Manure": 0.933
+    },
+    "rates": {
+      "DAP": 40.5,
+      "NPK 17-17-17": 50.0,
+      "Urea": 24.8
     },
     "segments": 119,
     "topCrop": "Maize",
@@ -277,6 +345,11 @@
       "Green manure": 0.022,
       "Manure": 0.813
     },
+    "rates": {
+      "DAP": 73.3,
+      "NPK 17-17-17": 298.5,
+      "Urea": 109.1
+    },
     "segments": 91,
     "topCrop": "Irish potato",
     "usedShare": 0.901
@@ -293,6 +366,11 @@
     "organic": {
       "Compost": 0.193,
       "Manure": 0.51
+    },
+    "rates": {
+      "DAP": 77.2,
+      "NPK 17-17-17": 87.5,
+      "Urea": 62.5
     },
     "segments": 145,
     "topCrop": "Paddy rice",
@@ -313,6 +391,11 @@
       "Compost": 0.01,
       "Green manure": 0.031,
       "Manure": 0.918
+    },
+    "rates": {
+      "DAP": 44.4,
+      "NPK 17-17-17": 106.7,
+      "Urea": 31.0
     },
     "segments": 98,
     "topCrop": "Climbing bean",
@@ -335,6 +418,11 @@
       "Green manure": 0.048,
       "Manure": 0.88
     },
+    "rates": {
+      "DAP": 75.8,
+      "NPK 17-17-17": 633.8,
+      "Urea": 67.1
+    },
     "segments": 83,
     "topCrop": "Irish potato",
     "usedShare": 0.928
@@ -354,6 +442,11 @@
       "Compost": 0.178,
       "Green manure": 0.017,
       "Manure": 0.351
+    },
+    "rates": {
+      "DAP": 277.8,
+      "NPK 17-17-17": 453.5,
+      "Urea": 312.5
     },
     "segments": 242,
     "topCrop": "Maize",
@@ -376,6 +469,11 @@
       "Green manure": 0.025,
       "Manure": 0.898
     },
+    "rates": {
+      "DAP": 38.5,
+      "NPK 17-17-17": 38.8,
+      "Urea": 30.3
+    },
     "segments": 118,
     "topCrop": "Climbing bean",
     "usedShare": 0.975
@@ -394,6 +492,11 @@
       "Compost": 0.028,
       "Green manure": 0.028,
       "Manure": 0.862
+    },
+    "rates": {
+      "DAP": 41.7,
+      "NPK 17-17-17": 46.3,
+      "Urea": 27.5
     },
     "segments": 109,
     "topCrop": "Paddy rice",
@@ -414,6 +517,10 @@
       "Green manure": 0.056,
       "Manure": 0.597
     },
+    "rates": {
+      "DAP": 62.5,
+      "Urea": 50.0
+    },
     "segments": 124,
     "topCrop": "Paddy rice",
     "usedShare": 0.798
@@ -429,6 +536,10 @@
     "irrigatedShare": 0.114,
     "organic": {
       "Manure": 0.682
+    },
+    "rates": {
+      "DAP": 28.6,
+      "Urea": 55.8
     },
     "segments": 44,
     "topCrop": "Tomato",
@@ -446,6 +557,11 @@
     "organic": {
       "Compost": 0.059,
       "Manure": 0.891
+    },
+    "rates": {
+      "DAP": 68.3,
+      "NPK 17-17-17": 100.0,
+      "Urea": 44.1
     },
     "segments": 119,
     "topCrop": "Irish potato",
@@ -465,6 +581,11 @@
       "Compost": 0.167,
       "Manure": 0.526
     },
+    "rates": {
+      "DAP": 305.6,
+      "NPK 17-17-17": 428.6,
+      "Urea": 133.3
+    },
     "segments": 78,
     "topCrop": "Irish potato",
     "usedShare": 0.692
@@ -483,6 +604,11 @@
       "Compost": 0.031,
       "Green manure": 0.023,
       "Manure": 0.775
+    },
+    "rates": {
+      "DAP": 39.1,
+      "NPK 17-17-17": 34.7,
+      "Urea": 46.3
     },
     "segments": 129,
     "topCrop": "Paddy rice",
@@ -505,6 +631,11 @@
       "Green manure": 0.061,
       "Manure": 0.704
     },
+    "rates": {
+      "DAP": 27.4,
+      "NPK 17-17-17": 66.7,
+      "Urea": 26.7
+    },
     "segments": 98,
     "topCrop": "Irish potato",
     "usedShare": 0.98
@@ -522,6 +653,11 @@
     "organic": {
       "Compost": 0.288,
       "Manure": 0.442
+    },
+    "rates": {
+      "DAP": 55.2,
+      "NPK 17-17-17": 135.1,
+      "Urea": 40.5
     },
     "segments": 104,
     "topCrop": "Paddy rice",
@@ -542,6 +678,11 @@
       "Green manure": 0.012,
       "Manure": 0.788
     },
+    "rates": {
+      "DAP": 54.1,
+      "NPK 17-17-17": 148.9,
+      "Urea": 59.8
+    },
     "segments": 85,
     "topCrop": "Irish potato",
     "usedShare": 0.882
@@ -560,6 +701,11 @@
       "Compost": 0.125,
       "Green manure": 0.138,
       "Manure": 0.539
+    },
+    "rates": {
+      "DAP": 139.2,
+      "NPK 17-17-17": 352.9,
+      "Urea": 66.2
     },
     "segments": 152,
     "topCrop": "Maize",

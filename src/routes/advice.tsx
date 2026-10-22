@@ -8,6 +8,8 @@ import { Panel, PanelBody, PanelHeader } from "@/components/ui/panel";
 import { Callout } from "@/components/ui/callout";
 import { Button } from "@/components/ui/button";
 import { adviceCopy, districtInputs, explainInput } from "@/lib/advice";
+import { buildPlanSummary } from "@/lib/plan-summary";
+import { PlanNotification } from "@/components/PlanNotification";
 import { getAdvice } from "@/lib/advice.functions";
 import { DISTRICTS, SOILS } from "@/lib/api";
 import { farmerCopy, soilLabel, type FarmerLanguage } from "@/lib/farmer-language";
@@ -106,6 +108,17 @@ function Advice() {
       .map(([name, share]) => ({ name, share, kind: "organic" })),
   ];
 
+  // The overview the farmer gets as soon as the field is chosen.
+  const summary = buildPlanSummary({
+    district,
+    soil,
+    season,
+    crops: crops.map((crop) => ({ crop: crop.crop, score: crop.score })),
+    profile: profile ?? null,
+    climate: rainMm != null && tempC != null ? { rainMm, tempC } : null,
+    language,
+  });
+
   return (
     <SiteShell language={language}>
       <div lang={language} className="page">
@@ -133,6 +146,10 @@ function Advice() {
             </select>
           </label>
         </header>
+
+        <div className="page-section">
+          <PlanNotification summary={summary} district={district} soil={soil} language={language} />
+        </div>
 
         <div className="page-section grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
           <Panel aria-labelledby="advice-field-title">

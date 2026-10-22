@@ -24,6 +24,8 @@ export type DistrictInputProfile = {
   usedShare: number;
   inorganic: Record<string, number>;
   organic: Record<string, number>;
+  /** The rate farmers applied each input at, in kilograms per hectare. */
+  rates: Record<string, number>;
   topCrop: string | null;
   irrigatedShare: number;
   erodedShare: number;

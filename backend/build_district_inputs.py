@@ -43,6 +43,10 @@ INORGANIC_COLUMNS = ["s3q101", "s3q102", "s3q103", "s3q104"]
 ORGANIC_COLUMN = "s3q2b"
 # The crop each mineral slot was applied to.
 CROP_COLUMNS = ["s3q151", "s3q152", "s3q153", "s3q154"]
+# The unit, the amount and the area each mineral slot was applied to.
+UNIT_COLUMNS = ["s3q111", "s3q112", "s3q113", "s3q114"]
+AMOUNT_COLUMNS = ["s3q121", "s3q122", "s3q123", "s3q124"]
+AREA_COLUMNS = ["s3q141", "s3q142", "s3q143", "s3q144"]
 
 # Spelling variants the survey itself uses; they are the same district.
 DISTRICT_ALIASES = {
@@ -67,6 +71,19 @@ def clean(value: object) -> str | None:
     if not text or text.lower() in {"nan", "none", "."}:
         return None
     return text
+
+
+def to_kilograms(amount: float | None, unit: str | None) -> float | None:
+    """The amount in kilograms, whatever unit the row used."""
+    if amount is None or unit is None:
+        return None
+    unit = unit.strip().lower()
+    if unit.startswith("kg"):
+        return amount
+    if unit.startswith("g"):
+        return amount / 1000
+    # Litres and pieces are not a mass.
+    return None
 
 
 def main() -> None:
@@ -122,7 +139,8 @@ def main() -> None:
         inorganic: dict[str, int] = {}
         organic: dict[str, int] = {}
         crops: dict[str, int] = {}
-        for column in INORGANIC_COLUMNS:
+        rates: dict[str, list[float]] = {}
+        for index, column in enumerate(INORGANIC_COLUMNS):
             if column not in group.columns:
                 continue
             for _, row in group.iterrows():
@@ -130,6 +148,16 @@ def main() -> None:
                 if not name:
                     continue
                 inorganic[name] = inorganic.get(name, 0) + 1
+                # The rate the farmers applied it at, in kilograms per hectare
+                # of the plot it went on.
+                amount = pd.to_numeric(pd.Series([row[AMOUNT_COLUMNS[index]]]), errors="coerce").iloc[0]
+                unit = clean(row[UNIT_COLUMNS[index]])
+                area = pd.to_numeric(pd.Series([row[AREA_COLUMNS[index]]]), errors="coerce").iloc[0]
+                kilograms = to_kilograms(amount, unit)
+                if kilograms and area and area > 0:
+                    rate = kilograms / (float(area) / 10000)
+                    if 0 < rate < 2000:
+                        rates.setdefault(name, []).append(rate)
         for _, row in group.iterrows():
             name = clean(row.get(ORGANIC_COLUMN))
             if name:
@@ -152,11 +180,17 @@ def main() -> None:
             }
 
         top_crop = max(crops.items(), key=lambda item: item[1])[0] if crops else None
+        input_rates = {
+            name: round(float(pd.Series(values).median()), 1)
+            for name, values in rates.items()
+            if len(values) >= 5
+        }
         profile[district] = {
             "segments": segments,
             "usedShare": round(used / segments, 3) if segments else 0,
             "inorganic": share(inorganic),
             "organic": share(organic),
+            "rates": input_rates,
             "topCrop": top_crop,
             "irrigatedShare": round(float(district_practice["irrigated"].mean()), 3)
             if practice_segments

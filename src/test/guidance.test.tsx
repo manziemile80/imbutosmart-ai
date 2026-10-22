@@ -26,7 +26,7 @@ vi.mock("@/lib/weather.functions", () => ({
   getDistrictWeather: async () => ({ district: "Musanze", climate: null, forecast: null }),
 }));
 
-const { Guidance } = await import("@/routes/guidance");
+const { Guidance } = await import("@/components/GuidancePage");
 
 afterEach(cleanup);
 
