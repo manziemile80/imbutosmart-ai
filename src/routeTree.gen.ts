@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdviceRouteImport } from './routes/advice'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as GuidanceRouteImport } from './routes/guidance'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +29,44 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuidanceRoute = GuidanceRouteImport.update({
+  id: '/guidance',
+  path: '/guidance',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/advice': typeof AdviceRoute
   '/dashboard': typeof DashboardRoute
+  '/guidance': typeof GuidanceRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/advice': typeof AdviceRoute
   '/dashboard': typeof DashboardRoute
+  '/guidance': typeof GuidanceRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/advice': typeof AdviceRoute
   '/dashboard': typeof DashboardRoute
+  '/guidance': typeof GuidanceRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/advice' | '/dashboard'
+  fullPaths: '/' | '/advice' | '/dashboard' | '/guidance'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/advice' | '/dashboard'
-  id: '__root__' | '/' | '/advice' | '/dashboard'
+  to: '/' | '/advice' | '/dashboard' | '/guidance'
+  id: '__root__' | '/' | '/advice' | '/dashboard' | '/guidance'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdviceRoute: typeof AdviceRoute
   DashboardRoute: typeof DashboardRoute
+  GuidanceRoute: typeof GuidanceRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guidance': {
+      id: '/guidance'
+      path: '/guidance'
+      fullPath: '/guidance'
+      preLoaderRoute: typeof GuidanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdviceRoute: AdviceRoute,
   DashboardRoute: DashboardRoute,
+  GuidanceRoute: GuidanceRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -54,12 +54,14 @@ The forecast carries the WMO weather code of each day ("Moderate rain showers") 
 
 ## The Advice portal
 `/advice` gives a plan a farmer can follow, for the district and soil they choose:
-
 - **Crops to plant here** — the agronomic suitability engine, with the district's own climate as the rainfall and temperature.
 - **Inputs used in your district** — from the Seasonal Agricultural Survey 2025: the share of segments using DAP, NPK, urea, manure, compost and the rest, plus how many irrigate and how many report soil erosion. `backend/build_district_inputs.py` writes the per-district profile to `src/lib/district-inputs.json` (aggregates only, no household data).
 - **When to act** — the district's usual season rainfall and temperature, and the coming days' forecast.
 - **Your written plan** — the AI writes the steps from those facts alone. A rate, spacing or price the model adds is dropped before the farmer sees it.
 - **Assistance** — the plan read aloud, the same plan in simpler words, and a plain explanation of every input name.
+
+## The Guidance portal
+`/guidance` is the help desk: every assistant in one place, chosen in plain words — **Ask a question**, **Speak your question**, **This season** or **My plan**. The district and soil chosen on the page are the ones the assistants answer for, and a short "how to get a good answer" guide sits beside them. The whole page is available in English, Kinyarwanda and French.
 
 ## Run the frontend
 ```bash

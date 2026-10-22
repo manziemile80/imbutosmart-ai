@@ -43,6 +43,14 @@ export function SiteShell({
                 {t.advicePage}
               </Link>
               <Link
+                to="/guidance"
+                className="nav-link"
+                activeOptions={{ exact: true }}
+                activeProps={{ className: "nav-link-active" }}
+              >
+                {t.guidancePage}
+              </Link>
+              <Link
                 to="/dashboard"
                 className="nav-link"
                 activeProps={{ className: "nav-link-active" }}

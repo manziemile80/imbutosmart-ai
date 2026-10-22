@@ -32,6 +32,7 @@
 - [x] Put AI assistance on the agronomist portal: an assistant that answers from the survey figures, the model report and the district's climate.
 - [x] Add an Advice portal: crops to plant for the soil and district, the inputs farmers there use, and a plan to follow, with an Assistance panel that reads it aloud or explains the names.
 - [x] Name the weather in the forecast: the WMO weather code of each day, and the hours rain is likely.
+- [x] Add a Guidance portal: one friendly place with every AI assistant, chosen in plain words, with a short guide on how to ask well.
 - [x] Wait before retrying a chat request that did not reach the backend, so a busy or weak connection still gives the farmer an answer.
 - [x] Deploy the design system and the retry fix, and verify the live app's record, transcribe and answer path.
 - [ ] Read answers aloud on the deployed app (blocked by accepting the Groq speech model's terms in the provider console — the app-level check now reports this as the refusal reason — or by pointing the host at a speech backend the deployment can reach).
