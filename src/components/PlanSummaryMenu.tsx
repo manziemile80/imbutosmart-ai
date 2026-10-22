@@ -122,9 +122,9 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
         <div
           role="dialog"
           aria-label={t.title}
-          className="absolute right-0 top-full z-30 mt-2 max-h-[min(80vh,40rem)] w-[min(92vw,30rem)] overflow-y-auto rounded-2xl border border-border bg-card p-5 text-left shadow-pop"
+          className="absolute right-0 top-full z-30 mt-2 flex max-h-[min(80vh,40rem)] w-[min(92vw,30rem)] flex-col rounded-2xl border border-border bg-card p-5 text-left shadow-pop"
         >
-          <div className="flex items-start justify-between gap-3">
+          <div className="flex shrink-0 items-start justify-between gap-3">
             <div>
               <p className="eyebrow">{district}</p>
               <p className="font-display text-lg text-foreground">{t.title}</p>
@@ -142,14 +142,14 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
             </Button>
           </div>
 
-          <div className="mt-4">
+          <div className="mt-4 -mr-2 overflow-y-auto pr-2">
             <PlanSummaryBody summary={summary} language={language} />
           </div>
 
           <Button
             type="button"
             variant="outline"
-            className="mt-5 h-10 w-full"
+            className="mt-4 h-10 w-full shrink-0"
             disabled={sent === "sent"}
             onClick={send}
           >

@@ -169,7 +169,7 @@ export function Guidance() {
               <>
                 <Panel aria-labelledby="guidance-plan-title" data-testid="guidance-plan">
                   <PanelHeader
-                    icon={<Sprout className="size-5" aria-hidden="true" />}
+                    icon={<ListChecks className="size-5" aria-hidden="true" />}
                     eyebrow={t.eyebrow}
                     title={t.modes.plan.label}
                     titleId="guidance-plan-title"

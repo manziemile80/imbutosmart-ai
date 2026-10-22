@@ -29,7 +29,7 @@ export function SiteShell({
         {/* The navigation line, with the theme toggle below the summary. */}
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 pb-3 pt-2">
           <nav
-            className="-mx-1 flex flex-nowrap gap-1 overflow-x-auto px-1 pr-3 text-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="-mx-1 flex flex-nowrap items-center gap-1 overflow-x-auto px-1 pr-4 text-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden max-sm:[mask-image:linear-gradient(to_right,#000_calc(100%-2rem),transparent)]"
             aria-label="Primary"
           >
             <Link
