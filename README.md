@@ -57,7 +57,7 @@ The forecast carries the WMO weather code of each day ("Moderate rain showers") 
 - **Inputs used in your district** — from the Seasonal Agricultural Survey 2025: the share of segments using DAP, NPK, urea, manure, compost and the rest, the rate each input was applied at in kilograms per hectare, plus how many irrigate and how many report soil erosion. `backend/build_district_inputs.py` writes the per-district profile to `src/lib/district-inputs.json` (aggregates only, no household data).
 - **When to act** — the district's usual season rainfall and temperature, and the coming days' forecast.
 - **Your written plan** — the AI writes the steps from those facts alone. A rate, spacing or price the model adds is dropped before the farmer sees it.
-- **Your summary** — the overview the farmer gets as soon as the district and soil are chosen: the crops for the field, the inputs farmers there use **with the rate they applied them at**, the insurance worth asking about, and what else to do. It is on the page, and the farmer can ask the browser to send it as a notification.
+- **Your summary** — the overview the farmer gets as soon as the district and soil are chosen: the crops for the field, the inputs farmers there use **with the rate they applied them at**, the insurance worth asking about, and what else to do. It sits at the top of the Advice page, and the bell in the header (just above the dark-mode toggle) opens the same summary on any page — the field the farmer chose is shared across the app and kept for their next visit.
 - **Assistance** — the plan read aloud, the same plan in simpler words, and a plain explanation of every input name.
 
 ## The Guidance portal

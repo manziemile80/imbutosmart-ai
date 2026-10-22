@@ -27,3 +27,4 @@
 - A written plan may only quote figures its digest holds: an application rate, a spacing or a price the model adds is dropped before the farmer sees it.
 - The Guidance portal is the help desk: every assistant is reachable from it in plain words, and the district and soil chosen there are the ones the assistants answer for.
 - The summary notification quotes the survey's own figures: the input share, the rate farmers applied the input at in that district, and the erosion and irrigation shares. A rate the app cannot source from the survey is never stated.
+- The farmer's field (district, soil, season) belongs to the app, not to a page: the header summary, the Advice page and the Guidance page all read and write the same field, so the summary follows the farmer between pages.

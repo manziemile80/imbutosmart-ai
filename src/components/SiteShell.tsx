@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Sprout } from "lucide-react";
 import type { ReactNode } from "react";
 import { farmerCopy, type FarmerLanguage } from "@/lib/farmer-language";
+import { PlanSummaryMenu } from "@/components/PlanSummaryMenu";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function SiteShell({
@@ -58,6 +59,7 @@ export function SiteShell({
                 {t.agronomist}
               </Link>
             </nav>
+            <PlanSummaryMenu language={language} />
             <ThemeToggle language={language} />
           </div>
         </div>

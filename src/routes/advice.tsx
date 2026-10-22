@@ -18,6 +18,7 @@ import { engineInput } from "@/lib/recommendation";
 import { recommendOffline } from "@/lib/recommendation-engine";
 import { seasonForMonth, seasonRainMm, seasonTempC, weatherCodeLabel } from "@/lib/weather";
 import { useDistrictWeather } from "@/hooks/use-district-weather";
+import { useField } from "@/lib/field";
 import { useVoice } from "@/hooks/use-voice";
 
 export const Route = createFileRoute("/advice")({
@@ -35,11 +36,8 @@ export const Route = createFileRoute("/advice")({
 });
 
 function Advice() {
-  const [district, setDistrict] = useState("Musanze");
-  const [soil, setSoil] = useState("Volcanic");
-  const [season, setSeason] = useState<"A" | "B" | "C" | null>(
-    seasonForMonth(new Date().getMonth() + 1),
-  );
+  const { field, setField } = useField();
+  const { district, soil, season } = field;
   const [language, setLanguage] = useState<FarmerLanguage>("en");
   const t = adviceCopy[language];
   const ft = farmerCopy[language];
@@ -166,7 +164,7 @@ function Advice() {
                   <select
                     className="field"
                     value={district}
-                    onChange={(e) => setDistrict(e.target.value)}
+                    onChange={(e) => setField({ district: e.target.value })}
                   >
                     {DISTRICTS.map((name) => (
                       <option key={name}>{name}</option>
@@ -175,7 +173,11 @@ function Advice() {
                 </label>
                 <label className="grid gap-1.5">
                   <span className="field-label">{ft.soil}</span>
-                  <select className="field" value={soil} onChange={(e) => setSoil(e.target.value)}>
+                  <select
+                    className="field"
+                    value={soil}
+                    onChange={(e) => setField({ soil: e.target.value })}
+                  >
                     {SOILS.map((name) => (
                       <option key={name} value={name}>
                         {soilLabel(name, language)}
@@ -189,7 +191,9 @@ function Advice() {
                     className="field"
                     value={season ?? ""}
                     onChange={(e) =>
-                      setSeason(e.target.value === "" ? null : (e.target.value as "A" | "B" | "C"))
+                      setField({
+                        season: e.target.value === "" ? null : (e.target.value as "A" | "B" | "C"),
+                      })
                     }
                   >
                     <option value="">—</option>

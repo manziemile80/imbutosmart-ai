@@ -19,6 +19,7 @@ import { buildPlanSummary } from "@/lib/plan-summary";
 import { PlanNotification } from "@/components/PlanNotification";
 import { seasonForMonth, seasonRainMm, seasonTempC } from "@/lib/weather";
 import { useDistrictWeather } from "@/hooks/use-district-weather";
+import { useField } from "@/lib/field";
 import { cn } from "@/lib/utils";
 
 const MODE_ICONS: Record<GuidanceMode, typeof MessageCircleQuestion> = {
@@ -31,8 +32,8 @@ const MODE_ICONS: Record<GuidanceMode, typeof MessageCircleQuestion> = {
 export function Guidance() {
   const [language, setLanguage] = useState<FarmerLanguage>("en");
   const [mode, setMode] = useState<GuidanceMode>("question");
-  const [district, setDistrict] = useState("Musanze");
-  const [soil, setSoil] = useState("Volcanic");
+  const { field, setField } = useField();
+  const { district, soil } = field;
   const t = guidanceCopy[language];
   const ft = farmerCopy[language];
   const season = seasonForMonth(new Date().getMonth() + 1);
@@ -252,7 +253,7 @@ export function Guidance() {
                     <select
                       className="field"
                       value={district}
-                      onChange={(event) => setDistrict(event.target.value)}
+                      onChange={(event) => setField({ district: event.target.value })}
                     >
                       {DISTRICTS.map((name) => (
                         <option key={name}>{name}</option>
@@ -264,7 +265,7 @@ export function Guidance() {
                     <select
                       className="field"
                       value={soil}
-                      onChange={(event) => setSoil(event.target.value)}
+                      onChange={(event) => setField({ soil: event.target.value })}
                     >
                       {SOILS.map((name) => (
                         <option key={name} value={name}>

@@ -27,12 +27,17 @@ vi.mock("@/lib/weather.functions", () => ({
 }));
 
 const { Guidance } = await import("@/components/GuidancePage");
+const { FieldProvider } = await import("@/lib/field-context");
 
 afterEach(cleanup);
 
 describe("guidance page", () => {
   it("offers every way of getting help in plain words", () => {
-    render(<Guidance />);
+    render(
+      <FieldProvider>
+        <Guidance />
+      </FieldProvider>,
+    );
 
     expect(screen.getByRole("region", { name: /Ask about your farm/i })).toBeInTheDocument();
     expect(screen.getByTestId("guidance-mode-voice")).toBeInTheDocument();
@@ -41,7 +46,11 @@ describe("guidance page", () => {
   });
 
   it("switches to the assistant that was asked for", () => {
-    render(<Guidance />);
+    render(
+      <FieldProvider>
+        <Guidance />
+      </FieldProvider>,
+    );
 
     fireEvent.click(screen.getByTestId("guidance-mode-season"));
     expect(screen.getByRole("region", { name: /Seasons & rainfall/i })).toBeInTheDocument();
@@ -51,7 +60,11 @@ describe("guidance page", () => {
   });
 
   it("keeps the guide for a good answer on the page", () => {
-    render(<Guidance />);
+    render(
+      <FieldProvider>
+        <Guidance />
+      </FieldProvider>,
+    );
 
     expect(screen.getByTestId("guidance-guide")).toBeInTheDocument();
     expect(screen.getByText(/Say where your field is/i)).toBeInTheDocument();
