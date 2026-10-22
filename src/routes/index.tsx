@@ -13,6 +13,7 @@ import { API_URL, DISTRICTS, SOILS } from "@/lib/api";
 import { farmerCopy, cropLabel, soilLabel, type FarmerLanguage } from "@/lib/farmer-language";
 import { monthTempC, seasonForMonth, seasonRainMm } from "@/lib/weather";
 import { useAutoPrediction } from "@/hooks/use-auto-prediction";
+import { useField } from "@/lib/field";
 import { useDistrictWeather } from "@/hooks/use-district-weather";
 
 export const Route = createFileRoute("/")({
@@ -38,8 +39,10 @@ export const Route = createFileRoute("/")({
 });
 
 function Advisory() {
-  const [district, setDistrict] = useState("Musanze");
-  const [soil, setSoil] = useState("Volcanic");
+  // The district, soil and season are the app's field, so the summary in the
+  // header follows whatever the farmer changes here.
+  const { field, setField } = useField();
+  const { district, soil } = field;
   const [rain, setRain] = useState("450");
   const [temp, setTemp] = useState("19");
   const [language, setLanguage] = useState<FarmerLanguage>("en");
@@ -48,7 +51,7 @@ function Advisory() {
   const [tempEdited, setTempEdited] = useState(false);
   const t = farmerCopy[language];
   const month = new Date().getMonth() + 1;
-  const season = seasonForMonth(month);
+  const season = field.season ?? seasonForMonth(month);
   const { result, loading, error } = useAutoPrediction(district, soil, rain, temp, season);
   const { weather, loading: weatherLoading } = useDistrictWeather(district);
 
@@ -101,7 +104,7 @@ function Advisory() {
                   <select
                     className="field"
                     value={district}
-                    onChange={(e) => setDistrict(e.target.value)}
+                    onChange={(e) => setField({ district: e.target.value })}
                   >
                     {DISTRICTS.map((d) => (
                       <option key={d}>{d}</option>
@@ -109,7 +112,11 @@ function Advisory() {
                   </select>
                 </Field>
                 <Field label={t.soil}>
-                  <select className="field" value={soil} onChange={(e) => setSoil(e.target.value)}>
+                  <select
+                    className="field"
+                    value={soil}
+                    onChange={(e) => setField({ soil: e.target.value })}
+                  >
                     {SOILS.map((s) => (
                       <option key={s} value={s}>
                         {soilLabel(s, language)}
