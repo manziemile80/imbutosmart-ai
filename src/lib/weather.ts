@@ -34,6 +34,12 @@ export type ForecastDay = {
   rainMm: number;
   tempMinC: number;
   tempMaxC: number;
+  /** The highest chance of rain in the day, in per cent. */
+  maxChanceOfRain: number;
+  /** The hours of the day rain is likely, e.g. "13:00" to "17:00". */
+  rainWindow: { from: string; to: string } | null;
+  /** The WMO weather code of the day, e.g. 61 for slight rain. */
+  weatherCode: number | null;
 };
 
 export type DistrictForecast = {
@@ -100,7 +106,10 @@ export function monthTempC(climate: DistrictClimate, month: number): number | nu
 }
 
 // The usual mean temperature of a season, in degrees Celsius.
-export function seasonTempC(climate: DistrictClimate, season: "A" | "B" | "C" | null): number | null {
+export function seasonTempC(
+  climate: DistrictClimate,
+  season: "A" | "B" | "C" | null,
+): number | null {
   if (!season) return null;
   const months = SEASON_MONTHS[season];
   const values = months
@@ -124,4 +133,93 @@ export function forecastSummary(forecast: DistrictForecast): {
     tempMinC: Math.min(...days.map((day) => day.tempMinC)),
     tempMaxC: Math.max(...days.map((day) => day.tempMaxC)),
   };
+}
+
+// The hours of a day when rain is likely, taken from the hourly forecast. A
+// farmer needs the hour, not only the day's total.
+export function rainWindowFrom(
+  hours: { time: string; chanceOfRain: number }[],
+  chance = 50,
+): { from: string; to: string } | null {
+  const likely = hours.filter((hour) => hour.chanceOfRain >= chance);
+  if (likely.length === 0) return null;
+  const hourOf = (time: string) => time.slice(11, 16);
+  const first = likely[0];
+  const last = likely[likely.length - 1];
+  if (!first || !last) return null;
+  return { from: hourOf(first.time), to: hourOf(last.time) };
+}
+
+// The WMO weather codes the forecast service reports, in the farmer's
+// language. The numbers are the international weather code, the same one the
+// forecast service uses.
+const weatherCodes: Record<number, { en: string; rw: string; fr: string }> = {
+  0: { en: "Clear sky", rw: "Igihe ciza", fr: "Ciel dégagé" },
+  1: { en: "Mainly clear", rw: "Igihe gisanzwe ciza", fr: "Plutôt dégagé" },
+  2: { en: "Partly cloudy", rw: "Igihe cy’ibumweru", fr: "Partiellement nuageux" },
+  3: { en: "Overcast", rw: "Igihe cy’ibimwe byinshi", fr: "Ciel couvert" },
+  45: { en: "Fog", rw: "Umukungugu", fr: "Brouillard" },
+  48: { en: "Depositing rime fog", rw: "Umukungugu w’ubukire", fr: "Brouillard givrant" },
+  51: { en: "Light drizzle", rw: "Umuyaga ucu", fr: "Bruine légère" },
+  53: { en: "Moderate drizzle", rw: "Umuyaga uhabaye", fr: "Bruine modérée" },
+  55: { en: "Dense drizzle", rw: "Umuyaga winshi", fr: "Bruine dense" },
+  56: { en: "Light freezing drizzle", rw: "Umuyaga w’ubukire", fr: "Bruine verglaçante" },
+  57: {
+    en: "Dense freezing drizzle",
+    rw: "Umuyaga w’ubukire winshi",
+    fr: "Bruine verglaçante dense",
+  },
+  61: { en: "Slight rain", rw: "Imvura nto", fr: "Pluie faible" },
+  63: { en: "Moderate rain", rw: "Imvura isanzwe", fr: "Pluie modérée" },
+  65: { en: "Heavy rain", rw: "Imvura nyinshi", fr: "Pluie forte" },
+  66: { en: "Light freezing rain", rw: "Imvura y’ubukire", fr: "Pluie verglaçante" },
+  67: { en: "Heavy freezing rain", rw: "Imvura nyinshi y’ubukire", fr: "Pluie verglaçante forte" },
+  71: { en: "Slight snowfall", rw: "Umuganda muto", fr: "Chute de neige faible" },
+  73: { en: "Moderate snowfall", rw: "Umuganda uhabaye", fr: "Chute de neige modérée" },
+  75: { en: "Heavy snowfall", rw: "Umuganda nyinshi", fr: "Chute de neige forte" },
+  77: { en: "Snow grains", rw: "Umuganda muto", fr: "Grains de neige" },
+  80: { en: "Slight rain showers", rw: "Imvura nto y’akanyura", fr: "Faibles averses de pluie" },
+  81: {
+    en: "Moderate rain showers",
+    rw: "Imvura isanzwe y’akanyura",
+    fr: "Averses de pluie modérées",
+  },
+  82: {
+    en: "Violent rain showers",
+    rw: "Imvura nyinshi y’akanyura",
+    fr: "Averses de pluie violentes",
+  },
+  85: { en: "Slight snow showers", rw: "Akanyura z’umuganda muto", fr: "Faibles averses de neige" },
+  86: {
+    en: "Heavy snow showers",
+    rw: "Akanyura z’umuganda nyinshi",
+    fr: "Averses de neige fortes",
+  },
+  95: { en: "Thunderstorm", rw: "Imivura y’umururuko", fr: "Orage" },
+  96: {
+    en: "Thunderstorm with slight hail",
+    rw: "Imivura y’umururuko n’ububanga buto",
+    fr: "Orage avec faible grêle",
+  },
+  97: { en: "Heavy thunderstorm", rw: "Imivura y’umururuko nyinshi", fr: "Orage violent" },
+  99: {
+    en: "Thunderstorm with heavy hail",
+    rw: "Imivura y’umururuko n’ububanga nyinshi",
+    fr: "Orage avec forte grêle",
+  },
+};
+
+// The name of a weather code, in the farmer's language.
+export function weatherCodeLabel(
+  code: number | null | undefined,
+  language: "en" | "rw" | "fr",
+): string | null {
+  if (code == null) return null;
+  return weatherCodes[code]?.[language] ?? null;
+}
+
+// Whether a weather code means precipitation of any kind.
+export function isWetWeather(code: number | null | undefined): boolean {
+  if (code == null) return false;
+  return (code >= 51 && code <= 67) || (code >= 80 && code <= 86) || code >= 95;
 }

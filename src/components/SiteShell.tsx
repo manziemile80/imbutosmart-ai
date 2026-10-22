@@ -35,6 +35,14 @@ export function SiteShell({
                 {t.farmer}
               </Link>
               <Link
+                to="/advice"
+                className="nav-link"
+                activeOptions={{ exact: true }}
+                activeProps={{ className: "nav-link-active" }}
+              >
+                {t.advicePage}
+              </Link>
+              <Link
                 to="/dashboard"
                 className="nav-link"
                 activeProps={{ className: "nav-link-active" }}

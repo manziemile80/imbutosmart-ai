@@ -50,7 +50,16 @@ The farmer page fills the rain and temperature from the selected district, so th
 - the **climate** (what the district's rainfall and temperature usually are) from NASA POWER, and
 - the **forecast** (what the coming days are expected to bring) from Open-Meteo, both fetched on the server and shown with their source.
 
-A figure the farmer typed is never overwritten, and the endpoints can be changed with `WEATHER_CLIMATE_URL` and `WEATHER_FORECAST_URL`. When a source cannot be reached the page says so calmly and keeps the figures the farmer entered.
+The forecast carries the WMO weather code of each day ("Moderate rain showers") and the hours rain is likely, so a farmer can plan the day rather than only the week. A figure the farmer typed is never overwritten, and the endpoints can be changed with `WEATHER_CLIMATE_URL` and `WEATHER_FORECAST_URL`. When a source cannot be reached the page says so calmly and keeps the figures the farmer entered.
+
+## The Advice portal
+`/advice` gives a plan a farmer can follow, for the district and soil they choose:
+
+- **Crops to plant here** — the agronomic suitability engine, with the district's own climate as the rainfall and temperature.
+- **Inputs used in your district** — from the Seasonal Agricultural Survey 2025: the share of segments using DAP, NPK, urea, manure, compost and the rest, plus how many irrigate and how many report soil erosion. `backend/build_district_inputs.py` writes the per-district profile to `src/lib/district-inputs.json` (aggregates only, no household data).
+- **When to act** — the district's usual season rainfall and temperature, and the coming days' forecast.
+- **Your written plan** — the AI writes the steps from those facts alone. A rate, spacing or price the model adds is dropped before the farmer sees it.
+- **Assistance** — the plan read aloud, the same plan in simpler words, and a plain explanation of every input name.
 
 ## Run the frontend
 ```bash

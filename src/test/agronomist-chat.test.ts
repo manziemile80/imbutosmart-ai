@@ -29,6 +29,16 @@ const input: AgronomistDigestInput = {
     byCrop: [{ crop: "Maize", actual: 1.83, predicted: 1.9, n: 6865 }],
   },
   climate: { period: "2001-2020", rainMm: 953, tempC: 17.4 },
+  outlook: [
+    {
+      day: "2026-10-23",
+      rainMm: 12,
+      tempMinC: 14,
+      tempMaxC: 24,
+      rainWindow: "13:00-17:00",
+      sky: "Slight rain",
+    },
+  ],
 };
 
 describe("agronomist digest", () => {
@@ -42,6 +52,7 @@ describe("agronomist digest", () => {
     expect(digest).toContain("Maize 1.83 (n=6865)");
     expect(digest).toContain("953 mm rain");
     expect(digest).toContain("17.4 °C");
+    expect(digest).toContain("2026-10-23 12 mm, 14–24 °C, Slight rain, rain likely 13:00-17:00");
   });
 
   it("says when a figure is missing instead of leaving a gap", () => {
@@ -54,7 +65,7 @@ describe("agronomist digest", () => {
     const prompt = buildAgronomistSystemPrompt("DIGEST");
     expect(prompt).toContain("Use only the figures in the data");
     expect(prompt).toContain("Never state a number that is not there");
-    expect(prompt).toContain("no markdown tables");
+    expect(prompt).toContain("no markdown");
     expect(prompt).toContain("DIGEST");
   });
 });

@@ -102,6 +102,14 @@ export type AgronomistDigestInput = {
     byCrop?: { crop: string; actual: number; predicted: number; n: number }[] | undefined;
   } | null;
   climate: { period: string; rainMm: number; tempC: number } | null;
+  outlook: {
+    day: string;
+    rainMm: number;
+    tempMinC: number;
+    tempMaxC: number;
+    rainWindow: string | null;
+    sky: string | null;
+  }[];
 };
 
 function round(value: number, digits = 2): number {
@@ -177,6 +185,21 @@ export function buildAgronomistDigest(input: AgronomistDigestInput): string {
     lines.push(`${input.district} climate: not available in this session.`);
   }
 
+  if (input.outlook.length > 0) {
+    lines.push(
+      `Forecast for ${input.district} (Open-Meteo): ` +
+        input.outlook
+          .map(
+            (day) =>
+              `${day.day} ${round(day.rainMm, 0)} mm, ${round(day.tempMinC, 0)}–${round(day.tempMaxC, 0)} °C` +
+              (day.sky ? `, ${day.sky}` : "") +
+              (day.rainWindow ? `, rain likely ${day.rainWindow}` : ""),
+          )
+          .join("; ") +
+        ".",
+    );
+  }
+
   return lines.join("\n");
 }
 
@@ -184,10 +207,11 @@ export function buildAgronomistSystemPrompt(digest: string): string {
   return [
     "You are the analyst assistant of ImbutoSmart AI, helping agronomists and extension officers in Rwanda.",
     "Answer in plain English, under 200 words, with a short list of concrete next steps when the question asks for action.",
-    "Write plain text: no markdown tables, no headings, no bold. Use short lines and plain sentences, because the answer is read as it is written.",
+    "Write plain text: no markdown, no bold, no tables. Use short lines and plain sentences, because the answer is read as it is written.",
     "Answer the question that was asked. Do not list every figure in the data and do not repeat yourself; give the figures the question needs.",
     "The data below is the whole of what you know. Follow these rules:",
     "- Use only the figures in the data. Never state a number that is not there, and never estimate one.",
+    "- Never give an application rate, a spacing, a depth or a price: the data holds none of them.",
     "- If the answer needs a figure that is missing, say which figure is missing and where it comes from (the NISR Seasonal Agricultural Survey, the model report, or Meteo Rwanda).",
     "- Say plainly when a figure is a national average and the question is about one district.",
     "- Do not forecast prices, recommend policy, or claim a treatment will work for certain.",

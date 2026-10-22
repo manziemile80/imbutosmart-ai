@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest";
 
 import {
   CLIMATE_MONTHS,
+  rainWindowFrom,
+  isWetWeather,
+  weatherCodeLabel,
   forecastSummary,
   monthTempC,
   seasonForMonth,
@@ -51,13 +54,58 @@ describe("district weather", () => {
     const forecast: DistrictForecast = {
       district: "Musanze",
       days: [
-        { date: "2026-10-21", rainMm: 3, tempMinC: 14, tempMaxC: 24 },
-        { date: "2026-10-22", rainMm: 7, tempMinC: 13, tempMaxC: 22 },
+        {
+          date: "2026-10-21",
+          rainMm: 3,
+          tempMinC: 14,
+          tempMaxC: 24,
+          maxChanceOfRain: 90,
+          rainWindow: { from: "13:00", to: "17:00" },
+          weatherCode: 61,
+        },
+        {
+          date: "2026-10-22",
+          rainMm: 7,
+          tempMinC: 13,
+          tempMaxC: 22,
+          maxChanceOfRain: 20,
+          rainWindow: null,
+          weatherCode: 0,
+        },
       ],
       source: "Open-Meteo",
       sourceUrl: "https://open-meteo.com/",
       issuedAt: "2026-10-21T00:00:00.000Z",
     };
     expect(forecastSummary(forecast)).toEqual({ rainMm: 10, tempMinC: 13, tempMaxC: 24 });
+  });
+
+  it("names the hours rain is likely", () => {
+    const hours = [
+      { time: "2026-10-23T09:00", chanceOfRain: 10 },
+      { time: "2026-10-23T13:00", chanceOfRain: 60 },
+      { time: "2026-10-23T15:00", chanceOfRain: 98 },
+      { time: "2026-10-23T18:00", chanceOfRain: 30 },
+    ];
+    expect(rainWindowFrom(hours)).toEqual({ from: "13:00", to: "15:00" });
+    expect(rainWindowFrom([{ time: "2026-10-23T09:00", chanceOfRain: 5 }])).toBeNull();
+  });
+
+  it("names the weather code in the farmer's language", () => {
+    expect(weatherCodeLabel(0, "en")).toBe("Clear sky");
+    expect(weatherCodeLabel(61, "en")).toBe("Slight rain");
+    expect(weatherCodeLabel(95, "en")).toBe("Thunderstorm");
+    expect(weatherCodeLabel(2, "fr")).toBe("Partiellement nuageux");
+    expect(weatherCodeLabel(2, "rw")).toBeTruthy();
+    expect(weatherCodeLabel(999, "en")).toBeNull();
+    expect(weatherCodeLabel(null, "en")).toBeNull();
+  });
+
+  it("knows which codes mean wet weather", () => {
+    expect(isWetWeather(61)).toBe(true);
+    expect(isWetWeather(80)).toBe(true);
+    expect(isWetWeather(95)).toBe(true);
+    expect(isWetWeather(3)).toBe(false);
+    expect(isWetWeather(0)).toBe(false);
   });
 });

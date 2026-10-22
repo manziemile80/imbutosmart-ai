@@ -24,3 +24,4 @@
 - A district's rain and temperature come from published records, never from an estimate made in the app, and a figure the farmer typed is never overwritten by a fetched one.
 - A server function call must work on the deployment without any optional service configured: an unavailable service leaves the answer as it is, and never stops the call from being made.
 - The agronomist assistant answers from a digest of the figures the dashboard shows, built on the server from the published survey figures, the model report and the district's climate; the model is told to quote no other number and to name a figure that is missing.
+- A written plan may only quote figures its digest holds: an application rate, a spacing or a price the model adds is dropped before the farmer sees it.

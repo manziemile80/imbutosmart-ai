@@ -9,7 +9,8 @@ import {
   recentHistory,
   type AgronomistMessage,
 } from "./agronomist-chat";
-import { seasonRainMm, seasonTempC } from "./weather";
+import { seasonRainMm, seasonTempC, weatherCodeLabel } from "./weather";
+import { groundToDigest } from "./grounding";
 import type { AiAnswer } from "./ai/error-codes";
 
 // Server function for the agronomist assistant. The browser sends the question
@@ -51,9 +52,10 @@ export const askAgronomist = createServerFn({ method: "POST" })
     const { getRequest } = await import("@tanstack/react-start/server");
     const { answerWithAi } = await import("./ai/chat.server");
     const { NISR_2026B } = await import("./local-model");
-    const { getDistrictClimate } = await import("./weather.server");
+    const { getDistrictClimate, getDistrictWeather } = await import("./weather.server");
 
     const climate = await getDistrictClimate(data.district);
+    const weather = await getDistrictWeather(data.district);
     const digest = buildAgronomistDigest({
       district: data.district,
       season: data.season,
@@ -85,6 +87,14 @@ export const askAgronomist = createServerFn({ method: "POST" })
             tempC: seasonTempC(climate, data.season) ?? 0,
           }
         : null,
+      outlook: (weather?.forecast?.days ?? []).slice(0, 3).map((day) => ({
+        day: day.date,
+        rainMm: day.rainMm,
+        tempMinC: day.tempMinC,
+        tempMaxC: day.tempMaxC,
+        rainWindow: day.rainWindow ? `${day.rainWindow.from}-${day.rainWindow.to}` : null,
+        sky: weatherCodeLabel(day.weatherCode, "en"),
+      })),
     });
 
     const system = buildAgronomistSystemPrompt(digest);
@@ -92,5 +102,8 @@ export const askAgronomist = createServerFn({ method: "POST" })
       role: message.role,
       content: message.content,
     }));
-    return answerWithAi(getRequest()?.signal, system, messages);
+    const answer = await answerWithAi(getRequest()?.signal, system, messages);
+    // A figure the model added on its own is dropped: the answer may only
+    // quote the digest.
+    return { ...answer, answer: groundToDigest(answer.answer, digest) };
   });

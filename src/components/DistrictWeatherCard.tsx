@@ -1,11 +1,17 @@
 import { CloudRain, Thermometer, LoaderCircle } from "lucide-react";
 
-import { farmerCopy, seasonName, type FarmerLanguage } from "@/lib/farmer-language";
+import {
+  farmerCopy,
+  forecastDayLabel,
+  seasonName,
+  type FarmerLanguage,
+} from "@/lib/farmer-language";
 import {
   forecastSummary,
   monthTempC,
   seasonForMonth,
   seasonRainMm,
+  weatherCodeLabel,
   type DistrictWeather,
 } from "@/lib/weather";
 
@@ -63,17 +69,46 @@ export function DistrictWeatherCard({
       )}
 
       {forecast && (
-        <p className="mt-1.5 flex items-start gap-2 text-sm leading-relaxed text-foreground">
-          <Thermometer className="mt-0.5 size-4 shrink-0 text-primary-text" aria-hidden="true" />
-          <span>
-            {t.forecastOutlook
-              .replace("{days}", String(forecast.days.length))
-              .replace("{source}", forecast.source)
-              .replace("{rain}", String(Math.round(forecastSummary(forecast).rainMm)))
-              .replace("{min}", String(Math.round(forecastSummary(forecast).tempMinC)))
-              .replace("{max}", String(Math.round(forecastSummary(forecast).tempMaxC)))}
-          </span>
-        </p>
+        <>
+          <p className="mt-1.5 flex items-start gap-2 text-sm leading-relaxed text-foreground">
+            <Thermometer className="mt-0.5 size-4 shrink-0 text-primary-text" aria-hidden="true" />
+            <span>
+              {t.forecastOutlook
+                .replace("{days}", String(forecast.days.length))
+                .replace("{source}", forecast.source)
+                .replace("{rain}", String(Math.round(forecastSummary(forecast).rainMm)))
+                .replace("{min}", String(Math.round(forecastSummary(forecast).tempMinC)))
+                .replace("{max}", String(Math.round(forecastSummary(forecast).tempMaxC)))}
+            </span>
+          </p>
+
+          {/* The next days, with the sky and the hours rain is likely: a farmer
+              needs the hour, not only the day's total. */}
+          <ul className="mt-2 grid gap-1">
+            {forecast.days.slice(0, 3).map((day) => {
+              const sky = weatherCodeLabel(day.weatherCode, language);
+              return (
+                <li key={day.date} className="flex flex-wrap items-baseline gap-x-2 text-xs">
+                  <span className="font-medium text-foreground">
+                    {forecastDayLabel(day.date, language)}
+                  </span>
+                  <span className="tabular text-muted-foreground">
+                    {Math.round(day.rainMm)} mm · {Math.round(day.tempMinC)}–
+                    {Math.round(day.tempMaxC)} °C
+                  </span>
+                  {sky && <span className="text-muted-foreground">{sky}</span>}
+                  {day.rainWindow && (
+                    <span className="text-primary-text">
+                      {t.rainLikely
+                        .replace("{from}", day.rainWindow.from)
+                        .replace("{to}", day.rainWindow.to)}
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </>
       )}
 
       <p className="mt-2 text-xs leading-relaxed text-muted-foreground">

@@ -1,0 +1,568 @@
+{
+  "Bugesera": {
+    "erodedShare": 0.035,
+    "inorganic": {
+      "DAP": 0.177,
+      "DI Grow": 0.02,
+      "Indi fumbire (yivuge)": 0.045,
+      "NPK 17-17-17": 0.187,
+      "Other NPK": 0.01,
+      "Urea": 0.253
+    },
+    "irrigatedShare": 0.247,
+    "organic": {
+      "Compost": 0.04,
+      "Green manure": 0.101,
+      "Manure": 0.505
+    },
+    "segments": 198,
+    "topCrop": "Paddy rice",
+    "usedShare": 0.652
+  },
+  "Burera": {
+    "erodedShare": 0.096,
+    "inorganic": {
+      "DAP": 0.202,
+      "Indi fumbire (yivuge)": 0.029,
+      "NPK 17-17-17": 0.279,
+      "Omax": 0.048,
+      "Urea": 0.154
+    },
+    "irrigatedShare": 0.019,
+    "organic": {
+      "Green manure": 0.317,
+      "Manure": 0.635
+    },
+    "segments": 104,
+    "topCrop": "Irish potato",
+    "usedShare": 0.952
+  },
+  "Gakenke": {
+    "erodedShare": 0.22,
+    "inorganic": {
+      "DAP": 0.394,
+      "NPK 17-17-17": 0.138,
+      "NPK 20-10-10": 0.018,
+      "Urea": 0.33
+    },
+    "irrigatedShare": 0.092,
+    "organic": {
+      "Compost": 0.018,
+      "Manure": 0.917
+    },
+    "segments": 109,
+    "topCrop": "Climbing bean",
+    "usedShare": 0.936
+  },
+  "Gasabo": {
+    "erodedShare": 0.128,
+    "inorganic": {
+      "DAP": 0.234,
+      "DI Grow": 0.011,
+      "Indi fumbire (yivuge)": 0.032,
+      "NPK 17-17-17": 0.245,
+      "Other NPK": 0.011,
+      "Urea": 0.426
+    },
+    "irrigatedShare": 0.255,
+    "organic": {
+      "Compost": 0.043,
+      "Green manure": 0.011,
+      "Manure": 0.766
+    },
+    "segments": 94,
+    "topCrop": "Maize",
+    "usedShare": 0.819
+  },
+  "Gatsibo": {
+    "erodedShare": 0.066,
+    "inorganic": {
+      "Amidas": 0.016,
+      "Cereal": 0.027,
+      "DAP": 0.372,
+      "DI Grow": 0.027,
+      "Indi fumbire (yivuge)": 0.049,
+      "KCL/MOP": 0.011,
+      "NPK 17-17-17": 0.109,
+      "Urea": 0.372
+    },
+    "irrigatedShare": 0.24,
+    "organic": {
+      "Compost": 0.104,
+      "Manure": 0.694
+    },
+    "segments": 183,
+    "topCrop": "Maize",
+    "usedShare": 0.798
+  },
+  "Gicumbi": {
+    "erodedShare": 0.102,
+    "inorganic": {
+      "Chaux": 0.017,
+      "DAP": 0.153,
+      "NPK 17-17-17": 0.161,
+      "Urea": 0.144
+    },
+    "irrigatedShare": 0.085,
+    "organic": {
+      "Compost": 0.034,
+      "Manure": 0.915
+    },
+    "segments": 118,
+    "topCrop": "Irish potato",
+    "usedShare": 0.958
+  },
+  "Gisagara": {
+    "erodedShare": 0.13,
+    "inorganic": {
+      "Amidas": 0.034,
+      "Cereal": 0.048,
+      "DAP": 0.205,
+      "DI Grow": 0.027,
+      "NPK 17-17-17": 0.164,
+      "Urea": 0.363
+    },
+    "irrigatedShare": 0.301,
+    "organic": {
+      "Compost": 0.048,
+      "Manure": 0.719
+    },
+    "segments": 146,
+    "topCrop": "Paddy rice",
+    "usedShare": 0.767
+  },
+  "Huye": {
+    "erodedShare": 0.261,
+    "inorganic": {
+      "Amidas": 0.028,
+      "Cereal": 0.028,
+      "DAP": 0.134,
+      "DI Grow": 0.085,
+      "Indi fumbire (yivuge)": 0.042,
+      "NPK 17-17-17": 0.31,
+      "NPK 22-6-12": 0.014,
+      "Urea": 0.423
+    },
+    "irrigatedShare": 0.444,
+    "organic": {
+      "Compost": 0.106,
+      "Green manure": 0.014,
+      "Manure": 0.718
+    },
+    "segments": 142,
+    "topCrop": "Paddy rice",
+    "usedShare": 0.838
+  },
+  "Kamonyi": {
+    "erodedShare": 0.175,
+    "inorganic": {
+      "Cereal": 0.032,
+      "DAP": 0.198,
+      "DI Grow": 0.032,
+      "Indi fumbire (yivuge)": 0.016,
+      "NPK 17-17-17": 0.095,
+      "Urea": 0.325
+    },
+    "irrigatedShare": 0.341,
+    "organic": {
+      "Compost": 0.056,
+      "Manure": 0.794
+    },
+    "segments": 126,
+    "topCrop": "Maize",
+    "usedShare": 0.857
+  },
+  "Karongi": {
+    "erodedShare": 0.204,
+    "inorganic": {
+      "Chaux": 0.019,
+      "DAP": 0.223,
+      "NPK 17-17-17": 0.049,
+      "Urea": 0.252
+    },
+    "irrigatedShare": 0.087,
+    "organic": {
+      "Manure": 0.883
+    },
+    "segments": 103,
+    "topCrop": "Climbing bean",
+    "usedShare": 0.893
+  },
+  "Kayonza": {
+    "erodedShare": 0.147,
+    "inorganic": {
+      "DAP": 0.318,
+      "DI Grow": 0.012,
+      "Indi fumbire (yivuge)": 0.047,
+      "NPK 17-17-17": 0.2,
+      "Other NPK": 0.012,
+      "Urea": 0.394
+    },
+    "irrigatedShare": 0.329,
+    "organic": {
+      "Compost": 0.059,
+      "Manure": 0.606
+    },
+    "segments": 170,
+    "topCrop": "Maize",
+    "usedShare": 0.665
+  },
+  "Kicukiro": {
+    "erodedShare": 0.128,
+    "inorganic": {
+      "DAP": 0.234,
+      "DI Grow": 0.043,
+      "NPK 17-17-17": 0.064,
+      "Other NPK": 0.021,
+      "Urea": 0.298
+    },
+    "irrigatedShare": 0.128,
+    "organic": {
+      "Compost": 0.085,
+      "Manure": 0.511
+    },
+    "segments": 47,
+    "topCrop": "Maize",
+    "usedShare": 0.596
+  },
+  "Kirehe": {
+    "erodedShare": 0.049,
+    "inorganic": {
+      "DAP": 0.296,
+      "DI Grow": 0.021,
+      "Indi fumbire (yivuge)": 0.028,
+      "NPK 17-17-17": 0.085,
+      "Other NPK": 0.028,
+      "Urea": 0.31
+    },
+    "irrigatedShare": 0.232,
+    "organic": {
+      "Compost": 0.063,
+      "Green manure": 0.014,
+      "Manure": 0.676
+    },
+    "segments": 142,
+    "topCrop": "Maize",
+    "usedShare": 0.754
+  },
+  "Muhanga": {
+    "erodedShare": 0.084,
+    "inorganic": {
+      "DAP": 0.168,
+      "DI Grow": 0.042,
+      "NPK 17-17-17": 0.143,
+      "Urea": 0.185
+    },
+    "irrigatedShare": 0.227,
+    "organic": {
+      "Manure": 0.933
+    },
+    "segments": 119,
+    "topCrop": "Maize",
+    "usedShare": 0.941
+  },
+  "Musanze": {
+    "erodedShare": 0.231,
+    "inorganic": {
+      "DAP": 0.22,
+      "Indi fumbire (yivuge)": 0.011,
+      "NPK 17-17-17": 0.352,
+      "Omax": 0.011,
+      "Urea": 0.165,
+      "Urea liquid (mbonea majimaji)": 0.011
+    },
+    "irrigatedShare": 0.033,
+    "organic": {
+      "Compost": 0.066,
+      "Green manure": 0.022,
+      "Manure": 0.813
+    },
+    "segments": 91,
+    "topCrop": "Irish potato",
+    "usedShare": 0.901
+  },
+  "Ngoma": {
+    "erodedShare": 0.11,
+    "inorganic": {
+      "DAP": 0.131,
+      "DI Grow": 0.021,
+      "NPK 17-17-17": 0.152,
+      "Urea": 0.269
+    },
+    "irrigatedShare": 0.241,
+    "organic": {
+      "Compost": 0.193,
+      "Manure": 0.51
+    },
+    "segments": 145,
+    "topCrop": "Paddy rice",
+    "usedShare": 0.717
+  },
+  "Ngororero": {
+    "erodedShare": 0.143,
+    "inorganic": {
+      "Chaux": 0.041,
+      "DAP": 0.265,
+      "Indi fumbire (yivuge)": 0.01,
+      "NPK 17-17-17": 0.051,
+      "NPK 25-5-5": 0.01,
+      "Urea": 0.194
+    },
+    "irrigatedShare": 0.01,
+    "organic": {
+      "Compost": 0.01,
+      "Green manure": 0.031,
+      "Manure": 0.918
+    },
+    "segments": 98,
+    "topCrop": "Climbing bean",
+    "usedShare": 0.959
+  },
+  "Nyabihu": {
+    "erodedShare": 0.169,
+    "inorganic": {
+      "Chaux": 0.024,
+      "DAP": 0.169,
+      "DI Grow": 0.012,
+      "NPK 17-17-17": 0.446,
+      "Omax": 0.036,
+      "Other NPK": 0.012,
+      "Urea": 0.205,
+      "Yara Viva": 0.012
+    },
+    "irrigatedShare": 0.0,
+    "organic": {
+      "Green manure": 0.048,
+      "Manure": 0.88
+    },
+    "segments": 83,
+    "topCrop": "Irish potato",
+    "usedShare": 0.928
+  },
+  "Nyagatare": {
+    "erodedShare": 0.05,
+    "inorganic": {
+      "Amidas": 0.025,
+      "Cereal": 0.041,
+      "DAP": 0.438,
+      "Indi fumbire (yivuge)": 0.045,
+      "NPK 17-17-17": 0.099,
+      "Urea": 0.537
+    },
+    "irrigatedShare": 0.252,
+    "organic": {
+      "Compost": 0.178,
+      "Green manure": 0.017,
+      "Manure": 0.351
+    },
+    "segments": 242,
+    "topCrop": "Maize",
+    "usedShare": 0.545
+  },
+  "Nyamagabe": {
+    "erodedShare": 0.203,
+    "inorganic": {
+      "Chaux": 0.042,
+      "DAP": 0.297,
+      "DI Grow": 0.017,
+      "Indi fumbire (yivuge)": 0.034,
+      "NPK 17-17-17": 0.178,
+      "NPK 20-10-10": 0.017,
+      "Urea": 0.246
+    },
+    "irrigatedShare": 0.127,
+    "organic": {
+      "Compost": 0.051,
+      "Green manure": 0.025,
+      "Manure": 0.898
+    },
+    "segments": 118,
+    "topCrop": "Climbing bean",
+    "usedShare": 0.975
+  },
+  "Nyamasheke": {
+    "erodedShare": 0.165,
+    "inorganic": {
+      "Chaux": 0.064,
+      "DAP": 0.211,
+      "NPK 17-17-17": 0.193,
+      "NPK 22-6-12": 0.028,
+      "Urea": 0.294
+    },
+    "irrigatedShare": 0.147,
+    "organic": {
+      "Compost": 0.028,
+      "Green manure": 0.028,
+      "Manure": 0.862
+    },
+    "segments": 109,
+    "topCrop": "Paddy rice",
+    "usedShare": 0.917
+  },
+  "Nyanza": {
+    "erodedShare": 0.226,
+    "inorganic": {
+      "DAP": 0.129,
+      "Indi fumbire (yivuge)": 0.016,
+      "NPK 17-17-17": 0.105,
+      "Urea": 0.282
+    },
+    "irrigatedShare": 0.234,
+    "organic": {
+      "Biogas": 0.016,
+      "Compost": 0.129,
+      "Green manure": 0.056,
+      "Manure": 0.597
+    },
+    "segments": 124,
+    "topCrop": "Paddy rice",
+    "usedShare": 0.798
+  },
+  "Nyarugenge": {
+    "erodedShare": 0.159,
+    "inorganic": {
+      "DAP": 0.114,
+      "Indi fumbire (yivuge)": 0.023,
+      "NPK 17-17-17": 0.023,
+      "Urea": 0.182
+    },
+    "irrigatedShare": 0.114,
+    "organic": {
+      "Manure": 0.682
+    },
+    "segments": 44,
+    "topCrop": "Tomato",
+    "usedShare": 0.682
+  },
+  "Nyaruguru": {
+    "erodedShare": 0.109,
+    "inorganic": {
+      "Chaux": 0.059,
+      "DAP": 0.286,
+      "NPK 17-17-17": 0.202,
+      "Urea": 0.269
+    },
+    "irrigatedShare": 0.176,
+    "organic": {
+      "Compost": 0.059,
+      "Manure": 0.891
+    },
+    "segments": 119,
+    "topCrop": "Irish potato",
+    "usedShare": 0.958
+  },
+  "Rubavu": {
+    "erodedShare": 0.103,
+    "inorganic": {
+      "DAP": 0.231,
+      "NPK 17-17-17": 0.333,
+      "Other NPK": 0.013,
+      "Urea": 0.282,
+      "Urea liquid (mbonea majimaji)": 0.013
+    },
+    "irrigatedShare": 0.013,
+    "organic": {
+      "Compost": 0.167,
+      "Manure": 0.526
+    },
+    "segments": 78,
+    "topCrop": "Irish potato",
+    "usedShare": 0.692
+  },
+  "Ruhango": {
+    "erodedShare": 0.147,
+    "inorganic": {
+      "Cereal": 0.016,
+      "DAP": 0.062,
+      "DI Grow": 0.023,
+      "NPK 17-17-17": 0.14,
+      "Urea": 0.186
+    },
+    "irrigatedShare": 0.233,
+    "organic": {
+      "Compost": 0.031,
+      "Green manure": 0.023,
+      "Manure": 0.775
+    },
+    "segments": 129,
+    "topCrop": "Paddy rice",
+    "usedShare": 0.829
+  },
+  "Rulindo": {
+    "erodedShare": 0.357,
+    "inorganic": {
+      "Chaux": 0.01,
+      "DAP": 0.184,
+      "Indi fumbire (yivuge)": 0.051,
+      "NPK 17-17-17": 0.194,
+      "NPK 22-6-12": 0.01,
+      "Other NPK": 0.01,
+      "Urea": 0.265
+    },
+    "irrigatedShare": 0.163,
+    "organic": {
+      "Compost": 0.214,
+      "Green manure": 0.061,
+      "Manure": 0.704
+    },
+    "segments": 98,
+    "topCrop": "Irish potato",
+    "usedShare": 0.98
+  },
+  "Rusizi": {
+    "erodedShare": 0.279,
+    "inorganic": {
+      "Chaux": 0.058,
+      "DAP": 0.327,
+      "Indi fumbire (yivuge)": 0.048,
+      "NPK 17-17-17": 0.298,
+      "Urea": 0.385
+    },
+    "irrigatedShare": 0.288,
+    "organic": {
+      "Compost": 0.288,
+      "Manure": 0.442
+    },
+    "segments": 104,
+    "topCrop": "Paddy rice",
+    "usedShare": 0.731
+  },
+  "Rutsiro": {
+    "erodedShare": 0.165,
+    "inorganic": {
+      "Chaux": 0.094,
+      "DAP": 0.188,
+      "NPK 17-17-17": 0.176,
+      "Urea": 0.212,
+      "Urea liquid (mbonea majimaji)": 0.012
+    },
+    "irrigatedShare": 0.012,
+    "organic": {
+      "Compost": 0.082,
+      "Green manure": 0.012,
+      "Manure": 0.788
+    },
+    "segments": 85,
+    "topCrop": "Irish potato",
+    "usedShare": 0.882
+  },
+  "Rwamagana": {
+    "erodedShare": 0.02,
+    "inorganic": {
+      "DAP": 0.243,
+      "DI Grow": 0.026,
+      "NPK 17-17-17": 0.171,
+      "Other NPK": 0.013,
+      "Urea": 0.309
+    },
+    "irrigatedShare": 0.237,
+    "organic": {
+      "Compost": 0.125,
+      "Green manure": 0.138,
+      "Manure": 0.539
+    },
+    "segments": 152,
+    "topCrop": "Maize",
+    "usedShare": 0.803
+  }
+}
