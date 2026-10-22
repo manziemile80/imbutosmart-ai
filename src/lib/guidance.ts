@@ -71,7 +71,7 @@ export const guidanceCopy: Record<
       },
       season: {
         label: "Uyu gihembwe",
-        blurb: "Amazina y'ibihembwe, imvura isanzwe n'ubwicuruzwe bw'ibihingwa.",
+        blurb: "Amazina y'ibihembwe, imvura isanzwe, n'ibihingwa bisanzwe bikorwa.",
       },
       plan: {
         label: "Gahunda yanjye",
@@ -81,7 +81,7 @@ export const guidanceCopy: Record<
     guideTitle: "Uko unshobora kubona igisubizo cyiza",
     guide: [
       "Bwira aho umurima wawe uri: akarere, kandi ubutaka niba ubukazi.",
-      "Baza ikibazo kimwe. Ikibazo gishy shorta gishobora igisubizo gikwiye.",
+      "Baza ikibazo kimwe. Ikibazo gito gishobora igisubizo gikwiye.",
       "Bwira ibyo wagiye ugakora, n'ibyo washobora kwishyuza.",
       "Umufasha akoresha ubumenyi rusange: emeza ibintu bikennye n'impuguke na Meteo Rwanda.",
     ],

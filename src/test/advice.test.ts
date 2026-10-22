@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { buildAdviceDigest, buildAdvicePrompt, districtInputs, explainInput } from "@/lib/advice";
+import {
+  buildAdviceDigest,
+  buildAdvicePrompt,
+  districtInputs,
+  explainInput,
+  inputName,
+} from "@/lib/advice";
 
 describe("advice", () => {
   it("has the survey profile of every district", () => {
@@ -16,6 +22,21 @@ describe("advice", () => {
     expect(explainInput("Manure", "fr")).toContain("Fumier");
     expect(explainInput("Urea", "rw")).toBeTruthy();
     expect(explainInput("Something else", "en")).toBeNull();
+  });
+
+  it("names the inputs the way the farmer's language does", () => {
+    // In Kinyarwanda manure is "ifumbire", not the English word.
+    expect(inputName("Manure", "rw")).toBe("Ifumbire y'amatungo");
+    expect(inputName("Compost", "rw")).toContain("Ifumbire");
+    expect(inputName("Green manure", "rw")).toContain("Ifumbire");
+    expect(inputName("Manure", "fr")).toBe("Fumier");
+    expect(inputName("DAP", "rw")).toBe("DAP");
+    // A name the survey uses that has no translation is left as it is.
+    expect(inputName("Omax", "rw")).toBe("Omax");
+  });
+
+  it("explains manure as fertiliser in Kinyarwanda", () => {
+    expect(explainInput("Manure", "rw")).toContain("Ifumbire y’amatungo");
   });
 
   it("writes the digest from the facts of the page", () => {

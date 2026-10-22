@@ -33,16 +33,34 @@ export type DistrictInputProfile = {
 
 export const districtInputs = inputs as unknown as Record<string, DistrictInputProfile>;
 
+// The names in the survey, explained in plain words. The survey writes them
+// in English; the farmer sees them in their own language.
+const inputNames: Record<string, { en: string; rw: string; fr: string }> = {
+  DAP: { en: "DAP", rw: "DAP", fr: "DAP" },
+  Urea: { en: "Urea", rw: "Urea", fr: "Urée" },
+  "NPK 17-17-17": { en: "NPK 17-17-17", rw: "NPK 17-17-17", fr: "NPK 17-17-17" },
+  Chaux: { en: "Lime", rw: "Ibunyanga", fr: "Chaux" },
+  Manure: { en: "Manure", rw: "Ifumbire y'amatungo", fr: "Fumier" },
+  Compost: { en: "Compost", rw: "Ifumbire y'ibimera", fr: "Compost" },
+  "Green manure": { en: "Green manure", rw: "Ifumbire y'ibimera bigerwa", fr: "Engrais vert" },
+  Biogas: { en: "Biogas slurry", rw: "Amashyamba ava kuri biogas", fr: "Lisier de biogaz" },
+};
+
+// The name of an input in the farmer's language.
+export function inputName(name: string, language: FarmerLanguage): string {
+  return inputNames[name]?.[language] ?? name;
+}
+
 // The names in the survey, explained in plain words.
 const glossary: Record<string, { en: string; rw: string; fr: string }> = {
   DAP: {
     en: "A mineral fertiliser that gives the plant phosphorus and nitrogen.",
-    rw: "Ifumbire mubisi itanga fosforu nitrojeni ku mubira.",
+    rw: "Ifumbire mubisi itanga fosforu na nitrojeni ku mubira.",
     fr: "Un engrais minéral qui apporte du phosphore et de l’azote à la plante.",
   },
   Urea: {
     en: "A nitrogen fertiliser. It makes plants grow green and leafy.",
-    rw: "Ifumbire mubisi rikora ko butabita bishyushya ibimera bigereye.",
+    rw: "Ifumbire mubisi rikora ko butabita bishingushya ibimera bigereye.",
     fr: "Un engrais azoté. Il fait pousser des plantes vertes et feuillues.",
   },
   "NPK 17-17-17": {
@@ -52,22 +70,22 @@ const glossary: Record<string, { en: string; rw: string; fr: string }> = {
   },
   Chaux: {
     en: "Lime. It is used on acid soils to make them less sour.",
-    rw: "Ibunyanga. Ikurikira ku butaka bw’umun acidity kurugabanya.",
+    rw: "Ibunyanga: ikurikira ku butaka bw’umun acidity kurugabanya.",
     fr: "Chaux. Elle s’utilise sur les sols acides pour les rendre moins acides.",
   },
   Manure: {
     en: "Farmyard manure: animal waste, spread on the field before planting.",
-    rw: "Imborera: ifumbire y’amatungo, ishyikirizwa ku murima mbere yo guhinga.",
+    rw: "Ifumbire y’amatungo: ibisomero by’amatungo, bigishyikirizwa ku murima mbere yo guhinga.",
     fr: "Fumier : déjections animales, épandues sur le champ avant le semis.",
   },
   Compost: {
     en: "Compost: plant and kitchen waste left to rot into a rich soil improver.",
-    rw: "Ikigisabo: ibimera n’ibikoresho byo mu kitchen biba ku butaka bishimishije.",
+    rw: "Ifumbire y’ibimera: ibisukura n’ibikoresho byo mu gikoni bigatandukira, bigishimishije ubutaka.",
     fr: "Compost : déchets de plantes et de cuisine décomposés pour enrichir le sol.",
   },
   "Green manure": {
     en: "Green manure: plants grown on the field and dug in to feed the soil.",
-    rw: "Ifumbire y’ibimera: ibihingwa ku murima bigahinga mu butaka.",
+    rw: "Ifumbire y’ibimera bigerwa: ibihingwa ku murima bikahingurwa mu butaka.",
     fr: "Engrais vert : plantes cultivées puis enfouies pour nourrir le sol.",
   },
   Biogas: {
@@ -157,7 +175,7 @@ export const adviceCopy: Record<
     glossaryTitle: "Ibintu bisobanura amazina",
     noInputs: "Nta mafishi y’ifumbire abatariwa kuri karere aka.",
     disclaimer:
-      "Uyu mwandishi ni inama rusange iva mu survey na seriveri y’ikirere. Si ibirozanyo by’ubutaka cyangwa imigendere: emeza n’impuguke na Meteo Rwanda mbere yo kugura cyangwa gushyiramo ikintu.",
+      "Uyu mwandishi ni inama rusange iva mu survey na seriveri y’ikirere. Si igisobanuro cy’ubutaka: emeza n’impuguke na Meteo Rwanda mbere yo kugura cyangwa gushyiramo ikintu.",
     errors: {
       unconfigured:
         "Gahunda y’ubwandishi ifite gukenera seriveri ya AI. Am facts ari ku ruge ruwome ari gahenduye.",

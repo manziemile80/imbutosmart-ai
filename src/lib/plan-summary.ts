@@ -1,5 +1,5 @@
 import type { FarmerLanguage } from "./farmer-language";
-import type { DistrictInputProfile } from "./advice";
+import { inputName, type DistrictInputProfile } from "./advice";
 
 // Browser-safe summary of a farmer's plan: what to plant, what farmers around
 // them apply, what to ask an insurer about, and what else to do. Every number
@@ -53,15 +53,15 @@ export const summaryCopy: Record<
     title: "Incamake yawe",
     intro: "Byose ukeneye kugirira kugiramo, ku murima wahisemo.",
     crops: "Ibihingwa by’umurima wawe",
-    inputs: "Ifumbire abahinzi bakoresha hano",
-    usedBy: "abakoresha {n}% by’abahinzi b’aka karere",
-    rate: "kuri {n} kg ku g hectare, nk’ibabakoresha hano mu 2025",
+    inputs: "Ifumbire abahinzi b'aka karere bakoresha",
+    usedBy: "abakoresha {n}% by’abahinzi",
+    rate: "kuri {n} kg ku/hektari, nk’ibabakoresha hano mu 2025",
     organic: "y’umubiri",
-    insurance: "Ubwishingizi wabagoyeza",
+    insurance: "Ubwishingizi bw'imvura nyinshi n'umwuzure",
     insuranceNote:
-      "Ubwishingizi bw’imvura nyinshi n’umwuzure ni bwinyabazwe wabagoyeza. Nimba ukeneye cyangwa icyakubitirwa, byerekana n’amasezerano, si kuri iyi porogaramu.",
+      "Ubwishingizi bw’imvura nyinshi n’umwuzure ni bwinyabazwe wabagoyeza. Nimba ukeneye cyangwa icyakubitirwa, byerekana n’amasezerano y’ikigo, si kuri iyi porogaramu.",
     advice: "Ibindi byakora",
-    notify: "Nkereza inyandiko",
+    notify: "Ohereza inyandiko",
     notified: "Inyandiko yoherejwe",
     notifyBlocked: "Umufurashisha wawe urabibuza ubutumwa, bityo inyandiko igahenda hano.",
     noInputs: "Nta mafishi y’ifumbire abatariwa kuri karere aka.",
@@ -109,7 +109,7 @@ export function buildPlanSummary(input: {
   const advice: string[] = [];
   advice.push(
     input.language === "rw"
-      ? "Hingira ku ntambwe y’imbura yizewe y’igihe, wirinde guhinga nyuma y’imvura nyinshi yarangiye."
+      ? "Hingira ku ntambwe y’imvura yizewe y’igihe, wirinde guhinga nyuma y’imvura nyinshi yarangiye."
       : input.language === "fr"
         ? "Plantez avec les premières pluies fiables de la saison et évitez de planter après les fortes pluies."
         : "Plant with the first reliable rains of the season, and avoid planting after heavy rain has passed.",
@@ -142,7 +142,7 @@ export function buildPlanSummary(input: {
 
   return {
     crops: input.crops,
-    inputs,
+    inputs: inputs.map((item) => ({ ...item, name: inputName(item.name, input.language) })),
     insurance: t.insurance,
     insuranceNote: t.insuranceNote,
     advice,

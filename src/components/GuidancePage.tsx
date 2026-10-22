@@ -14,7 +14,7 @@ import { farmerCopy, soilLabel, type FarmerLanguage } from "@/lib/farmer-languag
 import { knowledgeCropLabel } from "@/lib/crop-knowledge";
 import { engineInput } from "@/lib/recommendation";
 import { recommendOffline } from "@/lib/recommendation-engine";
-import { districtInputs } from "@/lib/advice";
+import { districtInputs, inputName } from "@/lib/advice";
 import { buildPlanSummary } from "@/lib/plan-summary";
 import { PlanNotification } from "@/components/PlanNotification";
 import { seasonForMonth, seasonRainMm, seasonTempC } from "@/lib/weather";
@@ -218,7 +218,9 @@ export function Guidance() {
                         <ul className="mt-2 grid gap-1 text-sm text-muted-foreground">
                           {topInputs.map((input) => (
                             <li key={input.name} className="flex justify-between gap-3">
-                              <span className="text-foreground">{input.name}</span>
+                              <span className="text-foreground">
+                                {inputName(input.name, language)}
+                              </span>
                               <span className="tabular">{Math.round(input.share * 100)}%</span>
                             </li>
                           ))}

@@ -7,7 +7,7 @@ import { SiteShell } from "@/components/SiteShell";
 import { Panel, PanelBody, PanelHeader } from "@/components/ui/panel";
 import { Callout } from "@/components/ui/callout";
 import { Button } from "@/components/ui/button";
-import { adviceCopy, districtInputs, explainInput } from "@/lib/advice";
+import { adviceCopy, districtInputs, explainInput, inputName } from "@/lib/advice";
 import { buildPlanSummary } from "@/lib/plan-summary";
 import { PlanNotification } from "@/components/PlanNotification";
 import { getAdvice } from "@/lib/advice.functions";
@@ -249,7 +249,7 @@ function Advice() {
                           key={input.name}
                           className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-sm"
                         >
-                          <span className="text-foreground">{input.name}</span>
+                          <span className="text-foreground">{inputName(input.name, language)}</span>
                           <span className="tabular text-muted-foreground">
                             {Math.round(input.share * 100)}%
                           </span>
@@ -395,7 +395,9 @@ function Advice() {
                       if (!explanation) return null;
                       return (
                         <div key={input.name}>
-                          <dt className="text-sm font-medium text-foreground">{input.name}</dt>
+                          <dt className="text-sm font-medium text-foreground">
+                            {inputName(input.name, language)}
+                          </dt>
                           <dd className="text-sm leading-relaxed text-muted-foreground">
                             {explanation}
                           </dd>
