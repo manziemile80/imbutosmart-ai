@@ -198,7 +198,6 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
 
     openMailDraft(draft.href);
     setEmailState("ready");
-    toast(t.toastMailApp);
   }
 
   return (

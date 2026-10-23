@@ -188,7 +188,6 @@ describe("summary in the header", () => {
         "We could not send it from the app, so your mail app was opened for farmer@example.com with the summary ready to send. If nothing opened, use Share all of this.",
       ),
     ).toBeInTheDocument();
-    expect(toasts.message).toHaveBeenCalledWith("Your mail app is opening with the summary");
     // The name and address stay on this device for the next summary.
     expect(window.localStorage.getItem(PLAN_EMAIL_STORAGE_KEY)).toBe("farmer@example.com");
     expect(window.localStorage.getItem(PLAN_NAME_STORAGE_KEY)).toBe("Aline");

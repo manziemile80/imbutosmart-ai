@@ -54,7 +54,6 @@ export const summaryCopy: Record<
     emailSent: string;
     emailInvalid: string;
     toastSent: string;
-    toastMailApp: string;
   }
 > = {
   en: {
@@ -95,7 +94,6 @@ export const summaryCopy: Record<
       "Summary sent to {email}. Look in your inbox in a few minutes, and in the spam folder if it is not there.",
     emailInvalid: "Check the email address, then try again.",
     toastSent: "Summary sent successfully to {email}",
-    toastMailApp: "Your mail app is opening with the summary",
   },
   rw: {
     title: "Incamake yawe",
@@ -136,7 +134,6 @@ export const summaryCopy: Record<
       "Incamake yoherejwe kuri {email}. Reba mu imeyili yawe mu minota mike, no mu bubiko bw'ubutumwa butifuzwa niba utayisanganywe.",
     emailInvalid: "Reba aderesi ya imeyili, hanyuma ugerageze.",
     toastSent: "Incamake yoherejwe neza kuri {email}",
-    toastMailApp: "Porogaramu yawe ya imeyili irafunguka n'incamake",
   },
   fr: {
     title: "Votre récapitulatif",
@@ -177,7 +174,6 @@ export const summaryCopy: Record<
       "Récapitulatif envoyé à {email}. Regardez votre boîte de réception dans quelques minutes, et les courriers indésirables s'il n'apparaît pas.",
     emailInvalid: "Vérifiez l'adresse e-mail, puis réessayez.",
     toastSent: "Récapitulatif envoyé avec succès à {email}",
-    toastMailApp: "Votre application e-mail s'ouvre avec le récapitulatif",
   },
 };
 
