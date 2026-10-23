@@ -43,6 +43,8 @@ export const summaryCopy: Record<
     nameLabel: string;
     namePlaceholder: string;
     nameInvalid: string;
+    emailTitle: string;
+    emailIntro: string;
     emailLabel: string;
     emailPlaceholder: string;
     emailSend: string;
@@ -78,14 +80,17 @@ export const summaryCopy: Record<
     nameLabel: "Your name",
     namePlaceholder: "e.g. Aline",
     nameInvalid: "Enter your name, then try again.",
+    emailTitle: "Send this summary to your email",
+    emailIntro: "The whole summary arrives as an email you can keep.",
     emailLabel: "Your email address",
     emailPlaceholder: "you@example.com",
-    emailSend: "Send to my email",
+    emailSend: "Send the summary",
     emailSending: "Sending the summary…",
-    emailHint:
-      "The message carries every section above. Your name and address are used only to send this summary, and stay in this browser so the next one is ready.",
-    emailReady: "Opened your mail app for {email}. Change the address to send it to someone else.",
-    emailSent: "Summary sent to {email}. Change the name or address to send it to someone else.",
+    emailHint: "Your name and address are used only for this summary, and stay in this browser.",
+    emailReady:
+      "We could not send it from the app, so your mail app was opened for {email} with the summary ready to send. If nothing opened, use Share all of this.",
+    emailSent:
+      "Summary sent to {email}. Look in your inbox in a few minutes, and in the spam folder if it is not there.",
     emailInvalid: "Check the email address, then try again.",
   },
   rw: {
@@ -113,16 +118,18 @@ export const summaryCopy: Record<
     nameLabel: "Amazina yawe",
     namePlaceholder: "urugero: Aline",
     nameInvalid: "Andika amazina yawe, hanyuma ugerageze.",
+    emailTitle: "Ohereza iyi ncamake kuri imeyili yawe",
+    emailIntro: "Incamake yose igera nk'imeyili ushobora kugumana.",
     emailLabel: "Aderesi ya imeyili yawe",
     emailPlaceholder: "wowe@urugero.com",
-    emailSend: "Yishyire kuri imeyili",
+    emailSend: "Ohereza incamake",
     emailSending: "Kohereza incamake…",
     emailHint:
-      "Ubutumwa bukubiyemo ibice byose hejuru. Amazina n'aderesi yawe bikoreshwa gusa kohereza iyi ncamake, kandi biguma kuri iyi gikoresho bityo incamake ikurikira iba yiteguye.",
+      "Amazina n'aderesi yawe bikoreshwa gusa muri iyi ncamake, kandi biguma kuri iyi gikoresho.",
     emailReady:
-      "Hafunguwe porogaramu yawe ya imeyili kubera {email}. Hindura aderesi ukohereze undi muntu.",
+      "Ntitwashoboye kuyohereza mu buryo bwa porogaramu, bityo porogaramu yawe ya imeyili yafunguriwe {email} n'incamake yiteguye koherezwa. Niba nta kintu cyafunguwe, koresha “Sangiza ibi byose”.",
     emailSent:
-      "Incamake yoherejwe kuri {email}. Hindura amazina cyangwa aderesi ukohereze undi muntu.",
+      "Incamake yoherejwe kuri {email}. Reba mu imeyili yawe mu minota mike, no mu bubiko bw'ubutumwa butifuzwa niba utayisanganywe.",
     emailInvalid: "Reba aderesi ya imeyili, hanyuma ugerageze.",
   },
   fr: {
@@ -150,16 +157,18 @@ export const summaryCopy: Record<
     nameLabel: "Votre nom",
     namePlaceholder: "ex. Aline",
     nameInvalid: "Saisissez votre nom, puis réessayez.",
+    emailTitle: "Envoyer ce récapitulatif à votre e-mail",
+    emailIntro: "Le récapitulatif complet arrive dans un e-mail que vous pouvez garder.",
     emailLabel: "Votre adresse e-mail",
     emailPlaceholder: "vous@exemple.com",
-    emailSend: "Envoyer à mon e-mail",
+    emailSend: "Envoyer le récapitulatif",
     emailSending: "Envoi du récapitulatif…",
     emailHint:
-      "Le message contient chaque section ci-dessus. Votre nom et votre adresse servent uniquement à envoyer ce récapitulatif, et restent sur cet appareil pour le prochain.",
+      "Votre nom et votre adresse servent uniquement à ce récapitulatif, et restent sur cet appareil.",
     emailReady:
-      "Votre application e-mail est ouverte pour {email}. Changez l'adresse pour l'envoyer à quelqu'un d'autre.",
+      "L'application n'a pas pu l'envoyer : votre application e-mail est ouverte pour {email} avec le récapitulatif prêt à envoyer. Si rien ne s'est ouvert, utilisez « Partager tout ceci ».",
     emailSent:
-      "Récapitulatif envoyé à {email}. Changez le nom ou l'adresse pour l'envoyer à quelqu'un d'autre.",
+      "Récapitulatif envoyé à {email}. Regardez votre boîte de réception dans quelques minutes, et les courriers indésirables s'il n'apparaît pas.",
     emailInvalid: "Vérifiez l'adresse e-mail, puis réessayez.",
   },
 };

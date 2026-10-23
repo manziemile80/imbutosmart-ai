@@ -163,7 +163,7 @@ describe("summary in the header", () => {
     fireEvent.change(screen.getByLabelText("Your email address"), {
       target: { value: "farmer@example.com" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Send to my email" }));
+    fireEvent.click(screen.getByRole("button", { name: "Send the summary" }));
 
     await waitFor(() => expect(opened).toHaveLength(1));
     expect(opened[0]).toContain("mailto:farmer@example.com?subject=");
@@ -177,7 +177,7 @@ describe("summary in the header", () => {
     expect(message).toContain("Also worth doing");
     expect(
       await screen.findByText(
-        "Opened your mail app for farmer@example.com. Change the address to send it to someone else.",
+        "We could not send it from the app, so your mail app was opened for farmer@example.com with the summary ready to send. If nothing opened, use Share all of this.",
       ),
     ).toBeInTheDocument();
     // The name and address stay on this device for the next summary.
@@ -207,11 +207,11 @@ describe("summary in the header", () => {
     fireEvent.change(screen.getByLabelText("Your email address"), {
       target: { value: "farmer@example.com" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Send to my email" }));
+    fireEvent.click(screen.getByRole("button", { name: "Send the summary" }));
 
     expect(
       await screen.findByText(
-        "Summary sent to farmer@example.com. Change the name or address to send it to someone else.",
+        "Summary sent to farmer@example.com. Look in your inbox in a few minutes, and in the spam folder if it is not there.",
       ),
     ).toBeInTheDocument();
     // The app delivered it, so no mail draft was opened.
@@ -227,7 +227,7 @@ describe("summary in the header", () => {
     });
 
     // The same summary can be sent again without reopening the app.
-    fireEvent.click(screen.getByRole("button", { name: "Send to my email" }));
+    fireEvent.click(screen.getByRole("button", { name: "Send the summary" }));
     await waitFor(() => expect(serverSend).toHaveBeenCalledTimes(2));
   });
 
@@ -252,7 +252,7 @@ describe("summary in the header", () => {
     fireEvent.change(screen.getByLabelText("Your email address"), {
       target: { value: "farmer@example.com" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Send to my email" }));
+    fireEvent.click(screen.getByRole("button", { name: "Send the summary" }));
 
     await waitFor(() => expect(opened).toHaveLength(1));
     expect(opened[0]).toContain("mailto:farmer@example.com?subject=");
@@ -282,7 +282,7 @@ describe("summary in the header", () => {
     await waitFor(() => expect(address).toHaveValue("farmer@example.com"));
     await waitFor(() => expect(name).toHaveValue("Aline"));
 
-    fireEvent.click(screen.getByRole("button", { name: "Send to my email" }));
+    fireEvent.click(screen.getByRole("button", { name: "Send the summary" }));
 
     await waitFor(() => expect(opened).toHaveLength(1));
     expect(opened[0]).toContain("mailto:farmer@example.com?subject=");
@@ -303,7 +303,7 @@ describe("summary in the header", () => {
     fireEvent.change(screen.getByLabelText("Your email address"), {
       target: { value: "farmer@example.com" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Send to my email" }));
+    fireEvent.click(screen.getByRole("button", { name: "Send the summary" }));
 
     expect(click).not.toHaveBeenCalled();
     expect(serverSend).not.toHaveBeenCalled();
@@ -325,7 +325,7 @@ describe("summary in the header", () => {
     fireEvent.change(screen.getByLabelText("Your email address"), {
       target: { value: "farmer@" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Send to my email" }));
+    fireEvent.click(screen.getByRole("button", { name: "Send the summary" }));
 
     expect(click).not.toHaveBeenCalled();
     expect(serverSend).not.toHaveBeenCalled();
@@ -347,18 +347,18 @@ describe("summary in the header", () => {
     fireEvent.change(screen.getByLabelText("Your name"), { target: { value: "Aline" } });
     const address = screen.getByLabelText("Your email address");
     fireEvent.change(address, { target: { value: "farmer@example.com" } });
-    fireEvent.click(screen.getByRole("button", { name: "Send to my email" }));
+    fireEvent.click(screen.getByRole("button", { name: "Send the summary" }));
 
     expect(
       await screen.findByText(
-        "Summary sent to farmer@example.com. Change the name or address to send it to someone else.",
+        "Summary sent to farmer@example.com. Look in your inbox in a few minutes, and in the spam folder if it is not there.",
       ),
     ).toBeInTheDocument();
     expect(notify).toBeEnabled();
 
     // The same summary can reach someone else without reopening the app.
     fireEvent.change(address, { target: { value: "neighbour@example.com" } });
-    fireEvent.click(screen.getByRole("button", { name: "Send to my email" }));
+    fireEvent.click(screen.getByRole("button", { name: "Send the summary" }));
     await waitFor(() => expect(serverSend).toHaveBeenCalledTimes(2));
     expect(
       (serverSend.mock.calls[1]?.[0] as { data: { email: string } } | undefined)?.data.email,

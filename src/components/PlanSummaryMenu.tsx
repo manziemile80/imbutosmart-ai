@@ -270,13 +270,13 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
 
             <Button
               type="button"
-              variant="outline"
+              variant="default"
               className="h-10 w-full"
               aria-expanded={showEmailForm}
               aria-controls="plan-summary-email-form"
               onClick={() => setShowEmailForm(true)}
             >
-              <Bell aria-hidden="true" />
+              <Mail aria-hidden="true" />
               {t.notify}
             </Button>
 
@@ -285,49 +285,71 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
                 id="plan-summary-email-form"
                 ref={emailForm}
                 noValidate
-                className="mt-1 grid gap-2 border-t border-border pt-3"
+                className="card-quiet grid gap-3"
                 onSubmit={emailSummary}
               >
-                <label htmlFor="plan-summary-name" className="text-xs font-medium text-foreground">
-                  {t.nameLabel}
-                </label>
-                <Input
-                  id="plan-summary-name"
-                  type="text"
-                  autoComplete="name"
-                  className="h-10"
-                  placeholder={t.namePlaceholder}
-                  value={name}
-                  disabled={emailState === "sending"}
-                  aria-invalid={nameState === "invalid"}
-                  aria-describedby="plan-summary-name-status"
-                  onChange={(event) => {
-                    setName(event.target.value);
-                    setNameState("idle");
-                    setEmailState("idle");
-                  }}
-                />
-                <p
-                  id="plan-summary-name-status"
-                  role={nameState === "invalid" ? "alert" : "status"}
-                  aria-live="polite"
-                  className={
-                    nameState === "invalid" ? "text-xs leading-relaxed text-destructive" : "sr-only"
-                  }
-                >
-                  {nameState === "invalid" ? t.nameInvalid : ""}
-                </p>
+                <div className="flex items-start gap-2">
+                  <Mail className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+                  <div>
+                    <p className="text-sm font-medium leading-snug text-foreground">
+                      {t.emailTitle}
+                    </p>
+                    <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
+                      {t.emailIntro}
+                    </p>
+                  </div>
+                </div>
 
-                <label htmlFor="plan-summary-email" className="text-xs font-medium text-foreground">
-                  {t.emailLabel}
-                </label>
-                <div className="flex flex-col gap-2 sm:flex-row">
+                <div className="grid gap-1.5">
+                  <label
+                    htmlFor="plan-summary-name"
+                    className="text-xs font-medium text-foreground"
+                  >
+                    {t.nameLabel}
+                  </label>
+                  <Input
+                    id="plan-summary-name"
+                    type="text"
+                    autoComplete="name"
+                    className="h-10"
+                    placeholder={t.namePlaceholder}
+                    value={name}
+                    disabled={emailState === "sending"}
+                    aria-invalid={nameState === "invalid"}
+                    aria-describedby="plan-summary-name-status"
+                    onChange={(event) => {
+                      setName(event.target.value);
+                      setNameState("idle");
+                      setEmailState("idle");
+                    }}
+                  />
+                  <p
+                    id="plan-summary-name-status"
+                    role={nameState === "invalid" ? "alert" : "status"}
+                    aria-live="polite"
+                    className={
+                      nameState === "invalid"
+                        ? "text-xs leading-relaxed text-destructive"
+                        : "sr-only"
+                    }
+                  >
+                    {nameState === "invalid" ? t.nameInvalid : ""}
+                  </p>
+                </div>
+
+                <div className="grid gap-1.5">
+                  <label
+                    htmlFor="plan-summary-email"
+                    className="text-xs font-medium text-foreground"
+                  >
+                    {t.emailLabel}
+                  </label>
                   <Input
                     id="plan-summary-email"
                     type="email"
                     autoComplete="email"
                     inputMode="email"
-                    className="h-10 flex-1"
+                    className="h-10"
                     placeholder={t.emailPlaceholder}
                     value={email}
                     disabled={emailState === "sending"}
@@ -338,26 +360,23 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
                       setEmailState("idle");
                     }}
                   />
-                  <Button
-                    type="submit"
-                    variant="outline"
-                    className="h-10 shrink-0"
-                    disabled={emailState === "sending"}
+                  <p
+                    id="plan-summary-email-hint"
+                    className="text-xs leading-relaxed text-muted-foreground"
                   >
-                    {emailState === "sending" ? (
-                      <LoaderCircle className="animate-spin" aria-hidden="true" />
-                    ) : (
-                      <Mail aria-hidden="true" />
-                    )}
-                    {emailState === "sending" ? t.emailSending : t.emailSend}
-                  </Button>
+                    {t.emailHint}
+                  </p>
                 </div>
-                <p
-                  id="plan-summary-email-hint"
-                  className="text-xs leading-relaxed text-muted-foreground"
-                >
-                  {t.emailHint}
-                </p>
+
+                <Button type="submit" className="h-10 w-full" disabled={emailState === "sending"}>
+                  {emailState === "sending" ? (
+                    <LoaderCircle className="animate-spin" aria-hidden="true" />
+                  ) : (
+                    <Mail aria-hidden="true" />
+                  )}
+                  {emailState === "sending" ? t.emailSending : t.emailSend}
+                </Button>
+
                 <p
                   id="plan-summary-email-status"
                   role={emailState === "invalid" ? "alert" : "status"}
@@ -367,16 +386,21 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
                       ? "sr-only"
                       : emailState === "invalid"
                         ? "text-xs leading-relaxed text-destructive"
-                        : "text-xs leading-relaxed text-muted-foreground"
+                        : "flex items-start gap-1.5 text-xs leading-relaxed text-muted-foreground"
                   }
                 >
-                  {emailState === "sent"
-                    ? t.emailSent.replace("{email}", email.trim())
-                    : emailState === "ready"
-                      ? t.emailReady.replace("{email}", email.trim())
-                      : emailState === "invalid"
-                        ? t.emailInvalid
-                        : ""}
+                  {emailState === "sent" && (
+                    <Check className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden="true" />
+                  )}
+                  <span>
+                    {emailState === "sent"
+                      ? t.emailSent.replace("{email}", email.trim())
+                      : emailState === "ready"
+                        ? t.emailReady.replace("{email}", email.trim())
+                        : emailState === "invalid"
+                          ? t.emailInvalid
+                          : ""}
+                  </span>
                 </p>
               </form>
             )}
