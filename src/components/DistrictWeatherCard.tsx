@@ -8,10 +8,10 @@ import {
 } from "@/lib/farmer-language";
 import {
   forecastSummary,
-  monthTempC,
+  seasonFigures,
   seasonForMonth,
-  seasonRainMm,
   weatherCodeLabel,
+  type AgriculturalSeason,
   type DistrictWeather,
 } from "@/lib/weather";
 
@@ -21,16 +21,20 @@ export function DistrictWeatherCard({
   weather,
   loading,
   language = "en",
+  season,
 }: {
   weather: DistrictWeather | null;
   loading: boolean;
   language?: FarmerLanguage;
+  /** The season the farmer chose; the current month's season when omitted. */
+  season?: AgriculturalSeason | null;
 }) {
   const t = farmerCopy[language];
   const climate = weather?.climate ?? null;
   const forecast = weather?.forecast ?? null;
   const month = new Date().getMonth() + 1;
-  const season = seasonForMonth(month);
+  const shownSeason = season === undefined ? seasonForMonth(month) : season;
+  const figures = climate ? seasonFigures(climate, shownSeason, month) : null;
 
   if (!loading && !climate && !forecast) {
     return (
@@ -57,14 +61,14 @@ export function DistrictWeatherCard({
         </p>
       )}
 
-      {climate && season && (
+      {climate && shownSeason && figures && (
         <p className="mt-2 text-sm leading-relaxed text-foreground">
           {t.climateTypical
             .replace("{district}", climate.district)
             .replace("{period}", climate.period)
-            .replace("{season}", seasonName(language, season))
-            .replace("{rain}", String(Math.round(seasonRainMm(climate, season))))
-            .replace("{temp}", (monthTempC(climate, month) ?? 0).toFixed(1))}
+            .replace("{season}", seasonName(language, shownSeason))
+            .replace("{rain}", String(Math.round(figures.rainMm ?? 0)))
+            .replace("{temp}", (figures.tempC ?? 0).toFixed(1))}
         </p>
       )}
 

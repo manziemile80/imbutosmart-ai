@@ -46,6 +46,9 @@ export const farmerCopy = {
     rainLikely: "rain likely {from}–{to}",
     weatherUnavailable:
       "The district weather is not available right now, so enter your own figures.",
+    weatherAuto:
+      "Rain and temperature come from {district}'s {period} climate record, for the season you chose. Edit either figure to use your own.",
+    useDistrictFigures: "Use the district's figures again",
     observations: "based on {n} farm observations",
     meteo: "Meteo Rwanda climatology",
     calendar: "NISR season calendar",
@@ -97,6 +100,9 @@ export const farmerCopy = {
     rainLikely: "pluie probable de {from} à {to}",
     weatherUnavailable:
       "La météo du district n’est pas disponible pour le moment ; saisissez vos propres valeurs.",
+    weatherAuto:
+      "La pluie et la température proviennent des relevés climatiques de {district} ({period}), pour la saison choisie. Modifiez l’une des valeurs pour utiliser les vôtres.",
+    useDistrictFigures: "Reprendre les chiffres du district",
     observations: "d’après {n} observations d’exploitations",
     meteo: "Climatologie — Meteo Rwanda",
     calendar: "Calendrier des saisons — NISR",
@@ -148,6 +154,9 @@ export const farmerCopy = {
     forecastOutlook: "Iminsi {days} ({source}): {rain} mm biteganyijwe, {min}–{max} °C",
     rainLikely: "imvura igaragara ku {from}–{to}",
     weatherUnavailable: "Ikirere c'akarere ntikaboneka ubu, andika ibiranganyo byawe.",
+    weatherAuto:
+      "Imvura n'ubushyuhe biva mu nyandiko y'ikirere y'akarere ka {district} ({period}), ku gihembwe wahisemo. Hindura kimwe muri byo niba ufite ibyawe.",
+    useDistrictFigures: "Ongera ukoreshe imibare y'akarere",
     observations: "bishingiye ku miryango {n} y'abimurimuriro",
     meteo: "Ikirere cya Rwanda — Meteo Rwanda",
     calendar: "Kalendari y’ibihembwe — NISR",

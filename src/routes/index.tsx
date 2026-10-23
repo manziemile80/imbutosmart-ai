@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SiteShell } from "@/components/SiteShell";
 import { SeasonAssistant } from "@/components/SeasonAssistant";
 import { FarmerAssistant } from "@/components/FarmerAssistant";
@@ -10,11 +10,17 @@ import { DistrictWeatherCard } from "@/components/DistrictWeatherCard";
 import { Panel, PanelBody, PanelHeader } from "@/components/ui/panel";
 import { Callout } from "@/components/ui/callout";
 import { API_URL, DISTRICTS, SOILS } from "@/lib/api";
-import { farmerCopy, cropLabel, soilLabel, type FarmerLanguage } from "@/lib/farmer-language";
-import { monthTempC, seasonForMonth, seasonRainMm } from "@/lib/weather";
+import {
+  farmerCopy,
+  cropLabel,
+  seasonName,
+  soilLabel,
+  type FarmerLanguage,
+} from "@/lib/farmer-language";
 import { useAutoPrediction } from "@/hooks/use-auto-prediction";
 import { useField } from "@/lib/field";
 import { useDistrictWeather } from "@/hooks/use-district-weather";
+import { useSeasonWeather } from "@/hooks/use-season-weather";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -42,30 +48,27 @@ function Advisory() {
   // The district, soil and season are the app's field, so the summary in the
   // header follows whatever the farmer changes here.
   const { field, setField } = useField();
-  const { district, soil } = field;
-  const [rain, setRain] = useState("450");
-  const [temp, setTemp] = useState("19");
+  const { district, soil, season } = field;
   const [language, setLanguage] = useState<FarmerLanguage>("en");
-  // A figure the farmer typed is never overwritten by the district's figures.
-  const [rainEdited, setRainEdited] = useState(false);
-  const [tempEdited, setTempEdited] = useState(false);
   const t = farmerCopy[language];
   const month = new Date().getMonth() + 1;
-  const season = field.season ?? seasonForMonth(month);
-  const { result, loading, error } = useAutoPrediction(district, soil, rain, temp, season);
   const { weather, loading: weatherLoading } = useDistrictWeather(district);
+  // The weather of the district the farmer is looking at now, not a previous
+  // district's figures while the new record loads.
+  const currentWeather = weather?.district === district ? weather : null;
+  const climate = currentWeather?.climate ?? null;
 
-  // The district's own record fills the season figures, so they follow the
-  // location the farmer chose. A figure the farmer entered stays as entered.
-  useEffect(() => {
-    const climate = weather?.climate;
-    if (!climate) return;
-    if (season && !rainEdited) setRain(String(Math.round(seasonRainMm(climate, season))));
-    if (!tempEdited) {
-      const usual = monthTempC(climate, month);
-      if (usual != null) setTemp(usual.toFixed(1));
-    }
-  }, [weather, season, month, rainEdited, tempEdited]);
+  // The district's own published record fills the season figures, so they
+  // follow both the location and the season the farmer chose. A figure the
+  // farmer typed is kept, and can be handed back to the record.
+  const { rain, temp, rainEdited, tempEdited, setRain, setTemp, useDistrictFigures } =
+    useSeasonWeather(climate, season, month);
+
+  const { result, loading, error } = useAutoPrediction(district, soil, rain, temp, season);
+
+  // While the record is still loading, an empty field is expected rather than
+  // an error the farmer can act on.
+  const waitingForClimate = weatherLoading && (!rain || !temp);
 
   return (
     <SiteShell language={language}>
@@ -124,6 +127,22 @@ function Advisory() {
                     ))}
                   </select>
                 </Field>
+                <Field label={t.farming}>
+                  <select
+                    className="field"
+                    value={season ?? ""}
+                    onChange={(e) =>
+                      setField({
+                        season: e.target.value === "" ? null : (e.target.value as "A" | "B" | "C"),
+                      })
+                    }
+                  >
+                    <option value="">—</option>
+                    <option value="A">{seasonName(language, "A")}</option>
+                    <option value="B">{seasonName(language, "B")}</option>
+                    <option value="C">{seasonName(language, "C")}</option>
+                  </select>
+                </Field>
                 <div className="grid grid-cols-2 gap-4">
                   <Field label={t.rain}>
                     <input
@@ -134,10 +153,7 @@ function Advisory() {
                       max={5000}
                       required
                       value={rain}
-                      onChange={(e) => {
-                        setRain(e.target.value);
-                        setRainEdited(true);
-                      }}
+                      onChange={(e) => setRain(e.target.value)}
                     />
                   </Field>
                   <Field label={t.temp}>
@@ -150,23 +166,41 @@ function Advisory() {
                       step="0.1"
                       required
                       value={temp}
-                      onChange={(e) => {
-                        setTemp(e.target.value);
-                        setTempEdited(true);
-                      }}
+                      onChange={(e) => setTemp(e.target.value)}
                     />
                   </Field>
                 </div>
+                {climate && (
+                  <p className="text-xs leading-relaxed text-muted-foreground">
+                    {t.weatherAuto
+                      .replace("{district}", district)
+                      .replace("{period}", climate.period)}
+                  </p>
+                )}
+                {climate && (rainEdited || tempEdited) && (
+                  <button
+                    type="button"
+                    className="link-quiet justify-self-start text-xs"
+                    onClick={useDistrictFigures}
+                  >
+                    {t.useDistrictFigures}
+                  </button>
+                )}
               </form>
 
-              <DistrictWeatherCard weather={weather} loading={weatherLoading} language={language} />
+              <DistrictWeatherCard
+                weather={currentWeather}
+                loading={weatherLoading}
+                language={language}
+                season={season}
+              />
 
               {loading && (
                 <p role="status" className="mt-5 text-sm text-muted-foreground">
                   {t.analysing}
                 </p>
               )}
-              {error && (
+              {error && !(waitingForClimate && error === "invalid") && (
                 <Callout tone="danger" role="alert" className="mt-5">
                   {t[error]}
                 </Callout>

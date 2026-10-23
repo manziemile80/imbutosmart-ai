@@ -57,7 +57,7 @@ The forecast carries the WMO weather code of each day ("Moderate rain showers") 
 - **Inputs used in your district** — from the Seasonal Agricultural Survey 2025: the share of segments using DAP, NPK, urea, manure, compost and the rest, the rate each input was applied at in kilograms per hectare, plus how many irrigate and how many report soil erosion. `backend/build_district_inputs.py` writes the per-district profile to `src/lib/district-inputs.json` (aggregates only, no household data).
 - **When to act** — the district's usual season rainfall and temperature, and the coming days' forecast.
 - **Your written plan** — the AI writes the steps from those facts alone. A rate, spacing or price the model adds is dropped before the farmer sees it.
-- **Your summary** — the overview the farmer gets as soon as the district and soil are chosen: the crops for the field, the inputs farmers there use **with the rate they applied them at**, the insurance worth asking about, and what else to do. It sits at the top of the Advice page, and the bell in the header (just above the dark-mode toggle) opens the same summary on any page — the field the farmer chose is shared across the app and kept for their next visit.
+- **Your summary** — the overview the farmer gets as soon as the district and soil are chosen: the crops for the field, the inputs farmers there use **with the rate they applied them at**, the insurance worth asking about, and what else to do. It sits at the top of the Advice page, and the bell in the header (just above the dark-mode toggle) opens the same summary on any page — the field the farmer chose is shared across the app and kept for their next visit. The bell panel can share the whole summary or **email it**: the **Send me this summary** button opens a short form asking for the farmer's name and email address, the app sends the complete summary from its own server and confirms **Summary sent**, and the name and address stay in that browser so the next summary is pre-filled. With no mail service configured, the same complete message opens in the farmer's own mail app instead.
 - **Assistance** — the plan read aloud, the same plan in simpler words, and a plain explanation of every input name.
 
 ## The Guidance portal
@@ -78,10 +78,22 @@ npm install && npm run dev
 - After deployment, verify `/meta` and a real `/predict` request (not just `/health`), then set the frontend `VITE_API_URL` to the HTTPS Render service address. `/stats` supplies held-out test accuracy, AUC and yield MAE in t/ha; historical comparison charts are in-sample, not test results.
 - **Frontend:** set `VITE_API_URL` to the Render URL and publish to any static/edge host (such as Vercel, Netlify, or Render). The app is live at **https://imbutosmart.vercel.app**, which is the project this workspace deploys to (`npx vercel deploy --prod`). `abahinzismart.vercel.app` serves the same app from a separate Vercel project that this workspace cannot deploy to, so it can lag behind.
 - **AI variables on the host:** the chat and speech backends are configured with server-only environment variables, so set them on the host rather than in the repository: `AI_BASE_URL`, `AI_MODEL` and `AI_API_KEY` for chat, and `AI_SPEECH_BASE_URL`, `AI_STT_MODEL`, `AI_TTS_MODEL`, `AI_TTS_VOICE`, `AI_TTS_FORMAT`, `AI_TTS_MAX_CHARS` and `AI_SPEECH_LANGUAGES` for voice. Keep them as secrets.
+- **Summary email on the host:** set `EMAIL_API_URL`, `EMAIL_API_KEY` and `EMAIL_FROM` on the deployment to send the summary from the app. `EMAIL_FROM` must be a sender the provider has verified; without these variables the page falls back to the farmer's own mail app, so emailing still works.
 - **Verify the deployment:** `node scripts\test-app-ai-e2e.mjs` checks the deployed app's server functions the same way it checks a dev server, so a live deployment can be confirmed without a browser. Point it at the deployment with `APP_URL`. It checks the spoken path in both directions: the answer is read aloud when the backend can speak, and a recorded sample (`scripts\fixtures\speech-sample.wav`) is transcribed and answered either way, so a deployment that cannot speak aloud still proves the farmer's recording works.
 
 ## District land-use map
 The dashboard imports district aggregate CSVs in the current browser session; they are not uploaded to the prediction service and are not training data. Required columns: `district,crops_ha,pasture_ha,fallow_ha`. Values must be nonnegative hectares; missing districts remain unavailable. Shares use only the sum of those three categories, not all district land. Crop area must be a non-overlapping physical area, not the sum of crop areas that double-count intercropping. Only import aggregate, non-sensitive figures. The supplied national PDF is not sufficient to populate district shares.
+
+## Email the summary
+In the bell panel, **Send me this summary** opens a short form asking for the farmer's name and email address, then sends the same complete summary the panel shows and confirms **Summary sent**. The browser sends only the chosen field (district, soil, season, language) and the name and address; the server rebuilds the summary from the published figures and the crop engine, so the endpoint cannot be used to send arbitrary content.
+
+Delivery is configured on the host with server-only variables:
+
+- `EMAIL_API_URL` — the provider endpoint (default `https://api.resend.com/emails`). Any endpoint accepting the Resend-style JSON body `{ from, to, subject, text }` works.
+- `EMAIL_API_KEY` — the credential, sent as a bearer token.
+- `EMAIL_FROM` — the verified sender, for example `ImbutoSmart <summary@yourdomain.com>`.
+
+The name and address are remembered only in the browser on that device, so the next summary is addressed without retyping. When no mail service is configured, or the provider cannot be reached, the same complete message opens in the farmer's own mail app instead — the farmer never loses the summary.
 
 ## AI assistance
 The farmer Q&A assistant and the season explanations call any **OpenAI-compatible** chat completions endpoint. Configure it with server-side environment variables:

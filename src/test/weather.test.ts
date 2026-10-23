@@ -7,8 +7,10 @@ import {
   weatherCodeLabel,
   forecastSummary,
   monthTempC,
+  seasonFigures,
   seasonForMonth,
   seasonRainMm,
+  seasonTempC,
   SEASON_MONTHS,
   type DistrictClimate,
   type DistrictForecast,
@@ -48,6 +50,18 @@ describe("district weather", () => {
   it("reads the usual temperature of a month", () => {
     expect(monthTempC(climate, 4)).toBe(18);
     expect(monthTempC(climate, 13)).toBe(18);
+  });
+
+  it("reads the usual temperature of a season", () => {
+    expect(seasonTempC(climate, "A")).toBe(18);
+    expect(seasonTempC(climate, null)).toBeNull();
+  });
+
+  it("fills the rain and temperature of the chosen season from the record", () => {
+    expect(seasonFigures(climate, "B", 4)).toEqual({ rainMm: 400, tempC: 18 });
+    // September belongs to two seasons: no seasonal rain, but the month's
+    // temperature is still known.
+    expect(seasonFigures(climate, null, 9)).toEqual({ rainMm: null, tempC: 18 });
   });
 
   it("summarises the coming week", () => {

@@ -119,6 +119,20 @@ export function seasonTempC(
   return values.reduce((total, value) => total + value, 0) / values.length;
 }
 
+// The usual rain and temperature of the season the farmer chose, from the
+// district's published record. The season calendar is the agricultural one
+// used for the survey, so the figures match the months the farmer works.
+// September belongs to seasons A and C, so with no season chosen only the
+// month's temperature is available.
+export function seasonFigures(
+  climate: DistrictClimate,
+  season: AgriculturalSeason | null,
+  month: number,
+): { rainMm: number | null; tempC: number | null } {
+  if (!season) return { rainMm: null, tempC: monthTempC(climate, month) };
+  return { rainMm: seasonRainMm(climate, season), tempC: seasonTempC(climate, season) };
+}
+
 // The rain and temperature the coming week is expected to bring, which is the
 // near-term outlook for the field.
 export function forecastSummary(forecast: DistrictForecast): {
