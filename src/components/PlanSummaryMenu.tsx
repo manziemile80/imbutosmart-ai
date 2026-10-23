@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Bell, BellRing, Check, LoaderCircle, Mail, Share2, X } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -185,6 +186,9 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
       });
       if (result.status === "sent") {
         setEmailState("sent");
+        // A toast confirms the send even when the panel has scrolled the
+        // confirmation out of view.
+        toast.success(t.toastSent.replace("{email}", draft.to));
         return;
       }
     } catch {
@@ -194,6 +198,7 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
 
     openMailDraft(draft.href);
     setEmailState("ready");
+    toast(t.toastMailApp);
   }
 
   return (

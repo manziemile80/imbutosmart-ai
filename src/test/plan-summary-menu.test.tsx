@@ -7,9 +7,15 @@ import { PLAN_EMAIL_STORAGE_KEY, PLAN_NAME_STORAGE_KEY } from "@/lib/plan-summar
 // and the fallback to the farmer's own mail app.
 const serverSend = vi.hoisted(() => vi.fn());
 
+// A toast confirms a successful send; it is asserted without rendering it.
+const toasts = vi.hoisted(() => ({ success: vi.fn(), message: vi.fn() }));
+
 // The summary in the header must follow the farmer's field: when the district
 // changes, the summary shows the new district's figures at once.
 vi.mock("@tanstack/react-start", () => ({ useServerFn: (fn: unknown) => fn }));
+vi.mock("sonner", () => ({
+  toast: Object.assign(toasts.message, { success: toasts.success }),
+}));
 vi.mock("@/lib/weather.functions", () => ({
   getDistrictWeather: async () => ({ district: "Musanze", climate: null, forecast: null }),
 }));
@@ -27,6 +33,8 @@ afterEach(() => {
   vi.unstubAllGlobals();
   serverSend.mockReset();
   serverSend.mockResolvedValue({ status: "unavailable" });
+  toasts.success.mockReset();
+  toasts.message.mockReset();
   window.localStorage.clear();
   delete (navigator as { share?: unknown }).share;
   delete (navigator as { clipboard?: unknown }).clipboard;
@@ -180,6 +188,7 @@ describe("summary in the header", () => {
         "We could not send it from the app, so your mail app was opened for farmer@example.com with the summary ready to send. If nothing opened, use Share all of this.",
       ),
     ).toBeInTheDocument();
+    expect(toasts.message).toHaveBeenCalledWith("Your mail app is opening with the summary");
     // The name and address stay on this device for the next summary.
     expect(window.localStorage.getItem(PLAN_EMAIL_STORAGE_KEY)).toBe("farmer@example.com");
     expect(window.localStorage.getItem(PLAN_NAME_STORAGE_KEY)).toBe("Aline");
@@ -355,6 +364,8 @@ describe("summary in the header", () => {
       ),
     ).toBeInTheDocument();
     expect(notify).toBeEnabled();
+    // The farmer sees the confirmation even if the panel scrolled it away.
+    expect(toasts.success).toHaveBeenCalledWith("Summary sent successfully to farmer@example.com");
 
     // The same summary can reach someone else without reopening the app.
     fireEvent.change(address, { target: { value: "neighbour@example.com" } });
@@ -363,5 +374,8 @@ describe("summary in the header", () => {
     expect(
       (serverSend.mock.calls[1]?.[0] as { data: { email: string } } | undefined)?.data.email,
     ).toBe("neighbour@example.com");
+    expect(toasts.success).toHaveBeenLastCalledWith(
+      "Summary sent successfully to neighbour@example.com",
+    );
   });
 });

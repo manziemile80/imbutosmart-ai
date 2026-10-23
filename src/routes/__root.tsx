@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportAppError } from "../lib/error-reporting";
 import { FieldProvider } from "../lib/field-context";
+import { Toaster } from "../components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -129,6 +130,8 @@ function RootComponent() {
       <FieldProvider>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
+        {/* Confirmations that must be read wherever the farmer has scrolled to. */}
+        <Toaster position="top-center" closeButton />
       </FieldProvider>
     </QueryClientProvider>
   );
