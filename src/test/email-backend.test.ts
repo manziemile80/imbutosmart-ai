@@ -20,6 +20,7 @@ afterEach(() => {
   globalThis.fetch = originalFetch;
   delete process.env["EMAIL_API_URL"];
   delete process.env["EMAIL_API_KEY"];
+  delete process.env["EMAIL_BREVO_API_KEY"];
   delete process.env["EMAIL_FROM"];
   delete process.env["EMAIL_SMTP_HOST"];
   delete process.env["EMAIL_SMTP_PORT"];
@@ -39,6 +40,11 @@ function configured() {
 function mailbox() {
   process.env["EMAIL_SMTP_USER"] = "grower@example.test";
   process.env["EMAIL_SMTP_PASSWORD"] = "app-password";
+}
+
+function brevo() {
+  process.env["EMAIL_BREVO_API_KEY"] = "brevo-key";
+  process.env["EMAIL_FROM"] = "ImbutoSmart <summary@example.test>";
 }
 
 const message = {
@@ -120,6 +126,82 @@ describe("summary email delivery", () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
 
     expect(await sendSummaryEmail(message)).toBe("failed");
+  });
+
+  it("sends through Brevo, which verifies one sender instead of a whole domain", async () => {
+    brevo();
+    const fetchMock = vi.fn().mockResolvedValue(new Response("{}", { status: 201 }));
+    globalThis.fetch = fetchMock as unknown as typeof fetch;
+
+    expect(await sendSummaryEmail(message)).toBe("sent");
+
+    const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    expect(url).toBe("https://api.brevo.com/v3/smtp/email");
+    const headers = init.headers as Record<string, string>;
+    expect(headers["api-key"]).toBe("brevo-key");
+    // Brevo is authenticated by its own header, not a bearer token.
+    expect(headers["authorization"]).toBeUndefined();
+
+    const body = JSON.parse(String(init.body)) as {
+      sender: { email: string; name?: string };
+      to: { email: string }[];
+      subject: string;
+      textContent: string;
+    };
+    expect(body.sender).toEqual({ email: "summary@example.test", name: "ImbutoSmart" });
+    expect(body.to).toEqual([{ email: "farmer@example.com" }]);
+    expect(body.subject).toBe("Your summary — Musanze");
+    expect(body.textContent).toContain("Your field: Musanze");
+  });
+
+  it("accepts a bare sender address for Brevo, with no display name", async () => {
+    process.env["EMAIL_BREVO_API_KEY"] = "brevo-key";
+    process.env["EMAIL_FROM"] = "summary@example.test";
+    const fetchMock = vi.fn().mockResolvedValue(new Response("{}", { status: 201 }));
+    globalThis.fetch = fetchMock as unknown as typeof fetch;
+
+    expect(await sendSummaryEmail(message)).toBe("sent");
+
+    const [, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    const body = JSON.parse(String(init.body)) as { sender: unknown };
+    expect(body.sender).toEqual({ email: "summary@example.test" });
+  });
+
+  it("writes Brevo's reason to the log and never the key", async () => {
+    brevo();
+    globalThis.fetch = vi
+      .fn()
+      .mockResolvedValue(
+        new Response(JSON.stringify({ message: "Sender not valid" }), { status: 400 }),
+      ) as unknown as typeof fetch;
+    const logged = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    expect(await sendSummaryEmail(message)).toBe("failed");
+    const line = String(logged.mock.calls[0]?.[0]);
+    expect(line).toContain("Brevo refused the summary email (400)");
+    expect(line).toContain("Sender not valid");
+    expect(line).not.toContain("brevo-key");
+  });
+
+  it("lets Brevo carry the summary when the first provider refuses the address", async () => {
+    configured();
+    brevo();
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ message: "You can only send testing emails" }), {
+          status: 403,
+        }),
+      )
+      .mockResolvedValueOnce(new Response("{}", { status: 201 }));
+    globalThis.fetch = fetchMock as unknown as typeof fetch;
+    vi.spyOn(console, "error").mockImplementation(() => {});
+
+    expect(await sendSummaryEmail(message)).toBe("sent");
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect((fetchMock.mock.calls[1] as [string, RequestInit])[0]).toBe(
+      "https://api.brevo.com/v3/smtp/email",
+    );
   });
 
   it("sends from a configured mailbox, so any address can receive the summary", async () => {

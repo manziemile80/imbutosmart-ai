@@ -89,7 +89,7 @@ npm install && npm run dev
 - After deployment, verify `/meta` and a real `/predict` request (not just `/health`), then set the frontend `VITE_API_URL` to the HTTPS Render service address. `/stats` supplies held-out test accuracy, AUC and yield MAE in t/ha; historical comparison charts are in-sample, not test results.
 - **Frontend:** set `VITE_API_URL` to the Render URL and publish to any static/edge host (such as Vercel, Netlify, or Render). The app is live at **https://imbutosmart.vercel.app**, which is the project this workspace deploys to (`npx vercel deploy --prod`). `abahinzismart.vercel.app` serves the same app from a separate Vercel project that this workspace cannot deploy to, so it can lag behind.
 - **AI variables on the host:** the chat and speech backends are configured with server-only environment variables, so set them on the host rather than in the repository: `AI_BASE_URL`, `AI_MODEL` and `AI_API_KEY` for chat, and `AI_SPEECH_BASE_URL`, `AI_STT_MODEL`, `AI_TTS_MODEL`, `AI_TTS_VOICE`, `AI_TTS_FORMAT`, `AI_TTS_MAX_CHARS` and `AI_SPEECH_LANGUAGES` for voice. Keep them as secrets.
-- **Summary email on the host:** set `EMAIL_API_URL`, `EMAIL_API_KEY` and `EMAIL_FROM` on the deployment to send the summary from the app. `EMAIL_FROM` must be a sender the provider has verified; without these variables the page falls back to the farmer's own mail app, so emailing still works. To reach every farmer without a verified domain, set `EMAIL_SMTP_USER` and `EMAIL_SMTP_PASSWORD` (an app password) instead or as well: the mailbox sends the summary when the provider refuses the address.
+- **Summary email on the host:** set `EMAIL_FROM` plus one sending credential to send the summary from the app. `EMAIL_FROM` must be a sender the provider has verified; without a credential the page falls back to the farmer's own mail app, so emailing still works. Any one of these reaches every farmer's address without owning a domain: `EMAIL_BREVO_API_KEY` (a free Brevo account verifies one sender address), `EMAIL_SMTP_USER` with `EMAIL_SMTP_PASSWORD` (a mailbox app password), or `EMAIL_API_URL` with `EMAIL_API_KEY` for a provider whose sending domain is verified.
 - **Verify the deployment:** `node scripts\test-app-ai-e2e.mjs` checks the deployed app's server functions the same way it checks a dev server, so a live deployment can be confirmed without a browser. Point it at the deployment with `APP_URL`. It checks the spoken path in both directions: the answer is read aloud when the backend can speak, and a recorded sample (`scripts\fixtures\speech-sample.wav`) is transcribed and answered either way, so a deployment that cannot speak aloud still proves the farmer's recording works.
 
 ## District land-use map
@@ -100,19 +100,14 @@ The dashboard imports district aggregate CSVs in the current browser session; th
 
 In the bell panel, **Send me this summary** opens a short form asking for the farmer's name and email address, then sends the same complete summary the panel shows and confirms **Summary sent**. The browser sends only the chosen field (district, soil, season, language) and the name and address; the server rebuilds the summary from the published figures and the crop engine, so the endpoint cannot be used to send arbitrary content.
 
-Delivery is configured on the host with server-only variables:
+Delivery is configured on the host with server-only variables. `EMAIL_FROM` is the sender the chosen service has verified, and each service below is tried in turn until one accepts the farmer's address:
 
 - `EMAIL_API_URL` — the provider endpoint (default `https://api.resend.com/emails`). Any endpoint accepting the Resend-style JSON body `{ from, to, subject, text }` works.
 - `EMAIL_API_KEY` — the credential, sent as a bearer token.
-- `EMAIL_FROM` — the verified sender, for example `ImbutoSmart <summary@yourdomain.com>`.
+- `EMAIL_BREVO_API_KEY` — a Brevo key. Brevo verifies one sender address instead of a domain, so it reaches any farmer's address; the free plan allows 300 messages a day.
+- `EMAIL_SMTP_USER` and `EMAIL_SMTP_PASSWORD` — a mailbox that sends the summary itself, with an **app password**, never the account password. Optional: `EMAIL_SMTP_HOST` (default `smtp.gmail.com`) and `EMAIL_SMTP_PORT` (default `465`, TLS).
 
-A mailbox can send the summary itself when no domain is used, which is the quickest way to reach every farmer's address:
-
-- `EMAIL_SMTP_USER` — the mailbox address.
-- `EMAIL_SMTP_PASSWORD` — an **app password** for that mailbox, never the account password.
-- `EMAIL_SMTP_HOST` — default `smtp.gmail.com`; `EMAIL_SMTP_PORT` — default `465` (TLS).
-
-The HTTP provider is tried first and the mailbox carries the message when the provider refuses the address, so a test sender that only accepts its own address stops being a dead end. A refusal is written to the server log with the provider's own reason.
+The HTTP provider is tried first, then Brevo, then the mailbox, so a test sender that only accepts its own address stops being a dead end. A refusal is written to the server log with the provider's own reason, and never shown to the farmer.
 
 The name and address are remembered only in the browser on that device, so the next summary is addressed without retyping. When no mail service is configured, or the provider cannot be reached, the same complete message opens in the farmer's own mail app instead — the farmer never loses the summary.
 
