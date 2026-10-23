@@ -113,11 +113,7 @@ const field = {
 
 console.log("1/2 A summary to an address the service accepts");
 const sent = await call("plan-summary.functions.ts", "sendPlanSummaryEmail", field);
-check(
-  "the server reports the summary as sent",
-  sent?.status === "sent",
-  `status: ${sent?.status}`,
-);
+check("the server reports the summary as sent", sent?.status === "sent", `status: ${sent?.status}`);
 
 console.log("\n2/2 A summary to any other address");
 const other = await call("plan-summary.functions.ts", "sendPlanSummaryEmail", {
