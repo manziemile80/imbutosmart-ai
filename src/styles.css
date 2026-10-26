@@ -80,7 +80,7 @@
 
 :root {
   --radius: 0.75rem;
-  --font-display: "Fraunces", Georgia, serif;
+  --font-display: "Bricolage Grotesque", "Manrope", system-ui, sans-serif;
   --font-body: "Manrope", system-ui, sans-serif;
 
   /* Surfaces */
@@ -253,8 +253,9 @@
 
 @utility font-display {
   font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  font-optical-sizing: auto;
+  letter-spacing: -0.03em;
 }
 
 @utility tabular {

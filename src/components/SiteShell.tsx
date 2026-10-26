@@ -13,7 +13,10 @@ export function SiteShell({ children }: { children: ReactNode }) {
       <header className="sticky top-0 z-20 border-b border-border bg-background/85 backdrop-blur">
         {/* The title line: the brand, and the farmer's summary at the far end. */}
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 pt-3.5">
-          <Link to="/" className="flex items-center gap-2.5 font-display text-lg text-foreground">
+          <Link
+            to="/"
+            className="flex items-center gap-2.5 font-display text-xl text-foreground sm:text-[1.35rem]"
+          >
             <img src="/logo.svg" alt="" className="size-9 rounded-xl" width={36} height={36} />
             <span>
               Imbuto<span className="text-primary-text">Smart</span> AI

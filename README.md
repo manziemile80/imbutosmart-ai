@@ -107,20 +107,22 @@ The `/dashboard` page is the advisory workspace for agricultural officers. It re
 
 Published figures come from NISR survey aggregates, the district climate record, the live Open-Meteo forecast and the trained-model report. The dashboard does not estimate a missing figure: a price, premium, application rate, eligibility rule or risk score is shown only when an agronomist records a verified value with its supplier or policy, its source and the date it was checked. A price older than 90 days is labelled for re-checking.
 
-Editable records live in Supabase. The app ships the migration in `supabase/migrations/20261026000000_agronomist_dashboard.sql`, which creates `agronomist_records` and `agronomist_audit`, enables row-level security and records who created or changed each record. Apply it with the Supabase CLI or the SQL editor before expecting stored records:
+Editable records live in a shared Supabase project, so every device signed in with the same account sees the same list. The app ships the migrations in `supabase/migrations/`, which create `agronomist_records` and `agronomist_audit`, add the reviewer allowlist, enable row-level security and record who created or changed each record. Apply them with the Supabase CLI or the SQL editor before expecting stored records:
 
 ```bash
 supabase db push
 ```
 
-The quickest path configures the whole project in one step, including Email sign-in. Create an access token at <https://supabase.com/dashboard/account/tokens>, then:
+The deployed project is provisioned from the Vercel Marketplace: **Storage → Supabase** creates the project and connecting it to the Vercel project writes `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` and `SUPABASE_SERVICE_ROLE_KEY` into the production environment. Copy `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` to `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` for the browser build, and keep the service-role key server-side. The direct `POSTGRES_URL_NON_POOLING` connection string is only needed to apply the two migrations.
+
+A project you own instead can be configured in one step, including Email sign-in. Create an access token at <https://supabase.com/dashboard/account/tokens>, then:
 
 ```powershell
 $env:SUPABASE_ACCESS_TOKEN = "sbp_..."
 npm run setup:supabase
 ```
 
-`scripts/setup-supabase.mjs` checks the token, turns on Email with auto-confirm, applies both migrations and verifies that `agronomist_records` answers over the public API. It is idempotent and never writes the token to disk. Without a token the two steps can also be done by hand: run both migration files in the SQL editor, then enable Email under Authentication → Sign In / Providers.
+`scripts/setup-supabase.mjs` checks the token, turns on Email with auto-confirm, applies both migrations and verifies that `agronomist_records` answers over the public API. It is idempotent and never writes the token to disk. Without a token the two steps can also be done by hand: run both migration files in the SQL editor, then enable Email under Authentication → Sign In / Providers. The shared account is created and confirmed through the Auth Admin API with the service-role key, which is why no dashboard access is required.
 
 Only an account whose **app_metadata** carries `role: "agronomist"` can add, edit or delete a record. `user_metadata` is editable by the account holder, so it is never trusted. Grant the role in the Supabase dashboard (Authentication → Users) or with SQL:
 
@@ -131,7 +133,7 @@ update auth.users
  where email = 'officer@example.org';
 ```
 
-The server checks the role on every write as well as the database policy, and the audit table keeps the actor, action and record. When the deployment has no shared database, or its migration has not been applied, the dashboard keeps its records in the browser instead of refusing every change. The shared reviewer account unlocks that device store with the same printed credentials, and a calm **Saved on this device** strip says once that the records stay here and are not shared; the **Shared database** disclosure carries the migration link. A count is then the device list's real total, so an empty device store is `0`, while a store that could not be read at all is still **—** rather than zero. A record edited while the connection is down is kept on the device and retried when the page next reaches the server.
+The server checks the role on every write as well as the database policy, and the audit table keeps the actor, action and record. The cloud store is the primary path: when the deployment has a shared database, records are written there and the page shows a **Shared database** pill instead of any device notice. A copy is cached for an offline visit, so a change made while the connection is down is kept on the device and retried when the page next reaches the server. Only when the deployment has no shared database at all, or its migration has not been applied, does the dashboard fall back to a store in this browser. The shared reviewer account unlocks that fallback with the same printed credentials, and a calm **Saved on this device** strip says once that the records stay here and are not shared; the **Shared database** disclosure carries the migration link. A count is then the device list's real total, so an empty device store is `0`, while a store that could not be read at all is still **—** rather than zero.
 
 A visitor who is not signed in sees only the reference records the database makes public — input products, agronomist contacts and insurance products. Farmer profiles, recommendations, pest reports, messages and follow-ups stay hidden even when an earlier visit left a copy on the same device. A farmer's profile lists the recommendations, pest reports, messages and follow-ups that carry the same name, and links back to the tab that holds each one. Pest reports keep prevention advice separate from treatment advice, a recommendation can name the farmer it is for, and the knowledge centre can download a guide or the filtered set as plain text for a visit.
 
@@ -251,7 +253,7 @@ npm run dev
 
 For a production build, preview with `node .output/server/index.mjs` after `npm run build` rather than `vite preview` (the Nitro output lives in `.output`).
 
-The agronomist records use the server-side `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`, plus the migration described in section 12.1. No service-role key is needed: the server forwards the signed-in account's token, and the row-level policies decide what that account may read or write. When Supabase is not configured, the dashboard falls back to a record store in the browser and the shared reviewer account can still sign in there, so the rest of the app and the workspace stay usable on that device.
+The agronomist records use the server-side `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`, plus the migrations described in section 12.1. Reading and writing a record needs no service-role key: the server forwards the signed-in account's token, and the row-level policies decide what that account may read or write. `SUPABASE_SERVICE_ROLE_KEY` stays on the server for administration only — creating and confirming the shared reviewer account when no Supabase dashboard session is available. When Supabase is not configured, the dashboard falls back to a record store in the browser and the shared reviewer account can still sign in there, so the rest of the app and the workspace stay usable on that device.
 
 
 ## 18. Deployment

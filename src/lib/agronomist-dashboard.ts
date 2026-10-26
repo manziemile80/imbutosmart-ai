@@ -466,7 +466,8 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
     },
     storage: {
       loading: "Loading records…",
-      ready: "Records are stored in the app database.",
+      ready:
+        "Records are stored in the shared database, so every device signed in with this account sees the same list.",
       device:
         "Records are saved in this browser on this device. No shared database is in use here, so these records stay on this device and are not shared with other devices.",
       unconfigured:
@@ -476,7 +477,7 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
     },
     storageShort: {
       loading: "Loading",
-      ready: "Database ready",
+      ready: "Shared database",
       device: "Saved on this device",
       unconfigured: "Stored on this device",
       error: "Database unreachable",
@@ -554,7 +555,8 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
     },
     storage: {
       loading: "Chargement des dossiers…",
-      ready: "Les dossiers sont enregistrés dans la base de l’application.",
+      ready:
+        "Les dossiers sont enregistrés dans la base partagée : chaque appareil connecté voit la même liste.",
       device:
         "Les dossiers sont enregistrés dans ce navigateur, sur cet appareil. Aucune base partagée n’est utilisée ici : les dossiers restent sur cet appareil.",
       unconfigured:
@@ -564,7 +566,7 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
     },
     storageShort: {
       loading: "Chargement",
-      ready: "Base prête",
+      ready: "Base partagée",
       device: "Enregistré sur cet appareil",
       unconfigured: "Sur cet appareil",
       error: "Base inaccessible",
@@ -642,7 +644,8 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
     },
     storage: {
       loading: "Turashakisha amadosiye…",
-      ready: "Amadosiye abitswe mu bubiko bw’porogaramu.",
+      ready:
+        "Amadosiye abitswe mu bubiko busangiwe, bityo buri mudasobwa winjiye ibona urutonde rumwe.",
       device:
         "Amadosiye abikwa muri iyi mushakisha kuri iyi mudasobwa. Nta bubiko busangiwe bukoreshwa hano, bityo amadosiye aguma kuri iyi mudasobwa.",
       unconfigured:
@@ -652,7 +655,7 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
     },
     storageShort: {
       loading: "Biracyashakishwa",
-      ready: "Ububiko bwiteguye",
+      ready: "Ububiko busangiwe",
       device: "Byabitswe kuri iyi mudasobwa",
       unconfigured: "Kuri iyi mudasobwa",
       error: "Ububiko ntibwabonetse",

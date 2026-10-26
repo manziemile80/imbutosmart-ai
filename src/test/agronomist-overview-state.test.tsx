@@ -69,7 +69,7 @@ describe("overview honest counts", () => {
     );
     expect(figures).toEqual(["0", "0", "0", "0", "—"]);
     expect(screen.queryByText(/The five counts are not known until/)).toBeNull();
-    expect(screen.getByText("Database ready")).toBeInTheDocument();
+    expect(screen.getByText("Shared database")).toBeInTheDocument();
   });
 
   it("treats a device store as read, and says the count is device-only", () => {
