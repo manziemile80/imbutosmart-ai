@@ -49,6 +49,8 @@
 - [x] Give the deployment reason once, in a calmer **Preview mode** strip, instead of repeating a setup paragraph in every module.
 - [x] Move the dashboard's records onto a shared cloud database: a Supabase project provisioned through the Vercel Marketplace, both migrations applied, the reviewer account created and confirmed through the Auth API, and a record saved in one browser verified in a second independent browser profile.
 - [x] Replace the header typeface with Bricolage Grotesque for display and keep Manrope for body text, so the brand and page titles read sharper.
+- [x] Add a header **Menu** dropdown for narrow screens, marking the page you are on, instead of a clipped row of scrolling links.
+- [x] Ship six sample farmer profiles in `20261026020000_agronomist_sample_farmers.sql`, authored by **Sample data**, so the Farmers tab shows real-looking records on every device.
 - [ ] Keep the `supabase-chestnut-pebble` project on a paid plan or claim it into an owned Supabase account if the free plan's limits are reached.
 - [ ] Read answers aloud on the deployed app (blocked by accepting the Groq speech model's terms in the provider console — the app-level check now reports this as the refusal reason — or by pointing the host at a speech backend the deployment can reach).
 - [ ] Update `abahinzismart.vercel.app` (a separate Vercel project, outside this workspace's account).
