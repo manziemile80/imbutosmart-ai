@@ -67,20 +67,20 @@ The forecast carries the WMO weather code of each day ("Moderate rain showers") 
 - **Inputs used in your district** — from the Seasonal Agricultural Survey 2025: the share of segments using DAP, NPK, urea, manure, compost and the rest, the rate each input was applied at in kilograms per hectare, plus how many irrigate and how many report soil erosion. `backend/build_district_inputs.py` writes the per-district profile to `src/lib/district-inputs.json` (aggregates only, no household data).
 - **When to act** — the district's usual season rainfall and temperature, and the coming days' forecast.
 - **Your written plan** — the AI writes the steps from those facts alone. A rate, spacing or price the model adds is dropped before the farmer sees it.
-- **Your summary** — the full overview lives on **Summary get** (`/summary`): the crops for the field, the inputs farmers there use **with the rate they applied them at**, the insurance worth asking about, and what else to do. The bell in the header (just above the dark-mode toggle) is a short announcement that the summary is ready and links there; the field the farmer chose is shared across the app and kept for their next visit. The page can download the whole summary, share it, or **email it**: the **Send me this summary** button opens a short form asking for the farmer's name and email address, the app sends the complete summary from its own server and confirms **Summary sent**, and the name and address stay in that browser so the next summary is pre-filled. With no mail service configured, the same complete message opens in the farmer's own mail app instead.
+- **Your summary** — the full overview lives on **Summary get** (`/summary`): the crops for the field, the inputs farmers there use **with the rate they applied them at**, the insurance worth asking about, and what else to do. The field the farmer chose is shared across the app and kept for their next visit. The page downloads the whole summary as a PDF named for the field, ready to keep or print. The bell in the header is the app's announcement feed and links to the pages that hold the detail.
 - **Assistance** — the plan read aloud, the same plan in simpler words, and a plain explanation of every input name.
 
 The field controls (district, soil, season) live on the Farmer page only. Advice, Summary get and Guidance show a short link back to it instead of repeating the selects, so the farmer never has two copies of the same field to keep in step. The language is chosen once in the header and every page follows it.
 
 ## The Summary get portal
 
-`/summary` is where the whole summary lives. It follows the district, soil and season chosen anywhere in the app, and shows every section: the crops, the district's inputs with their application rate, the insurance to ask about, and what else to do. Three actions sit beside it:
+`/summary` is where the whole summary lives. It follows the district, soil and season chosen anywhere in the app, and shows every section: the crops, the district's inputs with their application rate, the insurance to ask about, and what else to do. One action sits beside it:
 
-- **Download this summary** saves the same text as a file named for the field, for example `imbutosmart-summary-musanze-season-a.txt`, so the farmer can keep it or print it later.
-- **Share all of this** opens the share sheet, or copies the same complete text when the browser has no share sheet.
-- **Send me this summary** emails it from the app, or opens the farmer's own mail app when no mail service is configured.
+- **Download this summary** saves the whole summary as a PDF named for the field, for example `imbutosmart-summary-musanze-season-a.pdf`, so the farmer can keep it or print it later. The file carries every section the page shows.
 
-The header bell only announces that the summary is ready; the figures stay on this page.
+There is no share sheet and no email form on the page: the summary is read here and kept as a PDF.
+
+The header bell carries announcements only — the Guidance help desk, the cost of manure and a reminder to check the season — and each notice links to the page that holds the detail. The figures stay on the page that owns them.
 
 ## The Guidance portal
 
@@ -103,16 +103,16 @@ npm install && npm run dev
 - After deployment, verify `/meta` and a real `/predict` request (not just `/health`), then set the frontend `VITE_API_URL` to the HTTPS Render service address. `/stats` supplies held-out test accuracy, AUC and yield MAE in t/ha; historical comparison charts are in-sample, not test results.
 - **Frontend:** set `VITE_API_URL` to the Render URL and publish to any static/edge host (such as Vercel, Netlify, or Render). The app is live at **https://imbutosmart.vercel.app**, which is the project this workspace deploys to (`npx vercel deploy --prod`). `abahinzismart.vercel.app` serves the same app from a separate Vercel project that this workspace cannot deploy to, so it can lag behind.
 - **AI variables on the host:** the chat and speech backends are configured with server-only environment variables, so set them on the host rather than in the repository: `AI_BASE_URL`, `AI_MODEL` and `AI_API_KEY` for chat, and `AI_SPEECH_BASE_URL`, `AI_STT_MODEL`, `AI_TTS_MODEL`, `AI_TTS_VOICE`, `AI_TTS_FORMAT`, `AI_TTS_MAX_CHARS` and `AI_SPEECH_LANGUAGES` for voice. Keep them as secrets.
-- **Summary email on the host:** set `EMAIL_FROM` plus one sending credential to send the summary from the app. `EMAIL_FROM` must be a sender the provider has verified; without a credential the page falls back to the farmer's own mail app, so emailing still works. Any one of these reaches every farmer's address without owning a domain: `EMAIL_BREVO_API_KEY` (a free Brevo account verifies one sender address), `EMAIL_SMTP_USER` with `EMAIL_SMTP_PASSWORD` (a mailbox app password), or `EMAIL_API_URL` with `EMAIL_API_KEY` for a provider whose sending domain is verified.
+- **Summary email check on the host:** the Summary get page no longer sends email, so no menu depends on a mail service. The server-side summary email is kept only for the delivery check below; to run it, set `EMAIL_FROM` plus one sending credential. `EMAIL_FROM` must be a sender the provider has verified. Any one of these reaches a test address without owning a domain: `EMAIL_BREVO_API_KEY` (a free Brevo account verifies one sender address), `EMAIL_SMTP_USER` with `EMAIL_SMTP_PASSWORD` (a mailbox app password), or `EMAIL_API_URL` with `EMAIL_API_KEY` for a provider whose sending domain is verified.
 - **Verify the deployment:** `node scripts\test-app-ai-e2e.mjs` checks the deployed app's server functions the same way it checks a dev server, so a live deployment can be confirmed without a browser. Point it at the deployment with `APP_URL`. It checks the spoken path in both directions: the answer is read aloud when the backend can speak, and a recorded sample (`scripts\fixtures\speech-sample.wav`) is transcribed and answered either way, so a deployment that cannot speak aloud still proves the farmer's recording works.
 
 ## District land-use map
 
 The dashboard imports district aggregate CSVs in the current browser session; they are not uploaded to the prediction service and are not training data. Required columns: `district,crops_ha,pasture_ha,fallow_ha`. Values must be nonnegative hectares; missing districts remain unavailable. Shares use only the sum of those three categories, not all district land. Crop area must be a non-overlapping physical area, not the sum of crop areas that double-count intercropping. Only import aggregate, non-sensitive figures. The supplied national PDF is not sufficient to populate district shares.
 
-## Email the summary
+## Summary email check
 
-In Summary get, **Send me this summary** opens a short form asking for the farmer's name and email address, then sends the same complete summary the page shows and confirms **Summary sent**. The browser sends only the chosen field (district, soil, season, language) and the name and address; the server rebuilds the summary from the published figures and the crop engine, so the endpoint cannot be used to send arbitrary content.
+Summary get offers the farmer a PDF only: no menu shares or emails the summary any more. The server-side function is kept so a deployment can prove its mail service end to end. It rebuilds the same complete summary from the chosen field and the published figures, so it cannot be used to send arbitrary content.
 
 Delivery is configured on the host with server-only variables. `EMAIL_FROM` is the sender the chosen service has verified, and each service below is tried in turn until one accepts the farmer's address:
 
@@ -121,11 +121,9 @@ Delivery is configured on the host with server-only variables. `EMAIL_FROM` is t
 - `EMAIL_BREVO_API_KEY` — a Brevo key. Brevo verifies one sender address instead of a domain, so it reaches any farmer's address; the free plan allows 300 messages a day.
 - `EMAIL_SMTP_USER` and `EMAIL_SMTP_PASSWORD` — a mailbox that sends the summary itself, with an **app password**, never the account password. Optional: `EMAIL_SMTP_HOST` (default `smtp.gmail.com`) and `EMAIL_SMTP_PORT` (default `465`, TLS).
 
-The HTTP provider is tried first, then Brevo, then the mailbox, so a test sender that only accepts its own address stops being a dead end. A refusal is written to the server log with the provider's own reason, and never shown to the farmer.
+The HTTP provider is tried first, then Brevo, then the mailbox, so a test sender that only accepts its own address stops being a dead end. A refusal is written to the server log with the provider's own reason.
 
-The name and address are remembered only in the browser on that device, so the next summary is addressed without retyping. When no mail service is configured, or the provider cannot be reached, the same complete message opens in the farmer's own mail app instead — the farmer never loses the summary.
-
-`node scripts\test-app-email-e2e.mjs` calls the same server function the browser calls, so it proves the rebuilt summary reaches the provider. Set `EMAIL_TEST_TO` to an address the provider accepts, and `APP_URL` to check a deployment instead of the dev server. A provider that refuses an address (for example Resend before a sending domain is verified) is reported as `failed` rather than an error, because the page then opens the farmer's mail app.
+`node scripts\test-app-email-e2e.mjs` calls that server function, so it proves the rebuilt summary reaches the provider. Set `EMAIL_TEST_TO` to an address the provider accepts, and `APP_URL` to check a deployment instead of the dev server. A provider that refuses an address (for example Resend before a sending domain is verified) is reported as `failed` rather than an error.
 
 ## AI assistance
 

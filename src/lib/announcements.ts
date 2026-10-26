@@ -4,10 +4,10 @@ import type { FarmerLanguage } from "./farmer-language";
 // notice is short, links to the page that holds the detail, and states no
 // figure of its own: the pages quote the survey and the climate record.
 
-export type AnnouncementRoute = "/" | "/advice" | "/summary";
+export type AnnouncementRoute = "/" | "/advice" | "/guidance";
 
 export type Announcement = {
-  id: "summary" | "manure" | "season";
+  id: "system" | "manure" | "season";
   title: string;
   body: string;
   link: { to: AnnouncementRoute; label: string };
@@ -18,7 +18,7 @@ export const announcementCopy: Record<
   {
     label: string;
     intro: string;
-    summary: { title: string; body: string; link: string };
+    system: { title: string; body: string; link: string };
     manure: { title: string; body: string; link: string };
     season: { title: string; body: string; link: string };
   }
@@ -26,10 +26,10 @@ export const announcementCopy: Record<
   en: {
     label: "Announcements",
     intro: "Short notices for your field. The details stay on the pages they belong to.",
-    summary: {
-      title: "Your summary is ready",
-      body: "The crops, inputs, insurance and next steps for {district} are on Summary get, ready to read and download.",
-      link: "Open Summary get",
+    system: {
+      title: "All the help, in one place",
+      body: "The season guide, the voice answer, your own questions and the agronomist are all on the Guidance page, in the language you chose.",
+      link: "Open Guidance",
     },
     manure: {
       title: "Manure cost",
@@ -45,10 +45,10 @@ export const announcementCopy: Record<
   rw: {
     label: "Amatangazo",
     intro: "Amatangazo magufi ku murima wawe. Ibisobanuro birambuye biri ku rupapuro rwabyo.",
-    summary: {
-      title: "Incamake yawe yiteguye",
-      body: "Ibihingwa, ifumbire, ubwishingizi n'ibindi byo gukora kuri {district} biri kuri “Fata incamake”, byiteguye gusomwa no gukururwa.",
-      link: "Fata incamake",
+    system: {
+      title: "Ubufasha bwose ahantu hamwe",
+      body: "Ubuyobozi bw’igihembwe, igisubizo cy’ijwi, ibibazo byawe n’impuguke mu buhinzi biri kuri paji y’Ubuyobozi, mu rurimi wahisemo.",
+      link: "Fungura Ubuyobozi",
     },
     manure: {
       title: "Igiciro cy'ifumbire y'ubworozi",
@@ -64,10 +64,10 @@ export const announcementCopy: Record<
   fr: {
     label: "Annonces",
     intro: "De courtes annonces pour votre champ. Les détails restent sur les pages concernées.",
-    summary: {
-      title: "Votre récapitulatif est prêt",
-      body: "Les cultures, les intrants, l’assurance et les prochaines étapes pour {district} sont sur « Obtenir le récapitulatif », prêts à lire et à télécharger.",
-      link: "Obtenir le récapitulatif",
+    system: {
+      title: "Toute l'aide au même endroit",
+      body: "Le guide de la saison, la réponse vocale, vos propres questions et l'agronome sont tous sur la page Orientation, dans la langue que vous avez choisie.",
+      link: "Ouvrir Orientation",
     },
     manure: {
       title: "Coût du fumier",
@@ -82,17 +82,14 @@ export const announcementCopy: Record<
   },
 };
 
-export function buildAnnouncements(input: {
-  district: string;
-  language: FarmerLanguage;
-}): Announcement[] {
+export function buildAnnouncements(input: { language: FarmerLanguage }): Announcement[] {
   const t = announcementCopy[input.language];
   return [
     {
-      id: "summary",
-      title: t.summary.title,
-      body: t.summary.body.replace("{district}", input.district),
-      link: { to: "/summary", label: t.summary.link },
+      id: "system",
+      title: t.system.title,
+      body: t.system.body,
+      link: { to: "/guidance", label: t.system.link },
     },
     {
       id: "manure",

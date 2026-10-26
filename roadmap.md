@@ -34,13 +34,12 @@
 - [x] Add an Advice portal: crops to plant for the soil and district, the inputs farmers there use, and a plan to follow, with an Assistance panel that reads it aloud or explains the names.
 - [x] Name the weather in the forecast: the WMO weather code of each day, and the hours rain is likely.
 - [x] Add a Guidance portal: one friendly place with every AI assistant, chosen in plain words, with a short guide on how to ask well.
-- [x] Add a summary notification: after the district and soil are chosen, the farmer gets the crops, the inputs and their quantity, the insurance to ask about and what else to do, on the page and as a browser notification.
-- [x] Put the summary in the header, above the theme toggle, and share the farmer's field across every page so the summary follows them.
+- [x] Add a summary page: after the district and soil are chosen, the farmer gets the crops, the inputs and their quantity, the insurance to ask about and what else to do.
+- [x] Put the summary on its own page and share the farmer's field across every page so it follows them.
 - [x] Wait before retrying a chat request that did not reach the backend, so a busy or weak connection still gives the farmer an answer.
 - [x] Deploy the design system and the retry fix, and verify the live app's record, transcribe and answer path.
-- [x] Let the farmer email the whole summary, addressed to the email already used on this device: the address is kept only in the browser, and every section the notification panel shows is carried, with no mail service to configure.
-- [x] Keep the send buttons usable after a summary is sent, so the notification can be sent again and the email can be addressed to someone else.
-- [x] Move the full summary to a Summary get page with a download, and keep the header bell to a short announcement.
+- [x] Keep the summary to one action: a PDF named for the field, carrying every section the page shows.
+- [x] Make the header bell an announcement feed about the app and the season, with no summary figures and no email form.
 - [x] Give each feature one menu: the field controls on the Farmer page, every assistant in Guidance, the summary on Summary get, announcements in the bell, and one language selector in the header.
 - [ ] Read answers aloud on the deployed app (blocked by accepting the Groq speech model's terms in the provider console — the app-level check now reports this as the refusal reason — or by pointing the host at a speech backend the deployment can reach).
 - [ ] Update `abahinzismart.vercel.app` (a separate Vercel project, outside this workspace's account).

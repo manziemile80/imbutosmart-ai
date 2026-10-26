@@ -5,6 +5,7 @@ import { seasonName, soilLabel } from "./farmer-language";
 import { knowledgeCropLabel } from "./crop-knowledge";
 import { inputName, type DistrictInputProfile } from "./advice";
 import { DISTRICTS, SOILS } from "./api";
+import { buildPdfDocument, type PdfBlock } from "./pdf";
 
 // Browser-safe summary of a farmer's plan: what to plant, what farmers around
 // them apply, what to ask an insurer about, and what else to do. Every number
@@ -23,9 +24,6 @@ export const summaryCopy: Record<
   {
     title: string;
     intro: string;
-    announceTitle: string;
-    announceBody: string;
-    openSummary: string;
     pageEyebrow: string;
     pageTitle: string;
     pageLede: string;
@@ -37,191 +35,89 @@ export const summaryCopy: Record<
     inputs: string;
     usedBy: string;
     rate: string;
-    organic: string;
     insurance: string;
     insuranceNote: string;
     advice: string;
-    notify: string;
     noInputs: string;
     noCrops: string;
     field: string;
-    share: string;
-    shared: string;
-    copied: string;
-    shareFailed: string;
-    shareFooter: string;
-    nameLabel: string;
-    namePlaceholder: string;
-    nameInvalid: string;
-    emailTitle: string;
-    emailIntro: string;
-    emailLabel: string;
-    emailPlaceholder: string;
-    emailSend: string;
-    emailSending: string;
-    emailHint: string;
-    emailReady: string;
-    emailSent: string;
-    emailInvalid: string;
-    toastSent: string;
+    documentFooter: string;
   }
 > = {
   en: {
     title: "Your summary",
     intro: "Everything you need to act on, for the field you chose.",
-    announceTitle: "Your summary is ready",
-    announceBody:
-      "The crops, the inputs, the insurance to ask about and what else to do for {district} are in Summary get, ready to read and download.",
-    openSummary: "Open Summary get",
     pageEyebrow: "Summary get",
     pageTitle: "Get your summary and keep it",
     pageLede:
-      "Every part of your plan for the field you chose, in one place. Read it here, download it, share it or send it to your email.",
+      "Every part of your plan for the field you chose, in one place. Read it here, then download it as a PDF to keep or print.",
     download: "Download this summary",
     downloaded: "Summary downloaded. It is ready in your downloads.",
-    downloadFailed: "The download did not start. Try again, or use Share all of this.",
-    downloadNote: "The downloaded file holds every section shown below.",
+    downloadFailed: "The download did not start. Try again.",
+    downloadNote: "The downloaded PDF holds every section shown below.",
     crops: "Crops for your field",
     inputs: "Inputs farmers here use",
     usedBy: "used by {n}% of the farmers here",
     rate: "about {n} kg per hectare, as applied here in 2025",
-    organic: "organic",
     insurance: "Insurance to ask about",
     insuranceNote:
       "Excess-rain and flood cover is the one to ask a licensed insurer about. Whether you need it, and what it pays, depend on the policy — not on this app.",
     advice: "Also worth doing",
-    notify: "Send me this summary",
     noInputs: "No input figures have been supplied for this district yet.",
     noCrops: "No crops have been estimated for this field yet.",
     field: "Your field",
-    share: "Share all of this",
-    shared: "Summary shared",
-    copied: "Summary copied",
-    shareFailed: "Sharing is not available here, so the summary stays on this page.",
-    shareFooter:
-      "Shared from ImbutoSmart AI. Figures come from the NISR survey and the district's climate record.",
-    nameLabel: "Your name",
-    namePlaceholder: "e.g. Aline",
-    nameInvalid: "Enter your name, then try again.",
-    emailTitle: "Send this summary to your email",
-    emailIntro: "The whole summary arrives as an email you can keep.",
-    emailLabel: "Your email address",
-    emailPlaceholder: "you@example.com",
-    emailSend: "Send the summary",
-    emailSending: "Sending the summary…",
-    emailHint: "Your name and address are used only for this summary, and stay in this browser.",
-    emailReady:
-      "We could not send it from the app, so your mail app was opened for {email} with the summary ready to send. If nothing opened, use Share all of this.",
-    emailSent:
-      "Summary sent to {email}. Look in your inbox in a few minutes, and in the spam folder if it is not there.",
-    emailInvalid: "Check the email address, then try again.",
-    toastSent: "Summary sent successfully to {email}",
+    documentFooter:
+      "Prepared by ImbutoSmart AI. Figures come from the NISR survey and the district's climate record.",
   },
   rw: {
     title: "Incamake yawe",
     intro: "Byose ukeneye kugirira kugiramo, ku murima wahisemo.",
-    announceTitle: "Incamake yawe yiteguye",
-    announceBody:
-      "Ibihingwa, ifumbire, ubwishingizi bwo kubaza n’ibindi byo gukora kuri {district} biri muri “Fata incamake”, byiteguye gusomwa no gukururwa.",
-    openSummary: "Fata incamake",
     pageEyebrow: "Fata incamake",
     pageTitle: "Fata incamake yawe uyigumane",
     pageLede:
-      "Buri gice cy’umugambi w’umurima wahisemo, ahantu hamwe. Yisomere hano, uyikurure, uyisangize cyangwa uyoyereze kuri imeyili yawe.",
+      "Buri gice cy’umugambi w’umurima wahisemo, ahantu hamwe. Yisomere hano, hanyuma uyikurure nka PDF ushobora kugumana cyangwa gucapa.",
     download: "Kurura iyi ncamake",
     downloaded: "Incamake yakurujwe. Iri mu bwikorezi bwa dosiye zawe.",
-    downloadFailed:
-      "Gukurura ntibyatangira. Ongera ugerageze, cyangwa ukoreshe “Sangiza ibi byose”.",
-    downloadNote: "Dosiye wakuruye irimo buri gice kiri hasi.",
+    downloadFailed: "Gukurura ntibyatangira. Ongera ugerageze.",
+    downloadNote: "PDF wakuruye irimo buri gice kiri hasi.",
     crops: "Ibihingwa by’umurima wawe",
     inputs: "Ifumbire abahinzi b'aka karere bakoresha",
     usedBy: "abakoresha {n}% by’abahinzi",
     rate: "kuri {n} kg ku/hektari, nk’ibabakoresha hano mu 2025",
-    organic: "y’umubiri",
     insurance: "Ubwishingizi bw'imvura nyinshi n'umwuzure",
     insuranceNote:
       "Ubwishingizi bw’imvura nyinshi n’umwuzure ni bwinyabazwe wabagoyeza. Nimba ukeneye cyangwa icyakubitirwa, byerekana n’amasezerano y’ikigo, si kuri iyi porogaramu.",
     advice: "Ibindi byakora",
-    notify: "Ohereza inyandiko",
     noInputs: "Nta mafishi y’ifumbire abatariwa kuri karere aka.",
     noCrops: "Nta bihingwa byagereranyijwe kuri uyu murima.",
     field: "Umurima wawe",
-    share: "Sangiza ibi byose",
-    shared: "Incamake yasangijwe",
-    copied: "Incamake yakoporowe",
-    shareFailed: "Gusangiza ntibishoboka hano, bityo incamake iguma kuri iyi paji.",
-    shareFooter:
-      "Byasangijwe biva kuri ImbutoSmart AI. Imibare iva mu bushakashatsi bwa NISR n'inyandiko z'ikirere z'akarere.",
-    nameLabel: "Amazina yawe",
-    namePlaceholder: "urugero: Aline",
-    nameInvalid: "Andika amazina yawe, hanyuma ugerageze.",
-    emailTitle: "Ohereza iyi ncamake kuri imeyili yawe",
-    emailIntro: "Incamake yose igera nk'imeyili ushobora kugumana.",
-    emailLabel: "Aderesi ya imeyili yawe",
-    emailPlaceholder: "wowe@urugero.com",
-    emailSend: "Ohereza incamake",
-    emailSending: "Kohereza incamake…",
-    emailHint:
-      "Amazina n'aderesi yawe bikoreshwa gusa muri iyi ncamake, kandi biguma kuri iyi gikoresho.",
-    emailReady:
-      "Ntitwashoboye kuyohereza mu buryo bwa porogaramu, bityo porogaramu yawe ya imeyili yafunguriwe {email} n'incamake yiteguye koherezwa. Niba nta kintu cyafunguwe, koresha “Sangiza ibi byose”.",
-    emailSent:
-      "Incamake yoherejwe kuri {email}. Reba mu imeyili yawe mu minota mike, no mu bubiko bw'ubutumwa butifuzwa niba utayisanganywe.",
-    emailInvalid: "Reba aderesi ya imeyili, hanyuma ugerageze.",
-    toastSent: "Incamake yoherejwe neza kuri {email}",
+    documentFooter:
+      "Byateguwe na ImbutoSmart AI. Imibare iva mu bushakashatsi bwa NISR n'inyandiko z'ikirere z'akarere.",
   },
   fr: {
     title: "Votre récapitulatif",
     intro: "Tout ce qu'il vous faut pour agir, pour le champ que vous avez choisi.",
-    announceTitle: "Votre récapitulatif est prêt",
-    announceBody:
-      "Les cultures, les intrants, l’assurance à demander et les prochaines étapes pour {district} sont dans « Obtenir le récapitulatif », prêts à lire et à télécharger.",
-    openSummary: "Obtenir le récapitulatif",
     pageEyebrow: "Obtenir le récapitulatif",
     pageTitle: "Obtenez votre récapitulatif et gardez-le",
     pageLede:
-      "Toutes les parties de votre plan pour le champ choisi, au même endroit. Lisez-le ici, téléchargez-le, partagez-le ou envoyez-le à votre e-mail.",
+      "Toutes les parties de votre plan pour le champ choisi, au même endroit. Lisez-le ici, puis téléchargez-le en PDF pour le garder ou l'imprimer.",
     download: "Télécharger ce récapitulatif",
     downloaded: "Récapitulatif téléchargé. Il est prêt dans vos téléchargements.",
-    downloadFailed:
-      "Le téléchargement n’a pas démarré. Réessayez ou utilisez « Partager tout ceci ».",
-    downloadNote: "Le fichier téléchargé contient toutes les sections ci-dessous.",
+    downloadFailed: "Le téléchargement n’a pas démarré. Réessayez.",
+    downloadNote: "Le PDF téléchargé contient toutes les sections ci-dessous.",
     crops: "Cultures pour votre champ",
     inputs: "Intrants utilisés ici",
     usedBy: "utilisés par {n}% des agriculteurs du district",
     rate: "environ {n} kg par hectare, comme appliqué ici en 2025",
-    organic: "organique",
     insurance: "Assurance à demander",
     insuranceNote:
       "La couverture excès de pluie et inondation est celle à demander à un assureur agréé. Le besoin et l'indemnisation dépendent du contrat, pas de cette application.",
     advice: "À faire aussi",
-    notify: "M'envoyer ce récapitulatif",
     noInputs: "Aucun chiffre d'intrant n'a encore été fourni pour ce district.",
     noCrops: "Aucune culture n'a encore été estimée pour ce champ.",
     field: "Votre champ",
-    share: "Partager tout ceci",
-    shared: "Récapitulatif partagé",
-    copied: "Récapitulatif copié",
-    shareFailed: "Le partage n'est pas disponible ici ; le récapitulatif reste sur cette page.",
-    shareFooter:
-      "Partagé depuis ImbutoSmart AI. Les chiffres viennent de l'enquête NISR et des relevés climatiques du district.",
-    nameLabel: "Votre nom",
-    namePlaceholder: "ex. Aline",
-    nameInvalid: "Saisissez votre nom, puis réessayez.",
-    emailTitle: "Envoyer ce récapitulatif à votre e-mail",
-    emailIntro: "Le récapitulatif complet arrive dans un e-mail que vous pouvez garder.",
-    emailLabel: "Votre adresse e-mail",
-    emailPlaceholder: "vous@exemple.com",
-    emailSend: "Envoyer le récapitulatif",
-    emailSending: "Envoi du récapitulatif…",
-    emailHint:
-      "Votre nom et votre adresse servent uniquement à ce récapitulatif, et restent sur cet appareil.",
-    emailReady:
-      "L'application n'a pas pu l'envoyer : votre application e-mail est ouverte pour {email} avec le récapitulatif prêt à envoyer. Si rien ne s'est ouvert, utilisez « Partager tout ceci ».",
-    emailSent:
-      "Récapitulatif envoyé à {email}. Regardez votre boîte de réception dans quelques minutes, et les courriers indésirables s'il n'apparaît pas.",
-    emailInvalid: "Vérifiez l'adresse e-mail, puis réessayez.",
-    toastSent: "Récapitulatif envoyé avec succès à {email}",
+    documentFooter:
+      "Préparé par ImbutoSmart AI. Les chiffres viennent de l'enquête NISR et des relevés climatiques du district.",
   },
 };
 
@@ -289,9 +185,9 @@ export function buildPlanSummary(input: {
   };
 }
 
-// The whole summary as plain text, for the share sheet or the clipboard. It
-// carries every part the farmer sees in the notification panel, so a shared
-// plan is never a shortened version of what the app showed.
+// The whole summary as plain text: the body of the email the server sends and
+// of the draft the farmer's own mail app opens. It carries every part the page
+// shows, so a sent summary is never a shortened version of the app.
 export function buildPlanShareText(input: {
   summary: PlanSummary;
   district: string;
@@ -342,15 +238,81 @@ export function buildPlanShareText(input: {
 
   lines.push(t.advice);
   for (const line of input.summary.advice) lines.push(`• ${line}`);
-  lines.push("", t.shareFooter);
+  lines.push("", t.documentFooter);
 
   return lines.join("\n");
 }
 
-// The same complete summary as a file the farmer keeps. It is the share text,
-// so a download is never a shortened version of what the page shows, and the
-// name says which field it belongs to.
-export type PlanDownload = { filename: string; text: string; mime: string };
+// The summary as a PDF the farmer keeps. It carries every section the page
+// shows, laid out for a phone or a printer, and the name says which field it
+// belongs to.
+export type PlanDownload = { filename: string; bytes: Uint8Array<ArrayBuffer>; mime: string };
+
+export function buildPlanDocument(input: {
+  summary: PlanSummary;
+  district: string;
+  soil: string;
+  season: "A" | "B" | "C" | null;
+  language: FarmerLanguage;
+}): PdfBlock[] {
+  const t = summaryCopy[input.language];
+  const blocks: PdfBlock[] = [
+    { kind: "title", text: `${t.title} — ${input.district}` },
+    {
+      kind: "body",
+      text: `${t.field}: ${[
+        input.district,
+        soilLabel(input.soil, input.language),
+        input.season ? seasonName(input.language, input.season) : null,
+      ]
+        .filter(Boolean)
+        .join(" · ")}`,
+    },
+    { kind: "heading", text: t.crops },
+  ];
+
+  if (input.summary.crops.length === 0) {
+    blocks.push({ kind: "body", text: t.noCrops });
+  } else {
+    for (const crop of input.summary.crops) {
+      blocks.push({
+        kind: "bullet",
+        text: `${knowledgeCropLabel(crop.crop, input.language)} — ${crop.score}%`,
+      });
+    }
+  }
+
+  blocks.push({ kind: "heading", text: t.inputs });
+  if (input.summary.inputs.length === 0) {
+    blocks.push({ kind: "body", text: t.noInputs });
+  } else {
+    for (const item of input.summary.inputs) {
+      const share = Math.round(item.share * 100);
+      blocks.push({
+        kind: "bullet",
+        text: `${item.name} — ${t.usedBy.replace("{n}", String(share))}`,
+      });
+      if (item.rateKgPerHa) {
+        blocks.push({
+          kind: "detail",
+          text: t.rate.replace("{n}", String(Math.round(item.rateKgPerHa))),
+        });
+      }
+    }
+  }
+
+  blocks.push(
+    { kind: "heading", text: t.insurance },
+    { kind: "body", text: input.summary.insuranceNote },
+    { kind: "heading", text: t.advice },
+  );
+  for (const line of input.summary.advice) {
+    blocks.push({ kind: "bullet", text: line });
+  }
+  blocks.push({ kind: "note", text: t.documentFooter });
+
+  return blocks;
+}
 
 export function buildPlanDownload(input: {
   summary: PlanSummary;
@@ -361,9 +323,9 @@ export function buildPlanDownload(input: {
 }): PlanDownload {
   const season = input.season ? `-season-${input.season.toLowerCase()}` : "";
   return {
-    filename: `imbutosmart-summary-${fileSlug(input.district)}${season}.txt`,
-    text: buildPlanShareText(input),
-    mime: "text/plain;charset=utf-8",
+    filename: `imbutosmart-summary-${fileSlug(input.district)}${season}.pdf`,
+    bytes: buildPdfDocument(buildPlanDocument(input)),
+    mime: "application/pdf",
   };
 }
 
@@ -380,11 +342,11 @@ function fileSlug(value: string): string {
 }
 
 // Hand the file to the browser's download. Returns false when the browser
-// cannot make one, so the page can say so and keep the share option in reach.
+// cannot make one, so the page can say so.
 export function savePlanDownload(file: PlanDownload): boolean {
   if (typeof window === "undefined" || typeof document === "undefined") return false;
   try {
-    const blob = new Blob([file.text], { type: file.mime });
+    const blob = new Blob([file.bytes], { type: file.mime });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;

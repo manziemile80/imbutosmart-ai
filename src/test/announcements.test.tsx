@@ -66,7 +66,7 @@ describe("announcements in the header", () => {
 
     const panel = screen.getByRole("dialog");
     expect(panel).toHaveTextContent("Announcements");
-    expect(panel).toHaveTextContent("Your summary is ready");
+    expect(panel).toHaveTextContent("All the help, in one place");
     expect(panel).toHaveTextContent("Manure cost");
     expect(panel).toHaveTextContent("Check the season before you plant");
     expect(panel).toHaveTextContent("Musanze");
@@ -96,6 +96,7 @@ describe("announcements in the header", () => {
     const panel = screen.getByRole("dialog");
 
     // No summary, no input table and no email form: the bell is only the feed.
+    expect(panel).not.toHaveTextContent("Your summary is ready");
     expect(panel).not.toHaveTextContent("Crops for your field");
     expect(panel).not.toHaveTextContent("DAP");
     expect(panel).not.toHaveTextContent("Insurance to ask about");
@@ -112,8 +113,8 @@ describe("announcements in the header", () => {
     );
 
     fireEvent.click(screen.getByRole("button", { name: "Announcements" }));
-    const open = screen.getByRole("link", { name: "Open Summary get" });
-    expect(open).toHaveAttribute("href", "/summary");
+    const open = screen.getByRole("link", { name: "Open Guidance" });
+    expect(open).toHaveAttribute("href", "/guidance");
 
     fireEvent.click(open);
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
@@ -130,7 +131,7 @@ describe("announcements in the header", () => {
     fireEvent.click(screen.getByRole("button", { name: "Amatangazo" }));
 
     const panel = screen.getByRole("dialog");
-    expect(panel).toHaveTextContent("Incamake yawe yiteguye");
+    expect(panel).toHaveTextContent("Ubufasha bwose ahantu hamwe");
     expect(panel).toHaveTextContent("Igiciro cy'ifumbire y'ubworozi");
   });
 

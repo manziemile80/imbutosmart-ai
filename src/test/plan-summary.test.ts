@@ -85,7 +85,7 @@ describe("plan summary", () => {
     expect(summary.advice[0]).toMatch(/Hingira|hinga/);
   });
 
-  it("shares every part of the summary, not only the preview", () => {
+  it("carries every part of the summary, not only the preview", () => {
     const summary = buildPlanSummary({
       district: "Musanze",
       soil: "Volcanic",
@@ -113,10 +113,10 @@ describe("plan summary", () => {
     expect(text).toContain(summary.insuranceNote);
     expect(text).toContain("Also worth doing");
     expect(text).toContain(summary.advice[0] ?? "");
-    expect(text).toContain("Shared from ImbutoSmart AI");
+    expect(text).toContain("Prepared by ImbutoSmart AI");
   });
 
-  it("shares the summary in the farmer's language", () => {
+  it("writes the summary in the farmer's language", () => {
     const summary = buildPlanSummary({
       district: "Musanze",
       soil: "Volcanic",
@@ -176,7 +176,11 @@ describe("summary download", () => {
     language: "en",
   });
 
-  it("names the file for the field and holds every section", () => {
+  function asText(file: { bytes: Uint8Array }): string {
+    return new TextDecoder("latin1").decode(file.bytes);
+  }
+
+  it("names the PDF for the field and holds every section", () => {
     const file = buildPlanDownload({
       summary,
       district: "Musanze",
@@ -184,16 +188,22 @@ describe("summary download", () => {
       season: "A",
       language: "en",
     });
+    const pdf = asText(file);
 
-    expect(file.filename).toBe("imbutosmart-summary-musanze-season-a.txt");
-    expect(file.mime).toBe("text/plain;charset=utf-8");
-    expect(file.text).toContain("Your summary — Musanze");
-    expect(file.text).toContain("Your field: Musanze · Volcanic · Season A");
-    expect(file.text).toContain("Crops for your field");
-    expect(file.text).toContain("Maize — 86%");
-    expect(file.text).toContain("Inputs farmers here use");
-    expect(file.text).toContain("Insurance to ask about");
-    expect(file.text).toContain("Also worth doing");
+    expect(file.filename).toBe("imbutosmart-summary-musanze-season-a.pdf");
+    expect(file.mime).toBe("application/pdf");
+    expect(pdf.startsWith("%PDF-1.4")).toBe(true);
+    expect(pdf.endsWith("%%EOF\n")).toBe(true);
+    expect(pdf).toContain("Your summary");
+    expect(pdf).toContain("Musanze");
+    expect(pdf).toContain("Your field: Musanze");
+    expect(pdf).toContain("Crops for your field");
+    expect(pdf).toContain("Maize");
+    expect(pdf).toContain("86%");
+    expect(pdf).toContain("Inputs farmers here use");
+    expect(pdf).toContain("Insurance to ask about");
+    expect(pdf).toContain("Also worth doing");
+    expect(pdf).toContain("Prepared by ImbutoSmart AI.");
   });
 
   it("leaves the season out of the name when the farmer has not chosen one", () => {
@@ -205,7 +215,7 @@ describe("summary download", () => {
       language: "en",
     });
 
-    expect(file.filename).toBe("imbutosmart-summary-musanze.txt");
+    expect(file.filename).toBe("imbutosmart-summary-musanze.pdf");
   });
 
   it("writes a file name a phone and an email attachment both accept", () => {
@@ -217,7 +227,7 @@ describe("summary download", () => {
       language: "en",
     });
 
-    expect(file.filename).toBe("imbutosmart-summary-kigali-city-season-b.txt");
+    expect(file.filename).toBe("imbutosmart-summary-kigali-city-season-b.pdf");
   });
 });
 

@@ -25,9 +25,6 @@ vi.mock("@/lib/season-assistant.functions", () => ({
 vi.mock("@/lib/weather.functions", () => ({
   getDistrictWeather: async () => ({ district: "Musanze", climate: null, forecast: null }),
 }));
-vi.mock("@/lib/plan-summary.functions", () => ({
-  sendPlanSummaryEmail: async () => ({ status: "unavailable" }),
-}));
 
 const { Guidance } = await import("@/components/GuidancePage");
 const { FieldProvider } = await import("@/lib/field-context");

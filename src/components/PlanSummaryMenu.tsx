@@ -13,7 +13,7 @@ export function PlanSummaryMenu() {
   const { field, language } = useField();
   const { district } = field;
   const t = announcementCopy[language];
-  const items = buildAnnouncements({ district, language });
+  const items = buildAnnouncements({ language });
   const [open, setOpen] = useState(false);
   const wrapper = useRef<HTMLDivElement>(null);
   const firstLink = useRef<HTMLAnchorElement>(null);
