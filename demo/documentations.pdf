@@ -1,0 +1,786 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R] /Count 4 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 3720 >>
+stream
+0 g
+BT
+/F2 18 Tf
+1 0 0 1 56.00 767.89 Tm
+(ImbutoSmart AI \227 System Documentation) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 733.39 Tm
+(ImbutoSmart AI is a farmer-facing crop and field planning app for Rwanda. It) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 716.39 Tm
+(turns published district figures, the season and the weather into a short plan a) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 699.39 Tm
+(farmer can act on, in English, Kinyarwanda or French.) Tj
+ET
+0 g
+BT
+/F2 12 Tf
+1 0 0 1 56.00 656.89 Tm
+(What the app does) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 630.39 Tm
+(The farmer chooses a district, a soil type and a season once. From that field the) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 613.39 Tm
+(app estimates the crops that suit it, shows the inputs farmers in that district) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 596.39 Tm
+(actually apply and how much, explains the insurance worth asking about, and) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 579.39 Tm
+(offers a written plan and several ways to ask follow-up questions. The full) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 562.39 Tm
+(overview can be read on one page and downloaded as a PDF.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 537.39 Tm
+(Every figure is traceable: it comes from the NISR Seasonal Agricultural Survey) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 520.39 Tm
+(2025, the district's published climate record or the crop knowledge base. The app) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 503.39 Tm
+(does not invent prices, risk scores, premiums or missing measurements.) Tj
+ET
+0 g
+BT
+/F2 12 Tf
+1 0 0 1 56.00 460.89 Tm
+(The farmer's field) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 434.39 Tm
+(District, soil and season belong to the app, not to a page. The Farmer page is) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 417.39 Tm
+(the only menu that writes them; every other page reads the same field and points) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 400.39 Tm
+(back to the Farmer page with a short link. The field is kept in the browser for) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 383.39 Tm
+(the next visit, and the language is chosen once in the header and shared the) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 366.39 Tm
+(same way.) Tj
+ET
+0 g
+BT
+/F2 12 Tf
+1 0 0 1 56.00 323.89 Tm
+(The five pages) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 297.39 Tm
+(\225 Farmer \(/\) \227 the field controls, the crop estimate for that field and) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 280.39 Tm
+(the insurance guidance. This is the only page that sets the field.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 263.39 Tm
+(\225 Advice \(/advice\) \227 the crops for the field, the inputs farmers there) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 246.39 Tm
+(use with their application rate, the season's rain and the days ahead, the) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 229.39 Tm
+(written plan, and the assistance panel.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 212.39 Tm
+(\225 Guidance \(/guidance\) \227 the help desk. Every assistant is reachable here) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 195.39 Tm
+(in plain words: ask a question, speak a question, explain the season, or ask) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 178.39 Tm
+(the agronomist about the plan. No other menu repeats an assistant.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 161.39 Tm
+(\225 Summary get \(/summary\) \227 the whole summary in one place: crops, inputs) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 144.39 Tm
+(with rates, insurance and what else to do. One action: download it as a PDF.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 127.39 Tm
+(\225 Dashboard \(/dashboard\) \227 the agronomist view, with the district map, the) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 110.39 Tm
+(model report and the session-local land-use import.) Tj
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 3910 >>
+stream
+0 g
+BT
+/F2 12 Tf
+1 0 0 1 56.00 773.89 Tm
+(Data and figures) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 747.39 Tm
+(\225 Crops \227 the suitability engine combines the district, the soil, the season) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 730.39 Tm
+(and the district's climate.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 713.39 Tm
+(\225 Inputs \227 the share of survey segments using each input and the rate it was) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 696.39 Tm
+(applied at, in kilograms per hectare, from the NISR Seasonal Agricultural) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 679.39 Tm
+(Survey 2025. Only district aggregates are used; household records never enter) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 662.39 Tm
+(the app.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 645.39 Tm
+(\225 Season and weather \227 the district's published rainfall and temperature) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 628.39 Tm
+(records, plus the coming days' forecast. A figure the farmer types is never) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 611.39 Tm
+(overwritten by a fetched one, and the app never estimates a district's climate.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 594.39 Tm
+(\225 Insurance \227 a multilingual catalog of official programme information. It) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 577.39 Tm
+(gives context from the district and soil, never a risk score, eligibility) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 560.39 Tm
+(decision, premium or insurer ranking, and it asks the farmer to confirm the) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 543.39 Tm
+(policy.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 526.39 Tm
+(\225 Land use \227 the dashboard imports aggregate district CSVs in the browser) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 509.39 Tm
+(session only. Missing districts stay unavailable rather than being inferred) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 492.39 Tm
+(from national totals.) Tj
+ET
+0 g
+BT
+/F2 12 Tf
+1 0 0 1 56.00 449.89 Tm
+(AI assistance and voice) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 423.39 Tm
+(All AI runs against any OpenAI-compatible backend configured on the server with) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 406.39 Tm
+(AI_API_KEY, AI_BASE_URL and AI_MODEL. The browser never sees a credential) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 389.39 Tm
+(and no provider is hardcoded. Speech uses the same pattern through) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 372.39 Tm
+(AI_SPEECH_BASE_URL, behind the server gateway.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 347.39 Tm
+(The assistants answer from a digest of the figures the dashboard shows. A plan) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 330.39 Tm
+(may only quote figures its digest holds: a rate, spacing or price the model adds) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 313.39 Tm
+(is dropped before the farmer sees it. When AI is unavailable, the deterministic) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 296.39 Tm
+(reference guidance stays visible instead of an error.) Tj
+ET
+0 g
+BT
+/F2 12 Tf
+1 0 0 1 56.00 253.89 Tm
+(The downloadable summary) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 227.39 Tm
+(Summary get writes the whole summary as a PDF named for the field, for example) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 210.39 Tm
+(imbutosmart-summary-musanze-season-a.pdf. The file carries every section the) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 193.39 Tm
+(page shows, so a downloaded plan is never a shortened preview. The PDF is) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 176.39 Tm
+(written in the app with the standard Helvetica faces: no PDF dependency, no) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 159.39 Tm
+(network call, and it opens on a phone or a printer. The page has no share sheet) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 142.39 Tm
+(and no email form.) Tj
+ET
+0 g
+BT
+/F2 12 Tf
+1 0 0 1 56.00 99.89 Tm
+(Announcements) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 73.39 Tm
+(The header bell is an announcement feed, not a second copy of a page. It carries) Tj
+ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 3524 >>
+stream
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 775.39 Tm
+(three short notices: the Guidance help desk, the cost of manure \(with no price of) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 758.39 Tm
+(its own, because the app holds none\) and a reminder to check the season before) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 741.39 Tm
+(planting. Each notice links to the page that holds the detail. The bell never) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 724.39 Tm
+(repeats summary figures and never announces that a summary is ready.) Tj
+ET
+0 g
+BT
+/F2 12 Tf
+1 0 0 1 56.00 681.89 Tm
+(Languages and accessibility) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 655.39 Tm
+(The interface and the guidance are available in English, Kinyarwanda and French.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 638.39 Tm
+(One language selector in the header changes every page, and the choice is kept) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 621.39 Tm
+(for the next visit. Farmer-facing blocks are labelled panels built from the) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 604.39 Tm
+(shared primitives, so each topic is a landmark a screen reader can jump to. The) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 587.39 Tm
+(speech backend reports which languages it can read aloud; a language it cannot) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 570.39 Tm
+(speak is offered as writing only.) Tj
+ET
+0 g
+BT
+/F2 12 Tf
+1 0 0 1 56.00 527.89 Tm
+(Running the app) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 501.39 Tm
+(```bash) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 484.39 Tm
+(npm install) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 467.39 Tm
+(npm run dev) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 450.39 Tm
+(```) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 425.39 Tm
+(Set VITE_API_URL for the prediction backend. The AI and speech features need) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 408.39 Tm
+(the server-only AI_* variables described in the root README.md. Without them) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 391.39 Tm
+(the app runs, the deterministic guidance stays available and the summary is) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 374.39 Tm
+(still downloadable.) Tj
+ET
+0 g
+BT
+/F2 12 Tf
+1 0 0 1 56.00 331.89 Tm
+(Deployment) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 305.39 Tm
+(The frontend is published from this workspace to Vercel. The prediction backend) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 288.39 Tm
+(is a separate service deployed from the root Blueprint on Render, with the) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 271.39 Tm
+(backend Docker context. Verify the model-dependent endpoints, not only the health) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 254.39 Tm
+(endpoint, before treating a deployment as prediction-ready. The free local AI) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 237.39 Tm
+(and speech stack can be checked through the app's own server functions with) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 220.39 Tm
+(scripts/test-app-ai-e2e.mjs.) Tj
+ET
+0 g
+BT
+/F2 12 Tf
+1 0 0 1 56.00 177.89 Tm
+(Demo walkthrough) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 151.39 Tm
+(The video walkthrough is stored in demo/video/ and is described here.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 126.39 Tm
+(\225 Farmer page: choose district, soil and season.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 109.39 Tm
+(\225 Advice: crops, inputs and rates, season rain, written plan.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 92.39 Tm
+(\225 Guidance: a question, the season explanation, the voice panel, the agronomist.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 75.39 Tm
+(\225 Summary get: read the summary, download the PDF, open it.) Tj
+ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 12 0 R >>
+endobj
+12 0 obj
+<< /Length 2179 >>
+stream
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 775.39 Tm
+(\225 Header bell: the three announcements.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 758.39 Tm
+(\225 Dashboard: the agronomist view and the district map.) Tj
+ET
+0 g
+BT
+/F2 12 Tf
+1 0 0 1 56.00 715.89 Tm
+(Limitations and honest gaps) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 689.39 Tm
+(\225 The app holds no input prices. Manure and fertiliser prices change by shop and) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 672.39 Tm
+(season, so the farmer is told to ask their agrodealer.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 655.39 Tm
+(\225 District climate comes from published records; the app does not estimate it.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 638.39 Tm
+(\225 Some districts lack land-use aggregates, so those measurements stay) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 621.39 Tm
+(unavailable.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 604.39 Tm
+(\225 A speech backend may be unable to read answers aloud, for example when its) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 587.39 Tm
+(plan or terms do not cover speech. The answer then stays written and the page) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 570.39 Tm
+(says so calmly.) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 553.39 Tm
+(\225 The survey microdata, the training table and the trained models stay out of) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 536.39 Tm
+(the repository.) Tj
+ET
+0 g
+BT
+/F2 12 Tf
+1 0 0 1 56.00 493.89 Tm
+(NISR guidance alignment) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 467.39 Tm
+(The NISR 2026 project overview is now the repository README.md. It records the) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 450.39 Tm
+(problem, the six core features, the Random Forest classifier and regressor, the) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 433.39 Tm
+(held-out evaluation \(AUC 0.94, yield R\262 0.81\), the data sources \(NISR survey,) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 416.39 Tm
+(NASA POWER / MERRA-2 climate, Open-Meteo forecast\), privacy rules and the NST2) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 399.39 Tm
+(alignment. This documentation follows the same figures; where a section differs,) Tj
+ET
+0 g
+BT
+/F1 10.5 Tf
+1 0 0 1 56.00 382.39 Tm
+(README.md is the reference.) Tj
+ET
+endstream
+endobj
+xref
+0 13
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000140 00000 n 
+0000000237 00000 n 
+0000000339 00000 n 
+0000000481 00000 n 
+0000004252 00000 n 
+0000004394 00000 n 
+0000008355 00000 n 
+0000008498 00000 n 
+0000012074 00000 n 
+0000012218 00000 n 
+trailer
+<< /Size 13 /Root 1 0 R >>
+startxref
+14449
+%%EOF

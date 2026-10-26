@@ -1,0 +1,3 @@
+# Generated binary documents must keep their exact bytes (PDF cross-reference offsets depend on them).
+*.pdf binary
+

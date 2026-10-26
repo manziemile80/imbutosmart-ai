@@ -1,220 +1,234 @@
-# ImbutoSmart AI 🌱
+# ImbutoSmart AI
 
-NISR 2026 Big Data Hackathon
+**NISR 2026 Big Data Hackathon**
 
-ImbutoSmart AI turns NISR agricultural survey data into planting advice. A Random Forest classifier estimates
-the probability that a crop will succeed under a farmer's district, soil and forecast weather, and a
-Random Forest regressor estimates expected yield (t/ha). Crops are ranked by expected value.
+**Updated Project README / Technical Overview**
 
-**NST2 alignment:** supports the National Strategy for Transformation pillar on agricultural productivity —
-raising yields per hectare, climate-resilient crop choice, and data-driven extension services.
+Repository: [github.com/manziemile80/imbutosmart-ai](https://github.com/manziemile80/imbutosmart-ai)
 
-## Structure
+## 1. Project Overview
+
+ImbutoSmart AI turns NISR agricultural survey data into practical planting advice. A Random Forest classifier estimates the probability that a crop will succeed under a farmer's district, soil and forecast-weather conditions, while a Random Forest regressor estimates expected yield in tonnes per hectare (t/ha). Crops are ranked by expected value. The platform extends these predictions with district climate, weather, agronomic suitability, soil/input guidance, seasonal advice, insurance awareness, and AI assistance.
+
+**NST2 alignment:** supports agricultural productivity, raising yields per hectare, climate-resilient crop choice, and data-driven extension services.
+
+## 2. Problem Statement
+
+Rwandan farmers need clear, localized information to decide what to plant and how to manage production under different soil, seasonal and weather conditions. Agricultural and weather information can be difficult to combine into one practical decision. Farmers therefore need a system that translates available agricultural statistics and weather information into understandable, location-specific advice.
+
+ImbutoSmart AI addresses this gap by combining NISR agricultural survey information with district climate and forecast weather, machine-learning models, and a separate agronomic suitability engine. The result is a farmer-facing recommendation rather than a raw dataset or model output.
+
+## 3. Main Purpose
+
+The purpose of ImbutoSmart AI is to transform agricultural and meteorological data into simple, localized and actionable advice that helps farmers choose suitable crops, understand rainfall and seasonal conditions, estimate potential yield, improve soil and input management, and make informed agricultural-risk and insurance decisions.
+
+## 4. Core Farmer Questions
+
+- Which crops are suitable for my district and soil?
+- What is the estimated probability that each crop will succeed?
+- What yield can I expect in tonnes per hectare?
+- What are the usual rainfall and temperature conditions in my district?
+- What weather is expected in the coming days?
+- What agricultural inputs are commonly used in my district and at what observed rates?
+- When should I act based on seasonal and forecast conditions?
+- What insurance is worth asking about when production risk is high?
+- Can I receive advice in simple language, including Kinyarwanda and French text support?
+
+## 5. Data and Evidence
+
+### 5.1 NISR Seasonal Agricultural Survey 2025
+
+The training data come from NISR Seasonal Agricultural Survey 2025 microdata covering Seasons A, B and C. The prepared training table contains **51,225 crop observations across 30 districts, 12 crops and 3 seasons**. Crop names are mapped to the crop categories offered by the application. The survey records district, crop, area, harvest information and sampling weight.
+
+The microdata and trained models remain outside the repository and are built locally.
+
+### 5.2 District Climate and Weather
+
+Because the survey does not record plot-level soil type or plot-level weather, ML training rows use district climate for the relevant season. The project builds district climate from the published **2001–2020 record using NASA POWER and MERRA-2** at district-centre locations, together with weather from the 2025 survey year.
+
+The farmer interface separates usual district climate from the coming-days forecast. Climate comes from NASA POWER and the forecast comes from Open-Meteo; both are fetched server-side and their sources are shown.
+
+## 6. Machine-Learning Models
+
+### 6.1 Crop Success Classifier
+
+A Random Forest classifier estimates the probability that a crop will succeed under district, season and weather conditions represented by the model.
+
+### 6.2 Expected Yield Regressor
+
+A Random Forest regressor estimates expected yield in tonnes per hectare. Crops can then be ranked using estimated success probability and expected yield.
+
+### 6.3 Model Evaluation
+
+On a held-out fifth of the survey data, the current project reports **classifier AUC 0.94** and **yield-regressor R² 0.81**, with per-crop yield errors including **0.84 t/ha for maize** and **0.29 t/ha for beans**. The project also notes that 2025 was a below-average rainfall year, so learned yields reflect a relatively dry survey year.
+
+## 7. Soil, Manure and Agronomic Advice
+
+Farmer-selected soil is not treated as a measured variable in the ML training model. Instead, soil is used by a separate knowledge-based agronomic suitability engine. This distinction prevents the system from implying that the NISR survey directly measured plot-level soil.
+
+The Advice portal provides district-level information about **DAP, NPK, urea, manure, compost** and other inputs, including observed application rates in kg/ha, together with irrigation and soil-erosion indicators. These are aggregate district profiles rather than household-level data.
+
+## 8. Seasonal Rainfall and When to Act
+
+The system combines the district's usual seasonal rainfall and temperature with the coming-days forecast to help the farmer decide when to act.
+
+Rainfall information should be presented as statistical or forecast guidance, not as a guarantee that a particular amount of rain will occur.
+
+## 9. Agricultural Insurance Advice
+
+Insurance-related guidance is included in the farmer summary. The system helps the farmer identify insurance worth asking about in relation to agricultural risk. It is decision support and awareness, not an insurance contract or guarantee of coverage.
+
+## 10. AI Assistance
+
+The farmer Q&A assistant and season explanations use an OpenAI-compatible chat-completions endpoint. The farmer assistant answers agronomic questions in the farmer's language, while the agronomist assistant uses figures displayed by the dashboard, the model report and district climate. The model is instructed to use the supplied evidence and say when a figure is missing.
+
+The system can use a hosted provider such as **Groq** or a local **Ollama** model. The documented local configuration uses `qwen2.5:3b` for chat and a separate local speech backend.
+
+## 11. Voice and Language Support
+
+The Guidance portal provides **Ask a question**, **Speak your question**, **This season** and **My plan**. The page is available in **English, Kinyarwanda and French**.
+
+The current local speech configuration declares English as the supported spoken language. Kinyarwanda and French answers remain available as written responses unless a speech backend that reliably supports those languages is configured.
+
+## 12. Application Structure
+
+The project uses a FastAPI + scikit-learn backend and a React web application. The backend contains data preparation, the ML pipeline and API code; the frontend contains Farmer Advisory and Agronomist Dashboard interfaces.
 
 ```
-backend/   FastAPI + scikit-learn (data_processor.py, ml_pipeline.py, main.py, Dockerfile)
-src/       Web app: Farmer Advisory (/) and Agronomist Dashboard (/dashboard)
+backend/            FastAPI + scikit-learn
+src/                React web application
+src/components/ui/  reusable Panel, Callout, StatusPill and Stat primitives
+src/styles.css      shared design tokens and light/dark theme values
 ```
 
-## Design system
+## 13. Technologies Used
 
-The interface is built from one system, in three layers, so every page looks like the same product.
+ImbutoSmart AI uses a full-stack architecture combining a React-based farmer interface, a FastAPI machine-learning backend, Python data-processing tools, weather services, and optional AI/voice services.
 
-1. **Tokens** (`src/styles.css`): brand palette, surfaces, status colours (success, warning, info, danger), borders and elevation, each with a light and a dark value in `oklch`.
-2. **Components**: `.panel`, `.callout`, `.status-pill`, `.stat`, `.field`, `.option-card`, `.chip`, `.result-card`. Status colours are tokens, so a message reads the same in every language and in dark mode.
-3. **Layout**: `.page`, `.page-header`, `.page-title`, `.page-lede`, `.page-section`.
+### Frontend Technologies
 
-The React primitives in `src/components/ui` (`Panel`, `Callout`, `StatusPill`, `Stat`) wrap those classes. Every farmer-facing block is a panel: a `<section>` with `aria-labelledby`, so each topic is a landmark a screen reader can jump to. Add new blocks with the primitives rather than ad-hoc colours or spacing.
+- **React** — builds the Farmer Advisory and Agronomist Dashboard interfaces.
+- **TypeScript / TSX** — application logic and reusable frontend components.
+- **CSS** — responsive interface, design tokens, light/dark themes, status colours and layout.
+- **React UI primitives** — Panel, Callout, StatusPill and Stat provide consistent farmer-facing interface blocks.
 
-## Run the backend
+### Backend and API Technologies
+
+- **Python** — data preparation, machine learning and backend services.
+- **FastAPI** — REST API and server-side application backend.
+- **Uvicorn** — development/application server for the FastAPI backend.
+- **scikit-learn** — Random Forest classification and regression models.
+- **Joblib model artifacts** — stores trained machine-learning models for deployment.
+
+### Data and Machine Learning
+
+- **NISR Seasonal Agricultural Survey 2025** — primary agricultural training data.
+- **NASA POWER and MERRA-2** — district historical climate information used in the documented training pipeline.
+- **Open-Meteo** — coming-days weather forecast used by the farmer interface.
+- **Pandas / Python data-processing workflow** — used to prepare and transform agricultural data.
+
+### AI and Voice Technologies
+
+- **OpenAI-compatible Chat Completions API** — farmer Q&A and season explanations.
+- **Groq** — supported hosted option for AI chat and speech services.
+- **Ollama** — supported local AI option.
+- **Qwen 2.5 3B** — documented local chat model option.
+- **Whisper / faster-whisper** — speech-to-text option in the local voice stack.
+- **Kokoro / pyttsx3 and other configured speech backends** — text-to-speech options depending on deployment.
+- **FFmpeg** — audio conversion required by the documented local voice setup.
+
+### Deployment and Configuration
+
+- **Render** — documented backend deployment option.
+- **Vercel / Netlify / Render** — documented frontend hosting options.
+- **Docker** — backend containerization/deployment support.
+- **.env environment variables** — server-side configuration for API URLs, AI credentials, speech and email services.
+
+## 14. Recommendation Flow
+
+1. Farmer selects district, soil type and season.
+2. The application obtains district climate and forecast weather.
+3. ML models evaluate crop success probability and expected yield.
+4. The agronomic engine evaluates soil and crop suitability.
+5. District-level agricultural input information is added.
+6. Seasonal and short-term weather information helps determine when to act.
+7. Risk and insurance guidance are included where relevant.
+8. The system produces a simple farmer-facing plan and AI explanations.
+
+## 15. Example Recommendation
+
+| Information  | Example                                                        |
+| ------------ | -------------------------------------------------------------- |
+| District     | Gatsibo                                                        |
+| Soil         | Farmer-selected soil type                                      |
+| Season       | Season A                                                       |
+| Weather      | District climate + coming-days forecast                        |
+| Crop ranking | Crops ranked by estimated success and expected yield           |
+| Yield        | Displayed in t/ha                                              |
+| Input advice | District-level observed input use + agronomic guidance         |
+| Risk advice  | Seasonal/weather risk + insurance guidance                     |
+
+## 16. Privacy and Data Protection
+
+- Survey microdata and trained model artifacts are not committed to the repository.
+- District input profiles contain aggregate information, not household records.
+- District land-use imports are aggregate, non-sensitive figures.
+- AI and email credentials are server-side environment variables and must not be committed.
+
+## 17. Running the Project
+
+### Backend
 
 ```bash
 cd backend
 pip install -r requirements.txt
-python prepare_training_data.py --microdata "C:/path/to/Microdata"   # survey -> nisr_real_data.csv
-python ml_pipeline.py          # trains + prints metrics, writes models/
+python prepare_training_data.py --microdata "C:/path/to/Microdata"
+python ml_pipeline.py
 uvicorn main:app --reload --port 8000
 ```
 
-Preview a production build of the web app with `node .output/server/index.mjs` after `npm run build` (the Nitro output in `.output`, not `vite preview`).
-
-## The training data
-
-The models are fitted on the **NISR Seasonal Agricultural Survey 2025** microdata (Seasons A, B and C), which records every crop a household planted: the district, the crop, the area, what was harvested and the sampling weight.
-
-- `prepare_training_data.py` turns the extracted survey files into `backend/nisr_real_data.csv`: 51,225 crop observations over 30 districts, 12 crops and 3 seasons. Crops are mapped onto the crops the app offers (bush, climbing and French beans become beans; paddy rice becomes rice; cooking and dessert bananas become banana).
-- The survey does not record soil type or the weather of the plot, so the training rows carry the **district's own climate** for that season: `build_district_climate.py` writes `backend/district_climate.json` from the published 2001–2020 record (NASA POWER, MERRA-2) at the centre of each district, plus the weather of the 2025 survey year itself.
-- A crop that was planted and produced nothing is an unsuccessful planting. A crop that is normally harvested in a later round (cassava in Season A) contributes only the observations that were harvested, so a long cycle is not counted as a failure.
-- The microdata and the trained models stay out of the repository: both are git-ignored and built locally.
-
-The models work from the **district, the season and the weather**. The soil a farmer reports is used by the app's agronomic suitability engine, which is a separate, knowledge-based path. Measured on a held-out fifth of the survey: classifier AUC 0.94, yield regressor R² 0.81, and a per-crop yield error (maize 0.84 t/ha, beans 0.29 t/ha). 2025 was a below-average rainfall year, so the yields the model learned are from a dry year.
-
-## District weather
-
-The farmer page fills the rain and temperature from the selected district, so the figures follow the location instead of a fixed guess:
-
-- the **climate** (what the district's rainfall and temperature usually are) from NASA POWER, and
-- the **forecast** (what the coming days are expected to bring) from Open-Meteo, both fetched on the server and shown with their source.
-
-The forecast carries the WMO weather code of each day ("Moderate rain showers") and the hours rain is likely, so a farmer can plan the day rather than only the week. A figure the farmer typed is never overwritten, and the endpoints can be changed with `WEATHER_CLIMATE_URL` and `WEATHER_FORECAST_URL`. When a source cannot be reached the page says so calmly and keeps the figures the farmer entered.
-
-## The Advice portal
-
-`/advice` gives a plan a farmer can follow, for the district, soil and season set once on the Farmer page:
-
-- **Crops to plant here** — the agronomic suitability engine, with the district's own climate as the rainfall and temperature.
-
-- **Inputs used in your district** — from the Seasonal Agricultural Survey 2025: the share of segments using DAP, NPK, urea, manure, compost and the rest, the rate each input was applied at in kilograms per hectare, plus how many irrigate and how many report soil erosion. `backend/build_district_inputs.py` writes the per-district profile to `src/lib/district-inputs.json` (aggregates only, no household data).
-- **When to act** — the district's usual season rainfall and temperature, and the coming days' forecast.
-- **Your written plan** — the AI writes the steps from those facts alone. A rate, spacing or price the model adds is dropped before the farmer sees it.
-- **Your summary** — the full overview lives on **Summary get** (`/summary`): the crops for the field, the inputs farmers there use **with the rate they applied them at**, the insurance worth asking about, and what else to do. The field the farmer chose is shared across the app and kept for their next visit. The page downloads the whole summary as a PDF named for the field, ready to keep or print. The bell in the header is the app's announcement feed and links to the pages that hold the detail.
-- **Assistance** — the plan read aloud, the same plan in simpler words, and a plain explanation of every input name.
-
-The field controls (district, soil, season) live on the Farmer page only. Advice, Summary get and Guidance show a short link back to it instead of repeating the selects, so the farmer never has two copies of the same field to keep in step. The language is chosen once in the header and every page follows it.
-
-## The Summary get portal
-
-`/summary` is where the whole summary lives. It follows the district, soil and season chosen anywhere in the app, and shows every section: the crops, the district's inputs with their application rate, the insurance to ask about, and what else to do. One action sits beside it:
-
-- **Download this summary** saves the whole summary as a PDF named for the field, for example `imbutosmart-summary-musanze-season-a.pdf`, so the farmer can keep it or print it later. The file carries every section the page shows.
-
-There is no share sheet and no email form on the page: the summary is read here and kept as a PDF.
-
-The header bell carries announcements only — the Guidance help desk, the cost of manure and a reminder to check the season — and each notice links to the page that holds the detail. The figures stay on the page that owns them.
-
-## The Guidance portal
-
-`/guidance` is the help desk: every assistant in one place, chosen in plain words — **Ask a question**, **Speak your question**, **This season** or **My plan**. This is the only menu that hosts the assistants; the Farmer page no longer repeats them. The district, soil and season set on the Farmer page are the ones the assistants answer for, and a short "how to get a good answer" guide sits beside them. The whole page is available in English, Kinyarwanda and French.
-
-## Run the frontend
+In this workspace the survey extracts are copied to `dataset/Microdata`, which is git-ignored:
 
 ```bash
-cp .env.example .env           # set VITE_API_URL and any API keys
-npm install && npm run dev
+python build_district_inputs.py --microdata ../dataset/Microdata
+python prepare_training_data.py --microdata ../dataset/Microdata
 ```
 
-`.env` holds real API keys, so it is not committed. `.env.example` is the template: copy it and fill in the values you need. Every `AI_*` and `ELEVENLABS_*` variable is server-only and never reaches the browser.
+### Frontend
 
-## Deploy
-
-- **Backend → Render.com:** Connect this repository in Render and create a Blueprint using the root `render.yaml`. Alternatively create a Docker Web Service with root directory `backend`. This workspace has no Render deployment connection; the Blueprint must be launched from your Render account. Render may charge for your chosen service plan.
-- Before deployment, build the training table and train privately: `python prepare_training_data.py --microdata <survey folder>` and `python ml_pipeline.py`, then supply the four `backend/models/*.joblib` artifacts to the service. The survey microdata and the training table are confidential and are git-ignored: never commit them. Without trained artifacts `/health` can respond, but `/predict`, `/meta`, and `/stats` return 503: no trained model.
-- `/stats` also needs the original training table even when trained artifacts are supplied; artifacts alone support `/predict` and `/meta`, not historical yield comparisons.
-- After deployment, verify `/meta` and a real `/predict` request (not just `/health`), then set the frontend `VITE_API_URL` to the HTTPS Render service address. `/stats` supplies held-out test accuracy, AUC and yield MAE in t/ha; historical comparison charts are in-sample, not test results.
-- **Frontend:** set `VITE_API_URL` to the Render URL and publish to any static/edge host (such as Vercel, Netlify, or Render). The app is live at **https://imbutosmart.vercel.app**, which is the project this workspace deploys to (`npx vercel deploy --prod`). `abahinzismart.vercel.app` serves the same app from a separate Vercel project that this workspace cannot deploy to, so it can lag behind.
-- **AI variables on the host:** the chat and speech backends are configured with server-only environment variables, so set them on the host rather than in the repository: `AI_BASE_URL`, `AI_MODEL` and `AI_API_KEY` for chat, and `AI_SPEECH_BASE_URL`, `AI_STT_MODEL`, `AI_TTS_MODEL`, `AI_TTS_VOICE`, `AI_TTS_FORMAT`, `AI_TTS_MAX_CHARS` and `AI_SPEECH_LANGUAGES` for voice. Keep them as secrets.
-- **Summary email check on the host:** the Summary get page no longer sends email, so no menu depends on a mail service. The server-side summary email is kept only for the delivery check below; to run it, set `EMAIL_FROM` plus one sending credential. `EMAIL_FROM` must be a sender the provider has verified. Any one of these reaches a test address without owning a domain: `EMAIL_BREVO_API_KEY` (a free Brevo account verifies one sender address), `EMAIL_SMTP_USER` with `EMAIL_SMTP_PASSWORD` (a mailbox app password), or `EMAIL_API_URL` with `EMAIL_API_KEY` for a provider whose sending domain is verified.
-- **Verify the deployment:** `node scripts\test-app-ai-e2e.mjs` checks the deployed app's server functions the same way it checks a dev server, so a live deployment can be confirmed without a browser. Point it at the deployment with `APP_URL`. It checks the spoken path in both directions: the answer is read aloud when the backend can speak, and a recorded sample (`scripts\fixtures\speech-sample.wav`) is transcribed and answered either way, so a deployment that cannot speak aloud still proves the farmer's recording works.
-
-## District land-use map
-
-The dashboard imports district aggregate CSVs in the current browser session; they are not uploaded to the prediction service and are not training data. Required columns: `district,crops_ha,pasture_ha,fallow_ha`. Values must be nonnegative hectares; missing districts remain unavailable. Shares use only the sum of those three categories, not all district land. Crop area must be a non-overlapping physical area, not the sum of crop areas that double-count intercropping. Only import aggregate, non-sensitive figures. The supplied national PDF is not sufficient to populate district shares.
-
-## Summary email check
-
-Summary get offers the farmer a PDF only: no menu shares or emails the summary any more. The server-side function is kept so a deployment can prove its mail service end to end. It rebuilds the same complete summary from the chosen field and the published figures, so it cannot be used to send arbitrary content.
-
-Delivery is configured on the host with server-only variables. `EMAIL_FROM` is the sender the chosen service has verified, and each service below is tried in turn until one accepts the farmer's address:
-
-- `EMAIL_API_URL` — the provider endpoint (default `https://api.resend.com/emails`). Any endpoint accepting the Resend-style JSON body `{ from, to, subject, text }` works.
-- `EMAIL_API_KEY` — the credential, sent as a bearer token.
-- `EMAIL_BREVO_API_KEY` — a Brevo key. Brevo verifies one sender address instead of a domain, so it reaches any farmer's address; the free plan allows 300 messages a day.
-- `EMAIL_SMTP_USER` and `EMAIL_SMTP_PASSWORD` — a mailbox that sends the summary itself, with an **app password**, never the account password. Optional: `EMAIL_SMTP_HOST` (default `smtp.gmail.com`) and `EMAIL_SMTP_PORT` (default `465`, TLS).
-
-The HTTP provider is tried first, then Brevo, then the mailbox, so a test sender that only accepts its own address stops being a dead end. A refusal is written to the server log with the provider's own reason.
-
-`node scripts\test-app-email-e2e.mjs` calls that server function, so it proves the rebuilt summary reaches the provider. Set `EMAIL_TEST_TO` to an address the provider accepts, and `APP_URL` to check a deployment instead of the dev server. A provider that refuses an address (for example Resend before a sending domain is verified) is reported as `failed` rather than an error.
-
-## AI assistance
-
-The farmer Q&A assistant and the season explanations call any **OpenAI-compatible** chat completions endpoint. Configure it with server-side environment variables:
-
-- `AI_API_KEY` — API key for your provider (falls back to `OPENAI_API_KEY`).
-- `AI_BASE_URL` — endpoint base URL, e.g. `https://api.openai.com/v1` (default). Point it at Azure OpenAI, Groq, OpenRouter, Ollama, or a self-hosted gateway.
-- `AI_MODEL` — model name to request (default `gpt-4o-mini`).
-
-These variables are server-only: the browser never sees the key, and every request is validated before it reaches the model. When no key is set, the assistant reports that it is not configured and the deterministic crop estimates and season guide stay available.
-
-Both portals have AI assistance. The farmer assistant answers agronomic questions in the farmer's language. The agronomist assistant on the dashboard answers from the figures the page is showing: the server builds a digest of the published survey figures, the model report and the district's climate, and the model is told to use nothing else and to say when a figure is missing.
-
-The chat backend is chosen by `AI_PROVIDER`:
-
-- `openai` (default) — any OpenAI-compatible `/chat/completions` endpoint. `AI_BASE_URL` may be set on its own when the endpoint needs no auth.
-- `vercel-gateway` — the Vercel AI Gateway, which addresses models as `provider/model` and authenticates a Vercel deployment with its own OIDC token, so no extra key is needed.
-
-### Chat with Groq
-
-Groq serves an OpenAI-compatible API with a free tier, so it is a good fit for the farmer assistants. Create a key at `console.groq.com/keys`, then set:
-
-```
-AI_BASE_URL=https://api.groq.com/openai/v1
-AI_MODEL=openai/gpt-oss-20b
-AI_API_KEY=gsk_...
+```bash
+cp .env.example .env
+npm install
+npm run dev
 ```
 
-`openai/gpt-oss-20b` is fast, cheap and generous on the free plan (250K tokens per minute, 1K requests per minute). The Llama models moved to Enterprise plans, so they are no longer on the free tier.
+For a production build, preview with `node .output/server/index.mjs` after `npm run build` rather than `vite preview` (the Nitro output lives in `.output`).
 
-### Running entirely free on one machine
+## 18. Deployment
 
-Chat and voice can both run locally with no paid provider. Chat uses a local Ollama model; voice uses a separate self-hosted speech server.
+The documented deployment architecture uses **Render** for the FastAPI backend and a static/edge host such as **Vercel, Netlify or Render** for the frontend. Training data and models must be built privately, and the trained model artifacts supplied to the backend. After deployment, verify `/meta` and a real `/predict` request, not only `/health`.
 
-```sh
-# Chat (local LLM)
-winget install --id Ollama.Ollama -e
-ollama pull qwen2.5:3b            # ~2 GB, Q4_K_M, fits ~8 GB RAM on CPU
+## 19. Future Development
 
-# Voice (local speech-to-text + text-to-speech)
-python -m pip install --user "vocal-ai[kokoro]" "av<19"
-winget install --id=Gyan.FFmpeg -e   # required for audio conversion
-powershell -ExecutionPolicy Bypass -File scripts\start-local-voice.ps1
-```
+- Offline/hybrid farmer recommendations for limited-connectivity areas.
+- Reliable Kinyarwanda speech-to-text and text-to-speech.
+- More detailed soil and agronomic datasets.
+- Additional real-time meteorological sources.
+- Crop disease and pest advisory.
+- Market-price and market-access information.
+- Deeper agricultural-insurance integration.
+- Mobile and SMS delivery for farmers.
 
-Then set in `.env`:
+## 20. NST2 Alignment
 
-```
-AI_API_KEY=ollama
-AI_BASE_URL=http://127.0.0.1:11434/v1
-AI_MODEL=qwen2.5:3b
+ImbutoSmart AI supports NST2 priorities related to agricultural productivity through data-driven crop selection, higher potential yield per hectare, climate-resilient decision-making and agricultural extension services.
 
-AI_SPEECH_BASE_URL=http://127.0.0.1:8000/v1
-AI_STT_MODEL=Systran/faster-whisper-tiny
-AI_TTS_MODEL=pyttsx3
-AI_TTS_FORMAT=wav
-AI_SPEECH_LANGUAGES=en
-```
+## 21. AI Disclosure
 
-`AI_SPEECH_BASE_URL` points voice at its own OpenAI-compatible backend, so speech keeps working even when chat uses a different provider; it falls back to `AI_BASE_URL` when unset. A dedicated speech URL with no key sends a harmless placeholder, so a local server that ignores auth needs no credential. Verify the whole loop with `powershell -ExecutionPolicy Bypass -File scripts\test-voice-e2e.ps1`.
+AI assistants were used to architect the ML pipeline, generate UI components and debug code. The core data strategy, NISR data preprocessing logic and system design were implemented by the team.
 
-The local stack speaks with the voices installed on the machine, which is English only unless more are added, so `AI_SPEECH_LANGUAGES=en` is the honest declaration: Kinyarwanda and French answers stay written instead of being read aloud badly.
+## 22. Project Vision
 
-`node scripts\test-app-ai-e2e.mjs` is the app-level check: it calls the server functions the browser calls (farmer Q&A, season advice, speech round trip), so it also covers request validation, prompting and error handling. It needs the dev server running (`npm run dev`). The spoken sample it falls back to when the backend cannot speak is regenerated with `node scripts\make-speech-sample.mjs` while the local speech stack is running.
+> "From agricultural data to better decisions, from better decisions to better harvests."
 
-`av<19` is required: faster-whisper 1.2.1 still passes `metadata_errors` to `av.open`, which PyAV 19 removed. Pin until faster-whisper ships the upstream fix.
-
-### Voice with Groq
-
-Groq serves an OpenAI-compatible speech API, so the same key covers chat, transcription and spoken answers. Point the speech variables at it:
-
-```
-AI_SPEECH_BASE_URL=https://api.groq.com/openai/v1
-AI_STT_MODEL=whisper-large-v3-turbo
-AI_TTS_MODEL=canopylabs/orpheus-v1-english
-AI_TTS_VOICE=hannah
-AI_TTS_FORMAT=wav
-AI_TTS_MAX_CHARS=200
-AI_SPEECH_LANGUAGES=en
-```
-
-- **Transcription** uses `whisper-large-v3-turbo`, which is multilingual and handles the browser's webm/opus recording.
-- **Spoken answers** use Orpheus, which only accepts `wav` and at most 200 characters per request, so the answer is split into clips that are played in order. `AI_TTS_MAX_CHARS` sets that limit and `AI_TTS_FORMAT` the audio format.
-- Orpheus voices are `autumn`, `diana`, `hannah`, `austin`, `daniel` and `troy`.
-- Groq's speech models speak **English only**, so `AI_SPEECH_LANGUAGES=en` is declared. The server tells the page which languages the backend can really speak, so Kinyarwanda and French answers are offered as writing rather than spoken badly.
-- **Orpheus is gated.** It answers `model_terms_required` until the org admin accepts its terms at `https://console.groq.com/playground?model=canopylabs%2Forpheus-v1-english`, and the older `playai-tts` model has been decommissioned. Until the terms are accepted the page keeps every answer written and stops offering the spoken button; `scripts/test-app-ai-e2e.mjs` prints the refusal reason (`terms`, `plan`, `auth`, `model` or `request`) so the host can be fixed. The free local speech server above needs no account at all.
-
-The speech request carries only the standard OpenAI speech fields (`model`, `voice`, `input`, `response_format`): a strict endpoint rejects anything else with `unknown field`, and the language is chosen by the voice the model is asked for.
-
-Restart the dev server after changing `.env`: the server-side variables are read when the server starts, and a reload does not always pick them up.
-
-## AI Disclosure
-
-AI assistants (Codex) were used to architect the ML pipeline, generate UI components, and debug code. The core data strategy, NISR data preprocessing logic, and system design were implemented by the team.
+ImbutoSmart AI aims to bridge the gap between Rwanda's agricultural and meteorological data and the everyday decisions made by farmers, turning complex data into practical, localized and understandable agricultural guidance.
