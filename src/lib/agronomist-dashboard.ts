@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import { DISTRICTS, SOILS } from "./api";
 import type { FarmerLanguage } from "./farmer-language";
+import { isAgronomistEmail } from "./agronomist-accounts";
 import {
   AGRONOMIST_SOURCES,
   INSURANCE_SOURCE_URL,
@@ -333,6 +334,10 @@ type DashboardCopy = {
     unavailable: string;
     roleHint: string;
     readOnly: string;
+    demoTitle: string;
+    demoBody: string;
+    demoFill: string;
+    demoUnavailable: string;
   };
   storage: Record<StorageState, string>;
   common: {
@@ -399,6 +404,12 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
       roleHint:
         "Only accounts with the agronomist role can add, edit or delete records. The server checks the role on every change.",
       readOnly: "Read-only",
+      demoTitle: "Shared reviewer account",
+      demoBody:
+        "This account exists so the dashboard can be shown without an invitation. It is not for a farmer's private records, and anyone reading this page can use it.",
+      demoFill: "Fill the form",
+      demoUnavailable:
+        "This deployment has email sign-in turned off, so the shared account cannot sign in here. An administrator enables Email under Authentication → Sign In / Providers.",
     },
     storage: {
       loading: "Loading records…",
@@ -470,6 +481,12 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
       roleHint:
         "Seuls les comptes ayant le rôle d’agronome peuvent ajouter, modifier ou supprimer. Le serveur vérifie le rôle à chaque changement.",
       readOnly: "Lecture seule",
+      demoTitle: "Compte de démonstration partagé",
+      demoBody:
+        "Ce compte existe pour montrer le tableau de bord sans invitation. Il ne sert pas à conserver les dossiers privés d’un agriculteur, et toute personne qui lit cette page peut l’utiliser.",
+      demoFill: "Remplir le formulaire",
+      demoUnavailable:
+        "La connexion par e-mail est désactivée sur ce déploiement, le compte partagé ne peut donc pas se connecter ici. Un administrateur active Email dans Authentification → Connexion / Fournisseurs.",
     },
     storage: {
       loading: "Chargement des dossiers…",
@@ -541,6 +558,12 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
       roleHint:
         "Konti zifite uruhushya rw’impuguke gusa zishobora kongera, guhindura cyangwa gusiba. Seriveri igenzura uruhushya buri gihe.",
       readOnly: "Gusoma gusa",
+      demoTitle: "Konti y’urugero isangiwe",
+      demoBody:
+        "Iyi konti iriho kugira ngo ikibaho kigaragazwe nta butumire. Ntabwo ari iyo kubika amadosiye bwite y’umuhinzi, kandi umuntu wese usoma iyi paji ashobora kuyikoresha.",
+      demoFill: "Uzuza ifishi",
+      demoUnavailable:
+        "Kwinjira n’imeyili ntibyashyizweho kuri iyi serivisi, bityo iyi konti ntishobora kwinjira hano. Umuyobozi abishyira mu bikorwa muri Authentication → Sign In / Providers.",
     },
     storage: {
       loading: "Turashakisha amadosiye…",
@@ -586,9 +609,13 @@ export type AuthClaims = {
   user_metadata?: { full_name?: string };
 };
 
-// Only app_metadata is trusted: user_metadata is editable by the account holder.
+// app_metadata is trusted because the account holder cannot edit it;
+// user_metadata is never trusted. The shared reviewer address in
+// agronomist-accounts.ts is the one exception, and the database lists the same
+// address, so the app and the policies agree on who may write.
 export function isAgronomistClaims(claims: AuthClaims | null | undefined): boolean {
-  return claims?.app_metadata?.role === "agronomist";
+  if (claims?.app_metadata?.role === "agronomist") return true;
+  return isAgronomistEmail(claims?.email);
 }
 
 // ------------------------------------------------------------- formatting

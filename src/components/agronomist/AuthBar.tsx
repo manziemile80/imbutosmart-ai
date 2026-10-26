@@ -1,10 +1,11 @@
 import { useState, type FormEvent } from "react";
-import { KeyRound, LogIn, LogOut, ShieldCheck, ShieldAlert } from "lucide-react";
+import { ClipboardCopy, KeyRound, LogIn, LogOut, ShieldCheck, ShieldAlert } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
 import { Input } from "@/components/ui/input";
 import { StatusPill } from "@/components/ui/callout";
+import { DEMO_AGRONOMIST } from "@/lib/agronomist-accounts";
 import { dashboardCopy } from "@/lib/agronomist-dashboard";
 import type { AgronomistAuth } from "@/hooks/use-agronomist-auth";
 import type { FarmerLanguage } from "@/lib/farmer-language";
@@ -91,6 +92,42 @@ export function AuthBar({ auth, language }: { auth: AgronomistAuth; language: Fa
           <p className="text-xs leading-relaxed text-muted-foreground sm:col-span-3">
             {t.auth.signedOut} {t.auth.roleHint}
           </p>
+
+          <div className="mt-1 rounded-lg border border-dashed border-border bg-muted/30 p-3 sm:col-span-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="text-xs font-semibold text-foreground">{t.auth.demoTitle}</p>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setEmail(DEMO_AGRONOMIST.email);
+                  setPassword(DEMO_AGRONOMIST.password);
+                  setError(null);
+                }}
+              >
+                <ClipboardCopy aria-hidden="true" />
+                {t.auth.demoFill}
+              </Button>
+            </div>
+            <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
+              {t.auth.demoBody}
+            </p>
+            <dl className="mt-2 grid gap-1 text-[11px] sm:grid-cols-2">
+              <div className="flex gap-2">
+                <dt className="text-muted-foreground">{t.auth.email}:</dt>
+                <dd className="select-all font-mono break-all text-foreground">
+                  {DEMO_AGRONOMIST.email}
+                </dd>
+              </div>
+              <div className="flex gap-2">
+                <dt className="text-muted-foreground">{t.auth.password}:</dt>
+                <dd className="select-all font-mono break-all text-foreground">
+                  {DEMO_AGRONOMIST.password}
+                </dd>
+              </div>
+            </dl>
+          </div>
         </form>
       )}
 
@@ -116,6 +153,9 @@ export function AuthBar({ auth, language }: { auth: AgronomistAuth; language: Fa
       {error && (
         <Callout tone="danger" role="alert" className="mt-3">
           {error}
+          {/email logins are disabled|email_provider_disabled/i.test(error) && (
+            <span className="mt-1 block">{t.auth.demoUnavailable}</span>
+          )}
         </Callout>
       )}
     </section>

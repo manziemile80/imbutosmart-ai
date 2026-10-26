@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
+import { isDemoAgronomist } from "@/lib/agronomist-accounts";
 import { isAgronomistClaims, type AuthClaims } from "@/lib/agronomist-dashboard";
 
 // The dashboard's session state. Role checks in the browser only decide what to
@@ -97,12 +98,37 @@ export function useAgronomistAuth(): AgronomistAuth {
   }, [refresh]);
 
   const signIn = useCallback(async (email: string, password: string) => {
+    const address = email.trim();
     try {
       const { data, error: signInError } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
+        email: address,
         password,
       });
       if (signInError) {
+        // The shared reviewer account is created the first time it is used, so a
+        // demonstration needs nobody to provision it by hand. Every other
+        // address must already exist.
+        if (isDemoAgronomist(address) && /invalid login credentials/i.test(signInError.message)) {
+          const { data: created, error: createError } = await supabase.auth.signUp({
+            email: address,
+            password,
+            options: { data: { full_name: "Shared reviewer account" } },
+          });
+          if (createError) {
+            setError(createError.message);
+            return { ok: false, message: createError.message };
+          }
+          if (created.session) {
+            setIdentity(fromUser(created.user as SessionUser | null));
+            setStatus("signedIn");
+            setError(null);
+            return { ok: true };
+          }
+          const message =
+            "The shared account was created. Confirm its email address, then sign in again.";
+          setError(message);
+          return { ok: false, message };
+        }
         setError(signInError.message);
         return { ok: false, message: signInError.message };
       }

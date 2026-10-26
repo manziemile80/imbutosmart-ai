@@ -124,6 +124,19 @@ update auth.users
 
 The server checks the role on every write as well as the database policy, and the audit table keeps the actor, action and record. If the database is not configured or the migration has not been applied, the page still shows the published figures and the reference catalogue, and says plainly that records cannot be changed. A record edited while the connection is down is kept on the device and retried when the page next reaches the server.
 
+### 12.2 Shared reviewer account
+
+The sign-in form prints one shared account so the workspace can be shown without an invitation:
+
+- email `manziemile1@gmail.com`
+- password `Manzi12345`
+
+Those two values live in `src/lib/agronomist-accounts.ts` and are shown under the form. The first sign-in creates the account if it does not exist yet (that address only), and the second migration, `20261026010000_agronomist_allowlist.sql`, adds it to `public.agronomist_allowlist`, so `public.is_agronomist()` accepts the address as well as an `app_metadata` role. The server's `isAgronomistClaims` reads the same list, so the app and the policies agree.
+
+The password is public: it is in this repository and on the page. Use the account to demonstrate the dashboard, never to hold a real farmer's records, and change the password or delete the account before a real deployment. Add further addresses in the table **and** in `AGRONOMIST_EMAILS`, or in neither.
+
+Supabase must have the **Email** provider enabled (Authentication → Sign In / Providers). When it is disabled, every sign-in returns `email_provider_disabled` and the form says that an administrator has to enable the provider; no code change can work around it. A confirmed email is not required when "Confirm email" is off; when it is on, the first sign-in creates the account and asks for the address to be confirmed before the next sign-in.
+
 ## 13. Technologies Used
 
 ImbutoSmart AI uses a full-stack architecture combining a React-based farmer interface, a FastAPI machine-learning backend, Python data-processing tools, weather services, and optional AI/voice services.

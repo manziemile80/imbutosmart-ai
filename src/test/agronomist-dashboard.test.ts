@@ -15,6 +15,7 @@ import {
   type RecordData,
   type RecordKind,
 } from "@/lib/agronomist-dashboard";
+import { DEMO_AGRONOMIST, isAgronomistEmail, isDemoAgronomist } from "@/lib/agronomist-accounts";
 import type { DistrictWeather } from "@/lib/weather";
 
 function record(
@@ -234,6 +235,22 @@ describe("honest formatting and access", () => {
       } as unknown as Parameters<typeof isAgronomistClaims>[0]),
     ).toBe(false);
     expect(isAgronomistClaims(null)).toBe(false);
+  });
+
+  it("treats the shared reviewer address as an agronomist, and no other address", () => {
+    expect(isAgronomistClaims({ email: DEMO_AGRONOMIST.email, app_metadata: {} })).toBe(true);
+    expect(isAgronomistClaims({ email: "  MANZIEMILE1@Gmail.com ", app_metadata: {} })).toBe(true);
+    expect(isAgronomistClaims({ email: "someone@example.org", app_metadata: {} })).toBe(false);
+    expect(isAgronomistClaims({ app_metadata: { role: "farmer" }, email: "a@b.rw" })).toBe(false);
+  });
+
+  it("keeps the printed shared account to the one address the migration also lists", () => {
+    expect(isAgronomistEmail(DEMO_AGRONOMIST.email)).toBe(true);
+    expect(isAgronomistEmail("reviewer@example.org")).toBe(false);
+    expect(isAgronomistEmail(null)).toBe(false);
+    expect(isDemoAgronomist("ManziEmile1@gmail.com")).toBe(true);
+    expect(isDemoAgronomist("reviewer@example.org")).toBe(false);
+    expect(DEMO_AGRONOMIST.password.length).toBeGreaterThanOrEqual(6);
   });
 
   it("builds a WhatsApp link only for a usable number", () => {
