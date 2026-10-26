@@ -108,7 +108,6 @@ export const adviceCopy: Record<
     eyebrow: string;
     title: string;
     lede: string;
-    fieldTitle: string;
     planTitle: string;
     cropsTitle: string;
     inputsTitle: string;
@@ -130,8 +129,7 @@ export const adviceCopy: Record<
   en: {
     eyebrow: "Farming advice",
     title: "Advice you can follow",
-    lede: "Choose your district and your soil. The page shows which crops suit that place, which inputs the farmers around you use, and when to act. Nothing here is invented: the figures come from the survey and the weather service.",
-    fieldTitle: "Your field",
+    lede: "The plan follows the field you set on the Farmer page. It shows which crops suit that place, which inputs the farmers around you use, and when to act. Nothing here is invented: the figures come from the survey and the weather service.",
     planTitle: "Your plan",
     cropsTitle: "Crops to plant here",
     inputsTitle: "Inputs used in your district",
@@ -158,8 +156,7 @@ export const adviceCopy: Record<
   rw: {
     eyebrow: "Inama ku buhinzi",
     title: "Inama ushobora gukurikiza",
-    lede: "Hitamo akarere kawe n’ubutaka bwawe. Uyu urubuga rugaragaza ibihingwa bikwiye ako gihembwe, ifumbire abahinzi bakoresha hafi yawe, n’igihe cyo gukora. Nta ikigizeho umuziki: amafishi ava mu survey na seriveri y’ikirere.",
-    fieldTitle: "Umurima wawe",
+    lede: "Gahunda ikurikiza umurima wagennye ku rupapuro rw’Umuhinzi. Uyu urubuga rugaragaza ibihingwa bikwiye ako gihembwe, ifumbire abahinzi bakoresha hafi yawe, n’igihe cyo gukora. Nta kigizeho umuziki: amafishi ava mu survey na seriveri y’ikirere.",
     planTitle: "Gahunda yawe",
     cropsTitle: "Ibihingwa wibishobora guhinga hano",
     inputsTitle: "Ifumbire zikoreshwa mu karere kawe",
@@ -186,8 +183,7 @@ export const adviceCopy: Record<
   fr: {
     eyebrow: "Conseils agricoles",
     title: "Des conseils à suivre",
-    lede: "Choisissez votre district et votre sol. La page indique les cultures adaptées à ce lieu, les intrants utilisés par les farmers voisins et le moment d’agir. Rien n’est inventé : les chiffres viennent de l’enquête et du service météo.",
-    fieldTitle: "Votre champ",
+    lede: "Le plan suit le champ défini sur la page Agriculteur. La page indique les cultures adaptées à ce lieu, les intrants utilisés par les farmers voisins et le moment d’agir. Rien n’est inventé : les chiffres viennent de l’enquête et du service météo.",
     planTitle: "Votre plan",
     cropsTitle: "Cultures à choisir ici",
     inputsTitle: "Intrants utilisés dans votre district",

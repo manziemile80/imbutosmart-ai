@@ -81,10 +81,24 @@ function renderPage() {
 }
 
 describe("Summary get page", () => {
+  it("points back to the Farmer page instead of repeating the field controls", () => {
+    renderPage();
+
+    expect(screen.getByText("Your field is set on the Farmer page.")).toBeInTheDocument();
+    expect(screen.queryByLabelText("District")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Soil type")).not.toBeInTheDocument();
+    // One language selector, in the header.
+    expect(screen.getAllByLabelText("Language")).toHaveLength(1);
+  });
+
   it("shows every part of the summary, ready to keep", async () => {
     renderPage();
 
-    await waitFor(() => expect(screen.getByLabelText("District")).toHaveValue("Musanze"));
+    await waitFor(() =>
+      expect(
+        screen.getByRole("heading", { name: "Get your summary and keep it" }),
+      ).toBeInTheDocument(),
+    );
 
     expect(
       screen.getByRole("heading", { name: "Get your summary and keep it" }),
@@ -113,7 +127,11 @@ describe("Summary get page", () => {
     });
 
     renderPage();
-    await waitFor(() => expect(screen.getByLabelText("District")).toHaveValue("Musanze"));
+    await waitFor(() =>
+      expect(
+        screen.getByRole("heading", { name: "Get your summary and keep it" }),
+      ).toBeInTheDocument(),
+    );
 
     fireEvent.click(screen.getByRole("button", { name: "Download this summary" }));
 
@@ -134,7 +152,11 @@ describe("Summary get page", () => {
     });
 
     renderPage();
-    await waitFor(() => expect(screen.getByLabelText("District")).toHaveValue("Musanze"));
+    await waitFor(() =>
+      expect(
+        screen.getByRole("heading", { name: "Get your summary and keep it" }),
+      ).toBeInTheDocument(),
+    );
 
     fireEvent.click(screen.getByRole("button", { name: "Download this summary" }));
 
@@ -149,7 +171,11 @@ describe("Summary get page", () => {
     Object.defineProperty(navigator, "share", { configurable: true, value: share });
 
     renderPage();
-    await waitFor(() => expect(screen.getByLabelText("District")).toHaveValue("Musanze"));
+    await waitFor(() =>
+      expect(
+        screen.getByRole("heading", { name: "Get your summary and keep it" }),
+      ).toBeInTheDocument(),
+    );
 
     fireEvent.click(screen.getByRole("button", { name: "Share all of this" }));
 
@@ -171,7 +197,11 @@ describe("Summary get page", () => {
     });
 
     renderPage();
-    await waitFor(() => expect(screen.getByLabelText("District")).toHaveValue("Musanze"));
+    await waitFor(() =>
+      expect(
+        screen.getByRole("heading", { name: "Get your summary and keep it" }),
+      ).toBeInTheDocument(),
+    );
 
     fireEvent.click(screen.getByRole("button", { name: "Share all of this" }));
 
@@ -186,7 +216,11 @@ describe("Summary get page", () => {
 
   it("opens the short email form from the send button", async () => {
     renderPage();
-    await waitFor(() => expect(screen.getByLabelText("District")).toHaveValue("Musanze"));
+    await waitFor(() =>
+      expect(
+        screen.getByRole("heading", { name: "Get your summary and keep it" }),
+      ).toBeInTheDocument(),
+    );
 
     expect(screen.queryByLabelText("Your email address")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Send me this summary" }));
@@ -203,7 +237,11 @@ describe("Summary get page", () => {
     });
 
     renderPage();
-    await waitFor(() => expect(screen.getByLabelText("District")).toHaveValue("Musanze"));
+    await waitFor(() =>
+      expect(
+        screen.getByRole("heading", { name: "Get your summary and keep it" }),
+      ).toBeInTheDocument(),
+    );
 
     fireEvent.click(screen.getByRole("button", { name: "Send me this summary" }));
     fireEvent.change(screen.getByLabelText("Your name"), { target: { value: "Aline" } });
@@ -242,7 +280,11 @@ describe("Summary get page", () => {
     });
 
     renderPage();
-    await waitFor(() => expect(screen.getByLabelText("District")).toHaveValue("Musanze"));
+    await waitFor(() =>
+      expect(
+        screen.getByRole("heading", { name: "Get your summary and keep it" }),
+      ).toBeInTheDocument(),
+    );
 
     fireEvent.click(screen.getByRole("button", { name: "Send me this summary" }));
     fireEvent.change(screen.getByLabelText("Your name"), { target: { value: "Aline" } });
@@ -285,7 +327,11 @@ describe("Summary get page", () => {
     });
 
     renderPage();
-    await waitFor(() => expect(screen.getByLabelText("District")).toHaveValue("Musanze"));
+    await waitFor(() =>
+      expect(
+        screen.getByRole("heading", { name: "Get your summary and keep it" }),
+      ).toBeInTheDocument(),
+    );
 
     fireEvent.click(screen.getByRole("button", { name: "Send me this summary" }));
     fireEvent.change(screen.getByLabelText("Your name"), { target: { value: "Aline" } });
@@ -309,7 +355,11 @@ describe("Summary get page", () => {
     });
 
     renderPage();
-    await waitFor(() => expect(screen.getByLabelText("District")).toHaveValue("Musanze"));
+    await waitFor(() =>
+      expect(
+        screen.getByRole("heading", { name: "Get your summary and keep it" }),
+      ).toBeInTheDocument(),
+    );
 
     fireEvent.click(screen.getByRole("button", { name: "Send me this summary" }));
 
@@ -329,7 +379,11 @@ describe("Summary get page", () => {
     const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => {});
 
     renderPage();
-    await waitFor(() => expect(screen.getByLabelText("District")).toHaveValue("Musanze"));
+    await waitFor(() =>
+      expect(
+        screen.getByRole("heading", { name: "Get your summary and keep it" }),
+      ).toBeInTheDocument(),
+    );
 
     fireEvent.click(screen.getByRole("button", { name: "Send me this summary" }));
     fireEvent.change(screen.getByLabelText("Your email address"), {
@@ -346,7 +400,11 @@ describe("Summary get page", () => {
     const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => {});
 
     renderPage();
-    await waitFor(() => expect(screen.getByLabelText("District")).toHaveValue("Musanze"));
+    await waitFor(() =>
+      expect(
+        screen.getByRole("heading", { name: "Get your summary and keep it" }),
+      ).toBeInTheDocument(),
+    );
 
     fireEvent.click(screen.getByRole("button", { name: "Send me this summary" }));
     fireEvent.change(screen.getByLabelText("Your name"), { target: { value: "Aline" } });

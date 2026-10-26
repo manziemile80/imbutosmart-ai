@@ -4,22 +4,29 @@ import {
   DEFAULT_FIELD,
   FieldContext,
   readStoredField,
+  readStoredLanguage,
   storeField,
+  storeLanguage,
   type FieldContextValue,
   type FarmerField,
 } from "./field";
+import type { FarmerLanguage } from "./farmer-language";
 
-// Holds the farmer's field for the whole app, so the summary in the header
-// follows the district and soil the farmer chose on any page.
+// Holds the farmer's field and language for the whole app, so the announcements
+// in the header follow the district and soil the farmer chose on any page, and
+// every menu speaks the language chosen once in the header.
 
 export function FieldProvider({ children }: { children: ReactNode }) {
   const [field, setFieldState] = useState<FarmerField>(DEFAULT_FIELD);
+  const [language, setLanguageState] = useState<FarmerLanguage>("en");
 
-  // The stored choice is read after the first render, so the page the server
+  // The stored choices are read after the first render, so the page the server
   // sends and the page the browser builds are the same.
   useEffect(() => {
-    const stored = readStoredField();
-    if (stored) setFieldState(stored);
+    const storedField = readStoredField();
+    if (storedField) setFieldState(storedField);
+    const storedLanguage = readStoredLanguage();
+    if (storedLanguage) setLanguageState(storedLanguage);
   }, []);
 
   const value = useMemo<FieldContextValue>(
@@ -31,8 +38,13 @@ export function FieldProvider({ children }: { children: ReactNode }) {
           storeField(next);
           return next;
         }),
+      language,
+      setLanguage: (next) => {
+        setLanguageState(next);
+        storeLanguage(next);
+      },
     }),
-    [field],
+    [field, language],
   );
 
   return <FieldContext.Provider value={value}>{children}</FieldContext.Provider>;

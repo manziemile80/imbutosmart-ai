@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Check, Download, FileText, LoaderCircle, Mail, Share2, Sprout } from "lucide-react";
+import { Check, Download, FileText, LoaderCircle, Mail, Share2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Panel, PanelBody, PanelHeader } from "@/components/ui/panel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { FieldLink } from "@/components/FieldLink";
 import { PlanSummaryBody } from "@/components/PlanSummaryBody";
 import { SiteShell } from "@/components/SiteShell";
 import { useField } from "@/lib/field";
-import { DISTRICTS, SOILS } from "@/lib/api";
 import {
   buildPlanDownload,
   buildPlanEmail,
@@ -30,7 +30,6 @@ import { recommendOffline } from "@/lib/recommendation-engine";
 import { districtInputs } from "@/lib/advice";
 import { seasonRainMm, seasonTempC } from "@/lib/weather";
 import { useDistrictWeather } from "@/hooks/use-district-weather";
-import { farmerCopy, soilLabel, type FarmerLanguage } from "@/lib/farmer-language";
 
 // Summary get is where the whole plan lives: every section the farmer used to
 // find in the bell, now with room to read it, a file to download, and the
@@ -49,11 +48,11 @@ function openMailDraft(href: string) {
 }
 
 export function SummaryGetPage() {
-  const { field, setField } = useField();
+  // The field and the language belong to the app, so this page reads them and
+  // points back to the Farmer page for the field controls.
+  const { field, language } = useField();
   const { district, soil, season } = field;
-  const [language, setLanguage] = useState<FarmerLanguage>("en");
   const t = summaryCopy[language];
-  const ft = farmerCopy[language];
 
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [shareState, setShareState] = useState<"idle" | "shared" | "copied" | "failed">("idle");
@@ -216,90 +215,20 @@ export function SummaryGetPage() {
   const noteFailed = downloadState === "failed" || shareState === "failed";
 
   return (
-    <SiteShell language={language}>
+    <SiteShell>
       <div lang={language} className="page">
         <header className="page-header">
           <div className="min-w-0">
             <p className="eyebrow">{t.pageEyebrow}</p>
             <h1 className="page-title mt-2">{t.pageTitle}</h1>
             <p className="page-lede">{t.pageLede}</p>
+            <div className="mt-3">
+              <FieldLink />
+            </div>
           </div>
-          <label className="grid gap-1.5 sm:w-56">
-            <span className="field-label">{ft.language}</span>
-            <select
-              className="field"
-              aria-label="Language / Ururimi / Langue"
-              value={language}
-              onChange={(event) =>
-                setLanguage(
-                  event.target.value === "fr" ? "fr" : event.target.value === "rw" ? "rw" : "en",
-                )
-              }
-            >
-              <option value="en">English</option>
-              <option value="rw">Kinyarwanda</option>
-              <option value="fr">Français</option>
-            </select>
-          </label>
         </header>
 
-        <div className="page-section grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.8fr)]">
-          <Panel aria-labelledby="summary-field-title">
-            <PanelHeader
-              icon={<Sprout className="size-5" aria-hidden="true" />}
-              eyebrow={t.pageEyebrow}
-              title={ft.field}
-              titleId="summary-field-title"
-            />
-            <PanelBody>
-              <div className="grid gap-4">
-                <label className="grid gap-1.5">
-                  <span className="field-label">{ft.district}</span>
-                  <select
-                    className="field"
-                    value={district}
-                    onChange={(e) => setField({ district: e.target.value })}
-                  >
-                    {DISTRICTS.map((districtName) => (
-                      <option key={districtName}>{districtName}</option>
-                    ))}
-                  </select>
-                </label>
-                <label className="grid gap-1.5">
-                  <span className="field-label">{ft.soil}</span>
-                  <select
-                    className="field"
-                    value={soil}
-                    onChange={(e) => setField({ soil: e.target.value })}
-                  >
-                    {SOILS.map((soilName) => (
-                      <option key={soilName} value={soilName}>
-                        {soilLabel(soilName, language)}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label className="grid gap-1.5">
-                  <span className="field-label">{ft.farming}</span>
-                  <select
-                    className="field"
-                    value={season ?? ""}
-                    onChange={(e) =>
-                      setField({
-                        season: e.target.value === "" ? null : (e.target.value as "A" | "B" | "C"),
-                      })
-                    }
-                  >
-                    <option value="">—</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                  </select>
-                </label>
-              </div>
-            </PanelBody>
-          </Panel>
-
+        <div className="page-section">
           <Panel aria-labelledby="summary-content-title">
             <PanelHeader
               icon={<FileText className="size-5" aria-hidden="true" />}

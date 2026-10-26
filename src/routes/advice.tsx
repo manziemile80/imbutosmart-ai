@@ -1,17 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { BookOpen, ListChecks, LoaderCircle, Sparkles, Sprout, Volume2 } from "lucide-react";
+import { BookOpen, ListChecks, LoaderCircle, Sparkles, Volume2 } from "lucide-react";
 
 import { SiteShell } from "@/components/SiteShell";
+import { FieldLink } from "@/components/FieldLink";
 import { Panel, PanelBody, PanelHeader } from "@/components/ui/panel";
 import { Callout } from "@/components/ui/callout";
 import { Button } from "@/components/ui/button";
 import { adviceCopy, districtInputs, explainInput, inputName } from "@/lib/advice";
-import { buildPlanSummary } from "@/lib/plan-summary";
 import { getAdvice } from "@/lib/advice.functions";
-import { DISTRICTS, SOILS } from "@/lib/api";
-import { farmerCopy, soilLabel, type FarmerLanguage } from "@/lib/farmer-language";
 import { knowledgeCropLabel } from "@/lib/crop-knowledge";
 import { engineInput } from "@/lib/recommendation";
 import { recommendOffline } from "@/lib/recommendation-engine";
@@ -35,11 +33,11 @@ export const Route = createFileRoute("/advice")({
 });
 
 function Advice() {
-  const { field, setField } = useField();
+  // The field belongs to the app, so this page reads it and points back to the
+  // Farmer page, the one menu that owns the district, soil and season controls.
+  const { field, language } = useField();
   const { district, soil, season } = field;
-  const [language, setLanguage] = useState<FarmerLanguage>("en");
   const t = adviceCopy[language];
-  const ft = farmerCopy[language];
 
   const ask = useServerFn(getAdvice);
   const [plan, setPlan] = useState("");
@@ -105,108 +103,21 @@ function Advice() {
       .map(([name, share]) => ({ name, share, kind: "organic" })),
   ];
 
-  // The overview the farmer gets as soon as the field is chosen.
-  const summary = buildPlanSummary({
-    district,
-    soil,
-    season,
-    crops: crops.map((crop) => ({ crop: crop.crop, score: crop.score })),
-    profile: profile ?? null,
-    climate: rainMm != null && tempC != null ? { rainMm, tempC } : null,
-    language,
-  });
-
   return (
-    <SiteShell language={language}>
+    <SiteShell>
       <div lang={language} className="page">
         <header className="page-header">
           <div className="min-w-0">
             <p className="eyebrow">{t.eyebrow}</p>
             <h1 className="page-title mt-2">{t.title}</h1>
             <p className="page-lede">{t.lede}</p>
+            <div className="mt-3">
+              <FieldLink />
+            </div>
           </div>
-          <label className="grid gap-1.5 sm:w-56">
-            <span className="field-label">{ft.language}</span>
-            <select
-              className="field"
-              aria-label="Language / Ururimi / Langue"
-              value={language}
-              onChange={(event) =>
-                setLanguage(
-                  event.target.value === "fr" ? "fr" : event.target.value === "rw" ? "rw" : "en",
-                )
-              }
-            >
-              <option value="en">English</option>
-              <option value="rw">Kinyarwanda</option>
-              <option value="fr">Français</option>
-            </select>
-          </label>
         </header>
 
-        <div className="page-section grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
-          <Panel aria-labelledby="advice-field-title">
-            <PanelHeader
-              icon={<Sprout className="size-5" aria-hidden="true" />}
-              eyebrow={t.eyebrow}
-              title={t.fieldTitle}
-              titleId="advice-field-title"
-            />
-            <PanelBody>
-              <div className="grid gap-4">
-                <label className="grid gap-1.5">
-                  <span className="field-label">{ft.district}</span>
-                  <select
-                    className="field"
-                    value={district}
-                    onChange={(e) => setField({ district: e.target.value })}
-                  >
-                    {DISTRICTS.map((name) => (
-                      <option key={name}>{name}</option>
-                    ))}
-                  </select>
-                </label>
-                <label className="grid gap-1.5">
-                  <span className="field-label">{ft.soil}</span>
-                  <select
-                    className="field"
-                    value={soil}
-                    onChange={(e) => setField({ soil: e.target.value })}
-                  >
-                    {SOILS.map((name) => (
-                      <option key={name} value={name}>
-                        {soilLabel(name, language)}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label className="grid gap-1.5">
-                  <span className="field-label">{ft.farming}</span>
-                  <select
-                    className="field"
-                    value={season ?? ""}
-                    onChange={(e) =>
-                      setField({
-                        season: e.target.value === "" ? null : (e.target.value as "A" | "B" | "C"),
-                      })
-                    }
-                  >
-                    <option value="">—</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                  </select>
-                </label>
-              </div>
-
-              {profile && (
-                <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
-                  {profile.segments} segments in the 2025 survey for {district}.
-                </p>
-              )}
-            </PanelBody>
-          </Panel>
-
+        <div className="page-section">
           <Panel aria-labelledby="advice-plan-title">
             <PanelHeader
               icon={<ListChecks className="size-5" aria-hidden="true" />}

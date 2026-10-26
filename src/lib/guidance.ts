@@ -20,7 +20,6 @@ export const guidanceCopy: Record<
     planLink: string;
     planBlurb: string;
     planContains: { crops: string; inputs: string; when: string };
-    fieldTitle: string;
   }
 > = {
   en: {
@@ -60,7 +59,6 @@ export const guidanceCopy: Record<
     },
     planBlurb:
       "The Advice page has the whole plan: the crops, the inputs farmers in your district used, and when to act.",
-    fieldTitle: "Your field",
   },
   rw: {
     eyebrow: "Ubuyobozi",
@@ -99,7 +97,6 @@ export const guidanceCopy: Record<
     },
     planBlurb:
       "Uruhande rw'Inama ruzabikora: ibihingwa, ifumbire abahinzi mu karere kawe bakoreseye, n'igihe cyo gukora.",
-    fieldTitle: "Umurima wawe",
   },
   fr: {
     eyebrow: "Orientation",
@@ -139,6 +136,5 @@ export const guidanceCopy: Record<
     },
     planBlurb:
       "La page Conseils contient tout le plan : les cultures, les intrants utilisés dans votre district et le moment d'agir.",
-    fieldTitle: "Votre champ",
   },
 };

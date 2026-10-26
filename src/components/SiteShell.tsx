@@ -1,16 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { farmerCopy, type FarmerLanguage } from "@/lib/farmer-language";
+import { farmerCopy } from "@/lib/farmer-language";
+import { useField } from "@/lib/field";
 import { PlanSummaryMenu } from "@/components/PlanSummaryMenu";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
-export function SiteShell({
-  children,
-  language = "en",
-}: {
-  children: ReactNode;
-  language?: FarmerLanguage;
-}) {
+export function SiteShell({ children }: { children: ReactNode }) {
+  const { language, setLanguage } = useField();
   const t = farmerCopy[language];
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -23,10 +19,10 @@ export function SiteShell({
               Imbuto<span className="text-primary-text">Smart</span> AI
             </span>
           </Link>
-          <PlanSummaryMenu language={language} />
+          <PlanSummaryMenu />
         </div>
 
-        {/* The navigation line, with the theme toggle below the summary. */}
+        {/* The navigation line, with the language and the theme at the end. */}
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 pb-3 pt-2">
           <nav
             className="-mx-1 flex flex-nowrap items-center gap-1 overflow-x-auto px-1 pr-4 text-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden max-sm:[mask-image:linear-gradient(to_right,#000_calc(100%-2rem),transparent)]"
@@ -72,7 +68,27 @@ export function SiteShell({
               {t.agronomist}
             </Link>
           </nav>
-          <ThemeToggle language={language} />
+          <div className="flex shrink-0 items-center gap-2">
+            <label className="sr-only" htmlFor="app-language">
+              {t.language}
+            </label>
+            <select
+              id="app-language"
+              aria-label={t.language}
+              className="field h-8 w-[4.6rem] shrink-0 px-2 py-1 text-xs"
+              value={language}
+              onChange={(event) =>
+                setLanguage(
+                  event.target.value === "fr" ? "fr" : event.target.value === "rw" ? "rw" : "en",
+                )
+              }
+            >
+              <option value="en">EN</option>
+              <option value="rw">RW</option>
+              <option value="fr">FR</option>
+            </select>
+            <ThemeToggle language={language} />
+          </div>
         </div>
       </header>
       <main className="flex-1">{children}</main>

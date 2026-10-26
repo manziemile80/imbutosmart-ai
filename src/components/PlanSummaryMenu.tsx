@@ -1,23 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Bell, BellRing, FileText, X } from "lucide-react";
+import { Bell, BellRing, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useField } from "@/lib/field";
-import { summaryCopy } from "@/lib/plan-summary";
-import type { FarmerLanguage } from "@/lib/farmer-language";
+import { announcementCopy, buildAnnouncements } from "@/lib/announcements";
 
-// The bell is the announcement, not the summary itself: it says the summary
-// for the farmer's field is ready and takes them to Summary get, where the
-// whole plan can be read, downloaded, shared or emailed. Keeping the figures
-// on their own page means the header never carries a wall of numbers.
-export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage }) {
-  const { field } = useField();
+// The bell is the app's announcement feed, not the summary itself: each notice
+// says what changed or what to check, and links to the one page that holds the
+// detail. The figures stay on Summary get, Advice and the Farmer page.
+export function PlanSummaryMenu() {
+  const { field, language } = useField();
   const { district } = field;
-  const t = summaryCopy[language];
+  const t = announcementCopy[language];
+  const items = buildAnnouncements({ district, language });
   const [open, setOpen] = useState(false);
   const wrapper = useRef<HTMLDivElement>(null);
-  const openLink = useRef<HTMLAnchorElement>(null);
+  const firstLink = useRef<HTMLAnchorElement>(null);
 
   // The panel closes when the farmer clicks away from it.
   useEffect(() => {
@@ -36,9 +35,9 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
     };
   }, [open]);
 
-  // The announcement has one action, so it is focused when the panel opens.
+  // The first notice is focused when the feed opens, so the keyboard is ready.
   useEffect(() => {
-    if (open) openLink.current?.focus();
+    if (open) firstLink.current?.focus();
   }, [open]);
 
   return (
@@ -48,9 +47,9 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
         variant="ghost"
         size="icon"
         className="size-9 shrink-0 text-muted-foreground hover:text-foreground"
-        aria-label={t.title}
+        aria-label={t.label}
         aria-expanded={open}
-        title={t.title}
+        title={t.label}
         onClick={() => setOpen((current) => !current)}
       >
         {open ? <BellRing aria-hidden="true" /> : <Bell aria-hidden="true" />}
@@ -59,13 +58,14 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
       {open && (
         <div
           role="dialog"
-          aria-label={t.title}
-          className="absolute right-0 top-full z-30 mt-2 flex w-[min(92vw,24rem)] flex-col rounded-2xl border border-border bg-card p-5 text-left shadow-pop"
+          aria-label={t.label}
+          className="absolute right-0 top-full z-30 mt-2 flex max-h-[min(80vh,34rem)] w-[min(92vw,26rem)] flex-col rounded-2xl border border-border bg-card text-left shadow-pop"
         >
-          <div className="flex items-start justify-between gap-3">
+          <div className="flex items-start justify-between gap-3 p-5 pb-3">
             <div>
               <p className="eyebrow">{district}</p>
-              <p className="mt-1 font-display text-lg text-foreground">{t.announceTitle}</p>
+              <p className="mt-1 font-display text-lg text-foreground">{t.label}</p>
+              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{t.intro}</p>
             </div>
             <Button
               type="button"
@@ -79,16 +79,22 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
             </Button>
           </div>
 
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            {t.announceBody.replace("{district}", district)}
-          </p>
-
-          <Button asChild className="mt-4 h-10 w-full">
-            <Link ref={openLink} to="/summary" onClick={() => setOpen(false)}>
-              <FileText aria-hidden="true" />
-              {t.openSummary}
-            </Link>
-          </Button>
+          <ul className="overflow-y-auto px-5 pb-5">
+            {items.map((item, index) => (
+              <li key={item.id} className="border-t border-border py-3 first:border-t-0 first:pt-0">
+                <p className="text-sm font-semibold text-foreground">{item.title}</p>
+                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{item.body}</p>
+                <Link
+                  ref={index === 0 ? firstLink : undefined}
+                  to={item.link.to}
+                  className="mt-2 inline-flex text-xs font-medium text-primary-text underline-offset-4 hover:underline"
+                  onClick={() => setOpen(false)}
+                >
+                  {item.link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>

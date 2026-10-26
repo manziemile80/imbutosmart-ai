@@ -60,7 +60,7 @@ The forecast carries the WMO weather code of each day ("Moderate rain showers") 
 
 ## The Advice portal
 
-`/advice` gives a plan a farmer can follow, for the district and soil they choose:
+`/advice` gives a plan a farmer can follow, for the district, soil and season set once on the Farmer page:
 
 - **Crops to plant here** — the agronomic suitability engine, with the district's own climate as the rainfall and temperature.
 
@@ -69,6 +69,8 @@ The forecast carries the WMO weather code of each day ("Moderate rain showers") 
 - **Your written plan** — the AI writes the steps from those facts alone. A rate, spacing or price the model adds is dropped before the farmer sees it.
 - **Your summary** — the full overview lives on **Summary get** (`/summary`): the crops for the field, the inputs farmers there use **with the rate they applied them at**, the insurance worth asking about, and what else to do. The bell in the header (just above the dark-mode toggle) is a short announcement that the summary is ready and links there; the field the farmer chose is shared across the app and kept for their next visit. The page can download the whole summary, share it, or **email it**: the **Send me this summary** button opens a short form asking for the farmer's name and email address, the app sends the complete summary from its own server and confirms **Summary sent**, and the name and address stay in that browser so the next summary is pre-filled. With no mail service configured, the same complete message opens in the farmer's own mail app instead.
 - **Assistance** — the plan read aloud, the same plan in simpler words, and a plain explanation of every input name.
+
+The field controls (district, soil, season) live on the Farmer page only. Advice, Summary get and Guidance show a short link back to it instead of repeating the selects, so the farmer never has two copies of the same field to keep in step. The language is chosen once in the header and every page follows it.
 
 ## The Summary get portal
 
@@ -82,7 +84,7 @@ The header bell only announces that the summary is ready; the figures stay on th
 
 ## The Guidance portal
 
-`/guidance` is the help desk: every assistant in one place, chosen in plain words — **Ask a question**, **Speak your question**, **This season** or **My plan**. The district and soil chosen on the page are the ones the assistants answer for, and a short "how to get a good answer" guide sits beside them. The whole page is available in English, Kinyarwanda and French.
+`/guidance` is the help desk: every assistant in one place, chosen in plain words — **Ask a question**, **Speak your question**, **This season** or **My plan**. This is the only menu that hosts the assistants; the Farmer page no longer repeats them. The district, soil and season set on the Farmer page are the ones the assistants answer for, and a short "how to get a good answer" guide sits beside them. The whole page is available in English, Kinyarwanda and French.
 
 ## Run the frontend
 

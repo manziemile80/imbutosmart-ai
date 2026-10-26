@@ -72,4 +72,18 @@ describe("guidance page", () => {
     expect(screen.getByTestId("guidance-guide")).toBeInTheDocument();
     expect(screen.getByText(/Say where your field is/i)).toBeInTheDocument();
   });
+
+  it("points back to the Farmer page instead of repeating the field controls", () => {
+    render(
+      <FieldProvider>
+        <Guidance />
+      </FieldProvider>,
+    );
+
+    expect(screen.getByText("Your field is set on the Farmer page.")).toBeInTheDocument();
+    expect(screen.queryByLabelText("District")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Soil type")).not.toBeInTheDocument();
+    // One language selector, in the header.
+    expect(screen.getAllByLabelText("Language")).toHaveLength(1);
+  });
 });

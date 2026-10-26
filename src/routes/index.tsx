@@ -1,22 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 import { SiteShell } from "@/components/SiteShell";
-import { SeasonAssistant } from "@/components/SeasonAssistant";
-import { FarmerAssistant } from "@/components/FarmerAssistant";
-import { VoiceAssistant } from "@/components/VoiceAssistant";
 import { InsuranceGuidance } from "@/components/InsuranceGuidance";
 import { CropRecommendation } from "@/components/CropRecommendation";
 import { DistrictWeatherCard } from "@/components/DistrictWeatherCard";
 import { Panel, PanelBody, PanelHeader } from "@/components/ui/panel";
 import { Callout } from "@/components/ui/callout";
 import { API_URL, DISTRICTS, SOILS } from "@/lib/api";
-import {
-  farmerCopy,
-  cropLabel,
-  seasonName,
-  soilLabel,
-  type FarmerLanguage,
-} from "@/lib/farmer-language";
+import { farmerCopy, cropLabel, seasonName, soilLabel } from "@/lib/farmer-language";
 import { useAutoPrediction } from "@/hooks/use-auto-prediction";
 import { useField } from "@/lib/field";
 import { useDistrictWeather } from "@/hooks/use-district-weather";
@@ -46,10 +36,10 @@ export const Route = createFileRoute("/")({
 
 function Advisory() {
   // The district, soil and season are the app's field, so the summary in the
-  // header follows whatever the farmer changes here.
-  const { field, setField } = useField();
+  // header follows whatever the farmer changes here. This page is the one
+  // place with the field controls; every other page points back here.
+  const { field, setField, language } = useField();
   const { district, soil, season } = field;
-  const [language, setLanguage] = useState<FarmerLanguage>("en");
   const t = farmerCopy[language];
   const month = new Date().getMonth() + 1;
   const { weather, loading: weatherLoading } = useDistrictWeather(district);
@@ -71,7 +61,7 @@ function Advisory() {
   const waitingForClimate = weatherLoading && (!rain || !temp);
 
   return (
-    <SiteShell language={language}>
+    <SiteShell>
       <div lang={language} className="page">
         <header className="page-header">
           <div className="min-w-0">
@@ -79,26 +69,9 @@ function Advisory() {
             <h1 className="page-title mt-2">{t.title}</h1>
             <p className="page-lede">{t.intro}</p>
           </div>
-          <label className="grid gap-1.5 sm:w-56">
-            <span className="field-label">{t.language}</span>
-            <select
-              className="field"
-              aria-label="Language / Ururimi / Langue"
-              value={language}
-              onChange={(event) =>
-                setLanguage(
-                  event.target.value === "fr" ? "fr" : event.target.value === "rw" ? "rw" : "en",
-                )
-              }
-            >
-              <option value="en">English</option>
-              <option value="rw">Kinyarwanda</option>
-              <option value="fr">Français</option>
-            </select>
-          </label>
         </header>
 
-        <div className="page-section grid items-start gap-6 lg:grid-cols-2">
+        <div className="page-section">
           <Panel aria-labelledby="field-panel-title">
             <PanelHeader title={t.field} titleId="field-panel-title" />
             <PanelBody>
@@ -262,12 +235,6 @@ function Advisory() {
               )}
             </PanelBody>
           </Panel>
-
-          <SeasonAssistant
-            key={`${district}-${language}`}
-            district={district}
-            language={language}
-          />
         </div>
 
         <div className="page-section">
@@ -282,11 +249,6 @@ function Advisory() {
             temp={temp}
             language={language}
           />
-        </div>
-
-        <div className="page-section grid items-start gap-6 lg:grid-cols-2">
-          <VoiceAssistant district={district} soil={soil} language={language} />
-          <FarmerAssistant district={district} soil={soil} language={language} />
         </div>
       </div>
     </SiteShell>
