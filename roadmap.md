@@ -46,7 +46,7 @@
 - [x] Link each farmer profile to the advice, pest reports, messages and follow-ups recorded under the same name, hide farmer records from a signed-out visitor, keep pest prevention separate from treatment, and download the knowledge guides for a visit.
 - [x] Report an unread record store honestly: the overview shows **—** with the reason instead of `0`, a status pill carries a short label, and the danger callout uses readable ink rather than the button's white.
 - [x] Give the deployment reason once, in a calmer **Preview mode** strip, instead of repeating a setup paragraph in every module.
-- [ ] Apply the agronomist migration and grant the first `app_metadata.role = "agronomist"` account, then verify stored records and the audit trail against the live Supabase project (blocked by the missing project credentials in this workspace).
+- [ ] Apply the agronomist migration and grant the first `app_metadata.role = "agronomist"` account, then verify stored records and the audit trail against the live Supabase project (the one-command `npm run setup:supabase` needs an `sbp_` token for project `escrgypngrsqyfkzqbqw`, which this workspace does not hold).
 - [ ] Read answers aloud on the deployed app (blocked by accepting the Groq speech model's terms in the provider console — the app-level check now reports this as the refusal reason — or by pointing the host at a speech backend the deployment can reach).
 - [ ] Update `abahinzismart.vercel.app` (a separate Vercel project, outside this workspace's account).
 - [ ] Populate real district land shares (blocked by district crops/pasture/fallow aggregate data; supplied PDF has only national totals).

@@ -113,6 +113,15 @@ Editable records live in Supabase. The app ships the migration in `supabase/migr
 supabase db push
 ```
 
+The quickest path configures the whole project in one step, including Email sign-in. Create an access token at <https://supabase.com/dashboard/account/tokens>, then:
+
+```powershell
+$env:SUPABASE_ACCESS_TOKEN = "sbp_..."
+npm run setup:supabase
+```
+
+`scripts/setup-supabase.mjs` checks the token, turns on Email with auto-confirm, applies both migrations and verifies that `agronomist_records` answers over the public API. It is idempotent and never writes the token to disk. Without a token the two steps can also be done by hand: run both migration files in the SQL editor, then enable Email under Authentication → Sign In / Providers.
+
 Only an account whose **app_metadata** carries `role: "agronomist"` can add, edit or delete a record. `user_metadata` is editable by the account holder, so it is never trusted. Grant the role in the Supabase dashboard (Authentication → Users) or with SQL:
 
 ```sql

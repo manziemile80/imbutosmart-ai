@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
+    "setup:supabase": "node --env-file-if-exists=.env scripts/setup-supabase.mjs",
     "test": "vitest run",
     "test:watch": "vitest"
   },
