@@ -178,9 +178,11 @@ export function RecordManager({
   return (
     <div className="grid gap-5">
       {storage !== "ready" && storage !== "loading" && (
-        <Callout tone={storage === "unconfigured" ? "info" : "warning"}>
-          {dashboardCopy[language].storage[storage]}
-        </Callout>
+        <p className="text-xs leading-relaxed text-muted-foreground">
+          {storage === "unconfigured"
+            ? "Preview mode: records cannot be saved on this deployment. The reference catalogue below still works, and the Offline & data tab carries the setup detail."
+            : "The records database could not be reached; changes are disabled until it returns."}
+        </p>
       )}
       {notice && <Callout tone="success">{notice}</Callout>}
       {error && (

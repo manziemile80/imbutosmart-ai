@@ -17,7 +17,6 @@ import { districtInputs } from "@/lib/advice";
 import {
   RECORD_LABEL,
   SOURCE_LINKS,
-  DASHBOARD_MIGRATION_URL,
   dashboardCopy,
   forecastRisks,
   formatDate,
@@ -128,21 +127,11 @@ export function OverviewSection({
           </div>
 
           {unavailable && (
-            <Callout tone="warning" className="mt-4">
-              These five counts are not known, because the records database could not be read. They
-              are shown as <strong>—</strong> rather than 0, which would claim that nothing is
-              stored. The published figures and the reference catalogue below still work.{" "}
-              <a
-                className="link-quiet inline-flex items-center gap-1"
-                href={DASHBOARD_MIGRATION_URL}
-                target="_blank"
-                rel="noreferrer"
-              >
-                The dashboard migration
-              </a>{" "}
-              creates the records tables, and the deployment has to carry its Supabase URL and
-              browser key; either step needs whoever runs the deployment.
-            </Callout>
+            <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
+              The five counts are not known until the records database can be read, so they are
+              shown as <strong>—</strong> rather than 0. The published figures and the reference
+              catalogue below are unaffected.
+            </p>
           )}
 
           <div className="mt-5 grid gap-3 lg:grid-cols-3">

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Database, LoaderCircle, WifiOff } from "lucide-react";
+import { Database, ExternalLink, LoaderCircle, WifiOff } from "lucide-react";
 
 import { SiteShell } from "@/components/SiteShell";
 import { FieldLink } from "@/components/FieldLink";
@@ -8,6 +8,7 @@ import { useAgronomistAuth } from "@/hooks/use-agronomist-auth";
 import { useAgronomistRecords } from "@/hooks/use-agronomist-records";
 import { useDistrictWeather } from "@/hooks/use-district-weather";
 import {
+  DASHBOARD_MIGRATION_URL,
   DASHBOARD_TABS,
   dashboardCopy,
   visibleRecords,
@@ -86,6 +87,39 @@ export function AgronomistDashboard({ stats }: { stats: Stats | null }) {
         <div className="page-section">
           <AuthBar auth={auth} language={language} />
         </div>
+
+        {(records.storage === "unconfigured" || records.storage === "error") && (
+          <Callout tone="info" className="page-section">
+            <Database className="size-4" aria-hidden="true" />
+            <div>
+              <p className="text-sm text-foreground">
+                <strong>Preview mode.</strong> Records cannot be saved on this deployment, so the
+                workspace shows the published figures and the reference catalogue. The five counts
+                stay <strong>—</strong> rather than 0, and saving returns once the setup below is
+                done.
+              </p>
+              <details className="mt-2">
+                <summary className="cursor-pointer text-xs font-medium text-muted-foreground">
+                  Deployment setup
+                </summary>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                  {t.storage[records.storage]}{" "}
+                  <a
+                    className="link-quiet inline-flex items-center gap-1"
+                    href={DASHBOARD_MIGRATION_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <ExternalLink className="size-3.5" aria-hidden="true" />
+                    The dashboard migration
+                  </a>{" "}
+                  creates the tables, the deployment needs its Supabase URL and browser key, and
+                  email sign-in has to be enabled under Authentication → Sign In / Providers.
+                </p>
+              </details>
+            </div>
+          </Callout>
+        )}
 
         {records.storage === "ready" && records.pending > 0 && (
           <Callout tone="warning" className="page-section">

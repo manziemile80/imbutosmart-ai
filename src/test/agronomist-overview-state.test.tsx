@@ -45,7 +45,7 @@ describe("overview honest counts", () => {
       (node) => node.textContent,
     );
     expect(figures).toEqual(["—", "—", "—", "—", "—"]);
-    expect(screen.getByText(/These five counts are not known/)).toBeInTheDocument();
+    expect(screen.getByText(/The five counts are not known until/)).toBeInTheDocument();
     expect(screen.queryByText("No record has been stored yet.", { exact: false })).toBeNull();
     expect(screen.getByText(/no stored change can be listed here/)).toBeInTheDocument();
   });
@@ -68,7 +68,7 @@ describe("overview honest counts", () => {
       (node) => node.textContent,
     );
     expect(figures).toEqual(["0", "0", "0", "0", "—"]);
-    expect(screen.queryByText(/These five counts are not known/)).toBeNull();
+    expect(screen.queryByText(/The five counts are not known until/)).toBeNull();
     expect(screen.getByText("Database ready")).toBeInTheDocument();
   });
 });
