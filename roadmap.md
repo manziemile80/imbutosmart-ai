@@ -42,6 +42,7 @@
 - [x] Make the header bell an announcement feed about the app and the season, with no summary figures and no email form.
 - [x] Give each feature one menu: the field controls on the Farmer page, every assistant in Guidance, the summary on Summary get, announcements in the bell, and one language selector in the header.
 - [x] Rebuild the Agronomist Dashboard as a thirteen-module advisory workspace over the shared field, with a Supabase record store, row-level access, an audit trail and an offline retry queue.
+- [x] Keep the dashboard usable without a shared database: a missing table falls back to a record store in the browser, the shared reviewer account signs in on the device, and one calm strip says the records stay there instead of refusing every change.
 - [x] Show a price, premium, rate or coverage only when an agronomist records the source and date, and label anything unverified instead of inventing it.
 - [x] Link each farmer profile to the advice, pest reports, messages and follow-ups recorded under the same name, hide farmer records from a signed-out visitor, keep pest prevention separate from treatment, and download the knowledge guides for a visit.
 - [x] Report an unread record store honestly: the overview shows **—** with the reason instead of `0`, a status pill carries a short label, and the danger callout uses readable ink rather than the button's white.

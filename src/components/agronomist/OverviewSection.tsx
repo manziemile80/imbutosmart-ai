@@ -134,6 +134,13 @@ export function OverviewSection({
             </p>
           )}
 
+          {props.storage === "device" && (
+            <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
+              These counts come from the records saved in this browser on this device. They are not
+              a shared database total, and another device keeps its own list.
+            </p>
+          )}
+
           <div className="mt-5 grid gap-3 lg:grid-cols-3">
             <button
               type="button"

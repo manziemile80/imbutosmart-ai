@@ -15,6 +15,15 @@ export const DEMO_AGRONOMIST = {
   password: "Manzi12345",
 } as const;
 
+// When the deployment's cloud sign-in cannot serve the shared account, the same
+// printed credentials unlock a reviewer session that lives only in this browser.
+// The password is still checked against the constant above; no other address is
+// ever given a device session, and the record store stays on this device.
+export const DEVICE_SESSION = {
+  userId: "device-reviewer",
+  name: "Shared reviewer account",
+} as const;
+
 /** The addresses that hold dashboard rights without an app_metadata role. */
 export const AGRONOMIST_EMAILS: readonly string[] = [DEMO_AGRONOMIST.email];
 

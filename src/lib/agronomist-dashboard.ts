@@ -285,13 +285,60 @@ export type AgronomistRecord = {
   updatedAt: string;
 };
 
-export type StorageState = "loading" | "ready" | "unconfigured" | "error";
+export type StorageState = "loading" | "ready" | "device" | "unconfigured" | "error";
 
 export type RecordList = {
   storage: StorageState;
   records: AgronomistRecord[];
   message?: string;
 };
+
+// A record kept in the browser has no server to issue an id, so it gets a
+// prefixed id that can never be mistaken for a database row. When a shared
+// database is configured later, these records stay on the device instead of
+// being sent as updates to a row the server does not hold.
+export const DEVICE_RECORD_PREFIX = "device-";
+
+export function isDeviceRecordId(id: string): boolean {
+  return id.startsWith(DEVICE_RECORD_PREFIX);
+}
+
+export function newDeviceRecordId(): string {
+  const random =
+    typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+      ? crypto.randomUUID()
+      : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+  return `${DEVICE_RECORD_PREFIX}${random}`;
+}
+
+export type RecordAuthor = { id: string | null; name: string | null };
+
+/**
+ * Build a record that lives in this browser. The same schema validates it as a
+ * stored record, and an edit keeps the original author and creation time, so
+ * the page still says who wrote the record and when.
+ */
+export function deviceRecord(
+  kind: RecordKind,
+  data: unknown,
+  author: RecordAuthor,
+  existing?: AgronomistRecord | null,
+): AgronomistRecord | null {
+  const parsed = parseRecordData(kind, data);
+  if (!parsed.success) return null;
+  const now = new Date().toISOString();
+  return {
+    id: existing?.id ?? newDeviceRecordId(),
+    kind,
+    data: parsed.data as RecordData,
+    createdBy: existing?.createdBy ?? author.id,
+    createdByName: existing?.createdByName ?? author.name,
+    updatedBy: author.id,
+    updatedByName: author.name,
+    createdAt: existing?.createdAt ?? now,
+    updatedAt: now,
+  };
+}
 
 export type SaveResult = {
   ok: boolean;
@@ -339,6 +386,7 @@ type DashboardCopy = {
     demoBody: string;
     demoFill: string;
     demoUnavailable: string;
+    deviceSession: string;
   };
   storage: Record<StorageState, string>;
   /** A short label for a status pill; the sentence above is for the callout. */
@@ -403,7 +451,7 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
       notAgronomist:
         "This account is signed in but does not have the agronomist role. An administrator must grant it before records can be changed.",
       unavailable:
-        "Sign-in is not configured on this deployment. Reference data and published figures stay available; records cannot be changed.",
+        "Cloud sign-in is not configured on this deployment. The shared reviewer account can still sign in on this device, and the published figures and reference catalogue stay available.",
       roleHint:
         "Only accounts with the agronomist role can add, edit or delete records. The server checks the role on every change.",
       readOnly: "Read-only",
@@ -413,19 +461,24 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
       demoFill: "Fill the form",
       demoUnavailable:
         "This deployment has email sign-in turned off, so the shared account cannot sign in here. An administrator enables Email under Authentication → Sign In / Providers.",
+      deviceSession:
+        "Signed in on this device with the shared reviewer account. The session lives in this browser, so records stay here and are not shared with other devices.",
     },
     storage: {
       loading: "Loading records…",
       ready: "Records are stored in the app database.",
+      device:
+        "Records are saved in this browser on this device. No shared database is in use here, so these records stay on this device and are not shared with other devices.",
       unconfigured:
-        "The records database is not configured or its table has not been created. Published figures and the reference catalogue still work; changes are disabled.",
+        "The shared records table is not available on this deployment. Published figures and the reference catalogue still work; changes are stored on this device instead.",
       error:
-        "The records database could not be reached. Published figures and the reference catalogue are still shown.",
+        "The records database could not be reached. Published figures and the reference catalogue are still shown, and a copy of the records is kept on this device.",
     },
     storageShort: {
       loading: "Loading",
       ready: "Database ready",
-      unconfigured: "Database not configured",
+      device: "Saved on this device",
+      unconfigured: "Stored on this device",
       error: "Database unreachable",
     },
     common: {
@@ -486,7 +539,7 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
       notAgronomist:
         "Ce compte est connecté mais n’a pas le rôle d’agronome. Un administrateur doit l’accorder avant toute modification.",
       unavailable:
-        "La connexion n’est pas configurée sur ce déploiement. Les données de référence et les chiffres publiés restent disponibles ; les modifications sont désactivées.",
+        "La connexion cloud n’est pas configurée sur ce déploiement. Le compte de démonstration partagé peut tout de même se connecter sur cet appareil, et les chiffres publiés et le catalogue de référence restent disponibles.",
       roleHint:
         "Seuls les comptes ayant le rôle d’agronome peuvent ajouter, modifier ou supprimer. Le serveur vérifie le rôle à chaque changement.",
       readOnly: "Lecture seule",
@@ -496,19 +549,24 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
       demoFill: "Remplir le formulaire",
       demoUnavailable:
         "La connexion par e-mail est désactivée sur ce déploiement, le compte partagé ne peut donc pas se connecter ici. Un administrateur active Email dans Authentification → Connexion / Fournisseurs.",
+      deviceSession:
+        "Connecté sur cet appareil avec le compte de démonstration partagé. La session reste dans ce navigateur : les dossiers sont gardés ici et ne sont pas partagés avec d’autres appareils.",
     },
     storage: {
       loading: "Chargement des dossiers…",
       ready: "Les dossiers sont enregistrés dans la base de l’application.",
+      device:
+        "Les dossiers sont enregistrés dans ce navigateur, sur cet appareil. Aucune base partagée n’est utilisée ici : les dossiers restent sur cet appareil.",
       unconfigured:
-        "La base de dossiers n’est pas configurée ou sa table n’a pas été créée. Les chiffres publiés et le catalogue de référence restent disponibles ; les modifications sont désactivées.",
+        "La table partagée des dossiers n’est pas disponible sur ce déploiement. Les chiffres publiés et le catalogue de référence restent disponibles ; les modifications sont enregistrées sur cet appareil.",
       error:
-        "La base de dossiers est inaccessible. Les chiffres publiés et le catalogue de référence restent affichés.",
+        "La base de dossiers est inaccessible. Les chiffres publiés et le catalogue de référence restent affichés, et une copie des dossiers est gardée sur cet appareil.",
     },
     storageShort: {
       loading: "Chargement",
       ready: "Base prête",
-      unconfigured: "Base non configurée",
+      device: "Enregistré sur cet appareil",
+      unconfigured: "Sur cet appareil",
       error: "Base inaccessible",
     },
     common: {
@@ -569,7 +627,7 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
       notAgronomist:
         "Iyi konti yinjiye ariko nta ruhushya rw’impuguke ifite. Umuyobozi agomba kuyiha uruhushya mbere yo guhindura amadosiye.",
       unavailable:
-        "Kwinjira ntibyateganyijwe kuri iyi serivisi. Amakuru y’ubushakashatsi n’ibipimo byasohotse biraboneka; guhindura amadosiye ntibishoboka.",
+        "Kwinjira mu bicumbi ntibyateganyijwe kuri iyi serivisi. Konti y’urugero isangiwe ishobora kwinjira kuri iyi mudasobwa, kandi ibipimo byasohotse n’urutonde rw’ubushakashatsi biraboneka.",
       roleHint:
         "Konti zifite uruhushya rw’impuguke gusa zishobora kongera, guhindura cyangwa gusiba. Seriveri igenzura uruhushya buri gihe.",
       readOnly: "Gusoma gusa",
@@ -579,19 +637,24 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
       demoFill: "Uzuza ifishi",
       demoUnavailable:
         "Kwinjira n’imeyili ntibyashyizweho kuri iyi serivisi, bityo iyi konti ntishobora kwinjira hano. Umuyobozi abishyira mu bikorwa muri Authentication → Sign In / Providers.",
+      deviceSession:
+        "Winjiye kuri iyi mudasobwa ukoresheje konti y’urugero isangiwe. Iyi serivisi iguma muri iyi mushakisha, bityo amadosiye aguma hano kandi ntasangizwa n’izindi mudasobwa.",
     },
     storage: {
       loading: "Turashakisha amadosiye…",
       ready: "Amadosiye abitswe mu bubiko bw’porogaramu.",
+      device:
+        "Amadosiye abikwa muri iyi mushakisha kuri iyi mudasobwa. Nta bubiko busangiwe bukoreshwa hano, bityo amadosiye aguma kuri iyi mudasobwa.",
       unconfigured:
-        "Ububiko bw’amadosiye ntibwateganyijwe cyangwa imbonerahamwe yabwo ntiyakozwe. Ibipimo byasohotse n’urutonde rw’ubushakashatsi biraboneka; guhindura ntibishoboka.",
+        "Imbonerahamwe isangiwe y’amadosiye ntaboneka kuri iyi serivisi. Ibipimo byasohotse n’urutonde rw’ubushakashatsi biraboneka; guhindura bibikwa kuri iyi mudasobwa.",
       error:
-        "Ububiko bw’amadosiye ntibwabonetse. Ibipimo byasohotse n’urutonde rw’ubushakashatsi biracyagaragarira.",
+        "Ububiko bw’amadosiye ntibwabonetse. Ibipimo byasohotse n’urutonde rw’ubushakashatsi biracyagaragarira, kandi kopi y’amadosiye igumishwa kuri iyi mudasobwa.",
     },
     storageShort: {
       loading: "Biracyashakishwa",
       ready: "Ububiko bwiteguye",
-      unconfigured: "Ububiko ntibwateganyijwe",
+      device: "Byabitswe kuri iyi mudasobwa",
+      unconfigured: "Kuri iyi mudasobwa",
       error: "Ububiko ntibwabonetse",
     },
     common: {
@@ -806,9 +869,10 @@ export type OverviewCounts = {
 
 // A zero is only a fact when the store was actually read. If the table is
 // missing or unreachable, showing "0 records" claims that nothing is stored;
-// the dashboard shows that the figure is not known instead.
+// the dashboard shows that the figure is not known instead. A device store is a
+// real read, so its empty list is a real zero.
 export function recordsWereCounted(storage: StorageState, loaded: number): boolean {
-  return storage === "ready" || loaded > 0;
+  return storage === "ready" || storage === "device" || loaded > 0;
 }
 
 export function overviewCounts(records: AgronomistRecord[]): OverviewCounts {

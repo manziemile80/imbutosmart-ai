@@ -56,9 +56,11 @@ export function OfflineSection({
             <Database className="size-3.5" aria-hidden="true" />
             {t.storageShort[storage]}
           </StatusPill>
-          <StatusPill tone={pending > 0 ? "warning" : "neutral"}>
-            {pending} change{pending === 1 ? "" : "s"} waiting to sync
-          </StatusPill>
+          {storage !== "device" && (
+            <StatusPill tone={pending > 0 ? "warning" : "neutral"}>
+              {pending} change{pending === 1 ? "" : "s"} waiting to sync
+            </StatusPill>
+          )}
         </div>
 
         <dl className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -104,11 +106,20 @@ export function OfflineSection({
             <RefreshCw aria-hidden="true" />
             {pending > 0 ? "Refresh and send waiting changes" : t.common.refresh}
           </Button>
-          <Button type="button" variant="ghost" onClick={() => setCleared(clearCache())}>
-            <Trash2 aria-hidden="true" />
-            Clear the saved copy
-          </Button>
+          {storage !== "device" && (
+            <Button type="button" variant="ghost" onClick={() => setCleared(clearCache())}>
+              <Trash2 aria-hidden="true" />
+              Clear the saved copy
+            </Button>
+          )}
         </div>
+
+        {storage === "device" && (
+          <Callout tone="info" className="mt-4">
+            These records are the store on this device, not a copy of a shared database. Delete a
+            record from its module to remove it; there is no separate saved copy to clear.
+          </Callout>
+        )}
 
         {cleared && (
           <Callout tone={cleared.ok ? "success" : "warning"} className="mt-4">
@@ -123,7 +134,7 @@ export function OfflineSection({
                 : "The saved copy has been removed from this browser. The database copy is unchanged."}
           </Callout>
         )}
-        {storage !== "ready" && (
+        {(storage === "error" || storage === "unconfigured") && (
           <Callout tone="info" className="mt-4">
             {t.storage[storage]} The tables come from{" "}
             <a

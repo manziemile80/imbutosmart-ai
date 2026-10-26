@@ -41,7 +41,7 @@ export function AgronomistDashboard({ stats }: { stats: Stats | null }) {
   const t = dashboardCopy[language];
   const [tab, setTab] = useState<DashboardTab>("overview");
   const auth = useAgronomistAuth();
-  const records = useAgronomistRecords();
+  const records = useAgronomistRecords(auth.userId, auth.name);
   const { weather, loading: weatherLoading } = useDistrictWeather(field.district);
 
   // A visitor sees the reference catalogue, never a farmer's stored records,
@@ -88,22 +88,22 @@ export function AgronomistDashboard({ stats }: { stats: Stats | null }) {
           <AuthBar auth={auth} language={language} />
         </div>
 
-        {(records.storage === "unconfigured" || records.storage === "error") && (
+        {records.storage === "device" && (
           <Callout tone="info" className="page-section">
             <Database className="size-4" aria-hidden="true" />
             <div>
               <p className="text-sm text-foreground">
-                <strong>Preview mode.</strong> Records cannot be saved on this deployment, so the
-                workspace shows the published figures and the reference catalogue. The five counts
-                stay <strong>—</strong> rather than 0, and saving returns once the setup below is
-                done.
+                <strong>Saved on this device.</strong> Records you add are kept in this browser and
+                are not shared with other devices. The published figures, the forecast and the
+                reference catalogue work as usual.
               </p>
               <details className="mt-2">
                 <summary className="cursor-pointer text-xs font-medium text-muted-foreground">
-                  Deployment setup
+                  Shared database
                 </summary>
                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                  {t.storage[records.storage]}{" "}
+                  A deployment can keep records in a shared database instead, so every agronomist
+                  sees the same list.{" "}
                   <a
                     className="link-quiet inline-flex items-center gap-1"
                     href={DASHBOARD_MIGRATION_URL}
@@ -113,15 +113,23 @@ export function AgronomistDashboard({ stats }: { stats: Stats | null }) {
                     <ExternalLink className="size-3.5" aria-hidden="true" />
                     The dashboard migration
                   </a>{" "}
-                  creates the tables, the deployment needs its Supabase URL and browser key, and
-                  email sign-in has to be enabled under Authentication → Sign In / Providers.
+                  creates its tables. Records already on this device stay here.
                 </p>
               </details>
             </div>
           </Callout>
         )}
 
-        {records.storage === "ready" && records.pending > 0 && (
+        {records.storage === "error" && (
+          <Callout tone="info" className="page-section">
+            <Database className="size-4" aria-hidden="true" />
+            <p className="text-sm text-foreground">
+              <strong>Working from the saved copy.</strong> {t.storage.error}
+            </p>
+          </Callout>
+        )}
+
+        {records.pending > 0 && records.storage !== "device" && (
           <Callout tone="warning" className="page-section">
             <WifiOff className="size-4" aria-hidden="true" />
             {records.pending} change{records.pending === 1 ? "" : "s"} saved on this device{" "}

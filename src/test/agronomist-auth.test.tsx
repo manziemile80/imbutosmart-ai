@@ -10,6 +10,7 @@ afterEach(cleanup);
 function auth(overrides: Partial<AgronomistAuth> = {}): AgronomistAuth {
   return {
     status: "signedOut",
+    source: null,
     userId: null,
     email: null,
     name: null,
@@ -58,4 +59,29 @@ it("prints the shared account in the farmer's language", () => {
 
   expect(screen.getByText("Konti y’urugero isangiwe")).toBeTruthy();
   expect(screen.getByText(DEMO_AGRONOMIST.email)).toBeTruthy();
+});
+
+it("keeps the sign-in form on a deployment without cloud sign-in", () => {
+  render(<AuthBar auth={auth({ status: "unavailable" })} language="en" />);
+
+  expect(screen.getByRole("button", { name: /Sign in/ })).toBeTruthy();
+  expect(screen.getByText(DEMO_AGRONOMIST.email)).toBeTruthy();
+});
+
+it("says plainly when the reviewer session lives on this device", () => {
+  render(
+    <AuthBar
+      auth={auth({
+        status: "signedIn",
+        source: "device",
+        email: DEMO_AGRONOMIST.email,
+        name: "Shared reviewer account",
+        isAgronomist: true,
+      })}
+      language="en"
+    />,
+  );
+
+  expect(screen.getByText(/Signed in on this device/)).toBeTruthy();
+  expect(screen.getByText(/records stay here and are not shared/)).toBeTruthy();
 });

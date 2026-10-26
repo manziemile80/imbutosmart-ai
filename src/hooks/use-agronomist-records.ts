@@ -7,20 +7,26 @@ import {
   saveAgronomistRecord,
 } from "@/lib/agronomist-dashboard.functions";
 import {
+  deviceRecord,
+  isDeviceRecordId,
   parseRecordData,
   type AgronomistRecord,
-  type RecordData,
+  type RecordAuthor,
   type RecordKind,
   type RecordList,
   type SaveResult,
 } from "@/lib/agronomist-dashboard";
 
-// The dashboard's record store. A successful read is cached for the visit and
-// for a later offline visit; a change made while the connection is down is kept
-// in a small retry queue and sent when the page next loads or refreshes online.
+// The dashboard's record store. A deployment with a shared database reads and
+// writes there, caching a copy for a later offline visit and queueing a change
+// made while the connection is down. A deployment without one falls back to a
+// store in this browser: the same schemas validate the record, the page still
+// says who wrote it, and the records stay on this device instead of the page
+// refusing every change.
 
 const CACHE_KEY = "imbutosmart-agronomist-records-v1";
 const QUEUE_KEY = "imbutosmart-agronomist-queue-v1";
+const DEVICE_KEY = "imbutosmart-agronomist-device-v1";
 
 type Cached = { records: AgronomistRecord[]; savedAt: string };
 
@@ -70,6 +76,30 @@ function writeQueue(queue: Queued[]) {
   writeJson(QUEUE_KEY, queue);
 }
 
+function newestFirst(records: AgronomistRecord[]): AgronomistRecord[] {
+  return [...records].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+}
+
+function readDevice(): AgronomistRecord[] {
+  const stored = readJson<AgronomistRecord[]>(DEVICE_KEY);
+  if (!Array.isArray(stored)) return [];
+  return newestFirst(
+    stored.filter(
+      (record) =>
+        record &&
+        typeof record.id === "string" &&
+        isDeviceRecordId(record.id) &&
+        typeof record.kind === "string" &&
+        record.data &&
+        typeof record.data === "object",
+    ),
+  );
+}
+
+function writeDevice(records: AgronomistRecord[]) {
+  writeJson(DEVICE_KEY, newestFirst(records));
+}
+
 function queuedFailure(caught: unknown): SaveResult & { queued: true } {
   const message = caught instanceof Error ? caught.message : null;
   return message
@@ -93,7 +123,10 @@ export type AgronomistRecords = RecordList & {
   clearCache: () => { ok: boolean; pending: number };
 };
 
-export function useAgronomistRecords(): AgronomistRecords {
+export function useAgronomistRecords(
+  authorId: string | null = null,
+  authorName: string | null = null,
+): AgronomistRecords {
   const list = useServerFn(listAgronomistRecords);
   const saveRemote = useServerFn(saveAgronomistRecord);
   const deleteRemote = useServerFn(deleteAgronomistRecord);
@@ -104,11 +137,27 @@ export function useAgronomistRecords(): AgronomistRecords {
   const [lastSavedAt, setLastSavedAt] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const flushing = useRef(false);
+  // True once the server has said it has no shared records database. Writes then
+  // go to this browser rather than failing on a table that does not exist.
+  const deviceMode = useRef(false);
+  // The identity that signs a device record. The page passes the signed-in
+  // reviewer, so the record keeps a name after a reload.
+  const author = useRef<RecordAuthor>({ id: authorId, name: authorName });
+
+  useEffect(() => {
+    author.current = { id: authorId, name: authorName };
+  }, [authorId, authorName]);
 
   const remember = useCallback((records: AgronomistRecord[]) => {
     const savedAt = new Date().toISOString();
     writeJson(CACHE_KEY, { records, savedAt } satisfies Cached);
     setLastSavedAt(savedAt);
+  }, []);
+
+  const rememberDevice = useCallback((records: AgronomistRecord[]) => {
+    writeDevice(records);
+    const newest = newestFirst(records)[0]?.updatedAt ?? null;
+    setLastSavedAt(newest ?? new Date().toISOString());
   }, []);
 
   // An edit made offline is shown from the local copy straight away, so the
@@ -124,7 +173,7 @@ export function useAgronomistRecords(): AgronomistRecords {
           record.id === id
             ? {
                 ...record,
-                data: parsed.data as RecordData,
+                data: parsed.data as AgronomistRecord["data"],
                 updatedAt: now,
                 updatedByName: "Saved on this device",
               }
@@ -184,28 +233,70 @@ export function useAgronomistRecords(): AgronomistRecords {
     }
   }, [deleteRemote, saveRemote]);
 
+  const loadDeviceStore = useCallback(() => {
+    deviceMode.current = true;
+    const records = readDevice();
+    setState({ storage: "device", records });
+    setNotice(null);
+    rememberDevice(records);
+    return records;
+  }, [rememberDevice]);
+
+  const saveOnDevice = useCallback(
+    (kind: RecordKind, data: unknown, id?: string | null): SaveResult => {
+      const parsed = parseRecordData(kind, data);
+      if (!parsed.success) {
+        return {
+          ok: false,
+          error: "invalid",
+          message: parsed.error.issues[0]?.message ?? "Check the record details.",
+        };
+      }
+      const records = readDevice();
+      // A server row id is never reused as a device id: an edit that arrives
+      // before the fallback was noticed becomes its own local record instead of
+      // claiming to update a row this browser does not hold.
+      const existing = id && isDeviceRecordId(id) ? records.find((r) => r.id === id) : null;
+      const record = deviceRecord(kind, parsed.data, author.current, existing ?? null);
+      if (!record) {
+        return { ok: false, error: "invalid", message: "Check the record details." };
+      }
+      const next = [record, ...records.filter((item) => item.id !== record.id)];
+      deviceMode.current = true;
+      setState({ storage: "device", records: newestFirst(next) });
+      rememberDevice(next);
+      return { ok: true, record };
+    },
+    [rememberDevice],
+  );
+
   const refresh = useCallback(async () => {
     await flush();
     setBusy(true);
     try {
       const result = await list();
       if (result.storage === "ready") {
+        deviceMode.current = false;
         setState(result);
         remember(result.records);
         setNotice(null);
-      } else {
-        const cached = readJson<Cached>(CACHE_KEY);
-        setState({
-          ...result,
-          records: cached?.records ?? [],
-        });
-        if (cached) {
-          setNotice(
-            `Showing the copy saved on ${new Date(cached.savedAt).toLocaleString("en-GB")}.`,
-          );
-        }
+        return;
+      }
+      if (result.storage === "unconfigured") {
+        loadDeviceStore();
+        return;
+      }
+      deviceMode.current = false;
+      const cached = readJson<Cached>(CACHE_KEY);
+      setState({
+        ...result,
+        records: cached?.records ?? [],
+      });
+      if (cached) {
+        setNotice(`Showing the copy saved on ${new Date(cached.savedAt).toLocaleString("en-GB")}.`);
       }
     } catch (caught) {
+      deviceMode.current = false;
       const cached = readJson<Cached>(CACHE_KEY);
       setState({
         storage: "error",
@@ -219,7 +310,7 @@ export function useAgronomistRecords(): AgronomistRecords {
       setBusy(false);
       setPending(readQueue().length);
     }
-  }, [flush, list, remember]);
+  }, [flush, list, remember, loadDeviceStore]);
 
   useEffect(() => {
     void refresh();
@@ -230,6 +321,9 @@ export function useAgronomistRecords(): AgronomistRecords {
       setBusy(true);
       setNotice(null);
       try {
+        if (deviceMode.current || (id != null && isDeviceRecordId(id))) {
+          return saveOnDevice(kind, data, id);
+        }
         const result = await saveRemote({ data: { kind, id: id ?? null, data } });
         const saved = result.record;
         if (result.ok && saved) {
@@ -240,6 +334,9 @@ export function useAgronomistRecords(): AgronomistRecords {
             return { ...current, storage: "ready", records };
           });
           return result;
+        }
+        if (result.error === "unconfigured") {
+          return saveOnDevice(kind, data, id);
         }
         if (result.error === "failed") {
           const queue = readQueue();
@@ -275,7 +372,7 @@ export function useAgronomistRecords(): AgronomistRecords {
         setBusy(false);
       }
     },
-    [applyLocalEdit, remember, saveRemote],
+    [applyLocalEdit, remember, saveOnDevice, saveRemote],
   );
 
   const remove = useCallback(
@@ -283,6 +380,13 @@ export function useAgronomistRecords(): AgronomistRecords {
       setBusy(true);
       setNotice(null);
       try {
+        if (deviceMode.current || isDeviceRecordId(id)) {
+          const records = readDevice().filter((record) => record.id !== id);
+          deviceMode.current = true;
+          setState({ storage: "device", records });
+          rememberDevice(records);
+          return { ok: true };
+        }
         const result = await deleteRemote({ data: { id } });
         if (result.ok) {
           setState((current) => {
@@ -291,6 +395,13 @@ export function useAgronomistRecords(): AgronomistRecords {
             return { ...current, records };
           });
           return result;
+        }
+        if (result.error === "unconfigured") {
+          const records = readDevice().filter((record) => record.id !== id);
+          deviceMode.current = true;
+          setState({ storage: "device", records });
+          rememberDevice(records);
+          return { ok: true };
         }
         if (result.error === "failed") {
           const queue = readQueue();
@@ -330,7 +441,7 @@ export function useAgronomistRecords(): AgronomistRecords {
         setBusy(false);
       }
     },
-    [deleteRemote, remember],
+    [deleteRemote, remember, rememberDevice],
   );
 
   return {

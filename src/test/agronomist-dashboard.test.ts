@@ -4,11 +4,14 @@ import {
   buildActivityCsv,
   contactSpecializations,
   dashboardCopy,
+  deviceRecord,
   filterContacts,
   filterRecords,
   forecastRisks,
   formatRwf,
   isAgronomistClaims,
+  isDeviceRecordId,
+  newDeviceRecordId,
   overviewCounts,
   parseRecordData,
   recordsWereCounted,
@@ -252,6 +255,7 @@ describe("overview counts", () => {
     // A missing table and an empty table are different facts. Only a read
     // store, or a copy already in hand, may be counted.
     expect(recordsWereCounted("ready", 0)).toBe(true);
+    expect(recordsWereCounted("device", 0)).toBe(true);
     expect(recordsWereCounted("unconfigured", 0)).toBe(false);
     expect(recordsWereCounted("error", 0)).toBe(false);
     expect(recordsWereCounted("loading", 0)).toBe(false);
@@ -260,11 +264,53 @@ describe("overview counts", () => {
 
   it("keeps every status pill to a short label rather than a sentence", () => {
     for (const copy of Object.values(dashboardCopy)) {
-      for (const state of ["loading", "ready", "unconfigured", "error"] as const) {
+      for (const state of ["loading", "ready", "device", "unconfigured", "error"] as const) {
         expect(copy.storageShort[state].length).toBeLessThan(40);
         expect(copy.storageShort[state]).not.toMatch(/\.\s/);
       }
     }
+  });
+});
+
+describe("device records", () => {
+  const author = { id: "device-reviewer", name: "Shared reviewer account" };
+
+  it("gives a browser record an id that cannot be mistaken for a row", () => {
+    expect(isDeviceRecordId(newDeviceRecordId())).toBe(true);
+    expect(isDeviceRecordId("5f1e5d2a-1c3b-4a2e-9f00-000000000000")).toBe(false);
+  });
+
+  it("validates a device record with the same schema as a stored one", () => {
+    const saved = deviceRecord("product", { category: "fertilizer", name: "Urea" }, author);
+
+    expect(saved).not.toBeNull();
+    expect(saved?.kind).toBe("product");
+    expect(saved?.data["name"]).toBe("Urea");
+    expect(saved?.createdByName).toBe("Shared reviewer account");
+    expect(saved?.updatedByName).toBe("Shared reviewer account");
+    expect(isDeviceRecordId(saved?.id ?? "")).toBe(true);
+
+    expect(deviceRecord("product", { category: "fertilizer", name: "" }, author)).toBeNull();
+  });
+
+  it("keeps the author and creation time when a device record is edited", () => {
+    const created = deviceRecord(
+      "farmer",
+      { fullName: "Jean", district: "Musanze", soil: "Volcanic" },
+      author,
+    );
+    const edited = deviceRecord(
+      "farmer",
+      { fullName: "Jean", district: "Musanze", soil: "Volcanic", crops: "Maize" },
+      { id: "someone-else", name: "Second officer" },
+      created,
+    );
+
+    expect(edited?.id).toBe(created?.id);
+    expect(edited?.createdByName).toBe("Shared reviewer account");
+    expect(edited?.updatedByName).toBe("Second officer");
+    expect(edited?.createdAt).toBe(created?.createdAt);
+    expect(edited?.data["crops"]).toBe("Maize");
   });
 });
 

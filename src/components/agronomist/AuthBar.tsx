@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
 import { Input } from "@/components/ui/input";
 import { StatusPill } from "@/components/ui/callout";
-import { DEMO_AGRONOMIST } from "@/lib/agronomist-accounts";
+import { DEMO_AGRONOMIST, isDemoAgronomist } from "@/lib/agronomist-accounts";
 import { dashboardCopy } from "@/lib/agronomist-dashboard";
 import type { AgronomistAuth } from "@/hooks/use-agronomist-auth";
 import type { FarmerLanguage } from "@/lib/farmer-language";
@@ -60,7 +60,7 @@ export function AuthBar({ auth, language }: { auth: AgronomistAuth; language: Fa
         <p className="mt-3 text-sm text-muted-foreground">{t.storage.loading}</p>
       )}
 
-      {auth.status === "signedOut" && (
+      {(auth.status === "signedOut" || auth.status === "unavailable") && (
         <form
           onSubmit={onSubmit}
           className="mt-3 grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end"
@@ -144,6 +144,12 @@ export function AuthBar({ auth, language }: { auth: AgronomistAuth; language: Fa
         </div>
       )}
 
+      {auth.status === "signedIn" && auth.source === "device" && (
+        <Callout tone="info" className="mt-3">
+          {t.auth.deviceSession}
+        </Callout>
+      )}
+
       {auth.status === "signedIn" && !auth.isAgronomist && (
         <Callout tone="warning" className="mt-3">
           {t.auth.notAgronomist}
@@ -153,9 +159,10 @@ export function AuthBar({ auth, language }: { auth: AgronomistAuth; language: Fa
       {error && (
         <Callout tone="danger" role="alert" className="mt-3">
           {error}
-          {/email logins are disabled|email_provider_disabled/i.test(error) && (
-            <span className="mt-1 block">{t.auth.demoUnavailable}</span>
-          )}
+          {isDemoAgronomist(email) &&
+            /email logins are disabled|email_provider_disabled/i.test(error) && (
+              <span className="mt-1 block">{t.auth.demoUnavailable}</span>
+            )}
         </Callout>
       )}
     </section>

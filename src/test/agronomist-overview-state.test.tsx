@@ -53,7 +53,7 @@ describe("overview honest counts", () => {
   it("keeps the status pill to a short label", () => {
     renderOverview();
 
-    expect(screen.getByText("Database not configured")).toBeInTheDocument();
+    expect(screen.getByText("Stored on this device")).toBeInTheDocument();
     expect(
       screen.queryByText(/Published figures and the reference catalogue still work/),
     ).toBeNull();
@@ -70,5 +70,17 @@ describe("overview honest counts", () => {
     expect(figures).toEqual(["0", "0", "0", "0", "—"]);
     expect(screen.queryByText(/The five counts are not known until/)).toBeNull();
     expect(screen.getByText("Database ready")).toBeInTheDocument();
+  });
+
+  it("treats a device store as read, and says the count is device-only", () => {
+    renderOverview({ storage: "device" });
+
+    const figures = Array.from(document.querySelectorAll(".stat-value")).map(
+      (node) => node.textContent,
+    );
+    expect(figures).toEqual(["0", "0", "0", "0", "—"]);
+    expect(screen.getByText("Saved on this device")).toBeInTheDocument();
+    expect(screen.getByText(/another device keeps its own list/)).toBeInTheDocument();
+    expect(screen.queryByText(/Database not configured/)).toBeNull();
   });
 });

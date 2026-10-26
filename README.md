@@ -131,7 +131,7 @@ update auth.users
  where email = 'officer@example.org';
 ```
 
-The server checks the role on every write as well as the database policy, and the audit table keeps the actor, action and record. If the database is not configured or the migration has not been applied, the page still shows the published figures and the reference catalogue, and says plainly that records cannot be changed. The reason is given once, in a calm **Preview mode** strip whose "Deployment setup" disclosure carries the migration link and the two provider steps; each module adds only a short line. A count is then shown as **—** with the reason, never as `0`: a missing table and an empty table are different facts, and a zero would claim that nothing is stored. A record edited while the connection is down is kept on the device and retried when the page next reaches the server.
+The server checks the role on every write as well as the database policy, and the audit table keeps the actor, action and record. When the deployment has no shared database, or its migration has not been applied, the dashboard keeps its records in the browser instead of refusing every change. The shared reviewer account unlocks that device store with the same printed credentials, and a calm **Saved on this device** strip says once that the records stay here and are not shared; the **Shared database** disclosure carries the migration link. A count is then the device list's real total, so an empty device store is `0`, while a store that could not be read at all is still **—** rather than zero. A record edited while the connection is down is kept on the device and retried when the page next reaches the server.
 
 A visitor who is not signed in sees only the reference records the database makes public — input products, agronomist contacts and insurance products. Farmer profiles, recommendations, pest reports, messages and follow-ups stay hidden even when an earlier visit left a copy on the same device. A farmer's profile lists the recommendations, pest reports, messages and follow-ups that carry the same name, and links back to the tab that holds each one. Pest reports keep prevention advice separate from treatment advice, a recommendation can name the farmer it is for, and the knowledge centre can download a guide or the filtered set as plain text for a visit.
 
@@ -146,7 +146,7 @@ Those two values live in `src/lib/agronomist-accounts.ts` and are shown under th
 
 The password is public: it is in this repository and on the page. Use the account to demonstrate the dashboard, never to hold a real farmer's records, and change the password or delete the account before a real deployment. Add further addresses in the table **and** in `AGRONOMIST_EMAILS`, or in neither.
 
-Supabase must have the **Email** provider enabled (Authentication → Sign In / Providers). When it is disabled, every sign-in returns `email_provider_disabled` and the form says that an administrator has to enable the provider; no code change can work around it. A confirmed email is not required when "Confirm email" is off; when it is on, the first sign-in creates the account and asks for the address to be confirmed before the next sign-in.
+Supabase must have the **Email** provider enabled (Authentication → Sign In / Providers). When it is disabled, or when the deployment has no Supabase configuration at all, the same printed credentials open a reviewer session that lives in the browser; the page says so, and the records it writes stay on that device. No other address gets that path, and every write to a shared database still checks the agronomist role on the server. A confirmed email is not required when "Confirm email" is off; when it is on, the first sign-in creates the account and asks for the address to be confirmed before the next sign-in. As soon as the cloud sign-in works, it replaces the device session, and the form no longer offers the device path.
 
 ## 13. Technologies Used
 
@@ -251,7 +251,7 @@ npm run dev
 
 For a production build, preview with `node .output/server/index.mjs` after `npm run build` rather than `vite preview` (the Nitro output lives in `.output`).
 
-The agronomist records use the server-side `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`, plus the migration described in section 12.1. No service-role key is needed: the server forwards the signed-in account's token, and the row-level policies decide what that account may read or write. The dashboard's sign-in form, record status and offline notice all stay visible when Supabase is not configured, so the rest of the app still works.
+The agronomist records use the server-side `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`, plus the migration described in section 12.1. No service-role key is needed: the server forwards the signed-in account's token, and the row-level policies decide what that account may read or write. When Supabase is not configured, the dashboard falls back to a record store in the browser and the shared reviewer account can still sign in there, so the rest of the app and the workspace stay usable on that device.
 
 
 ## 18. Deployment

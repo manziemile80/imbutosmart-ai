@@ -159,7 +159,9 @@ export function RecordManager({
       setNotice(
         result.queued
           ? "Kept on this device and sent when the connection returns. A new record appears in the list after the server accepts it; an edit is shown from the local copy."
-          : "Saved. The record keeps the author's name and the time of the change.",
+          : storage === "device"
+            ? "Saved on this device. The record is kept in this browser with its author and the time of the change."
+            : "Saved. The record keeps the author's name and the time of the change.",
       );
     } else {
       setError(result.message ?? "The record could not be saved.");
@@ -179,9 +181,11 @@ export function RecordManager({
     <div className="grid gap-5">
       {storage !== "ready" && storage !== "loading" && (
         <p className="text-xs leading-relaxed text-muted-foreground">
-          {storage === "unconfigured"
-            ? "Preview mode: records cannot be saved on this deployment. The reference catalogue below still works, and the Offline & data tab carries the setup detail."
-            : "The records database could not be reached; changes are disabled until it returns."}
+          {storage === "device"
+            ? "Saved on this device: a record you add or change here stays in this browser. It is not shared with another device yet."
+            : storage === "unconfigured"
+              ? "This browser could not keep a local copy, so changes are disabled. The reference catalogue below still works."
+              : "The records database could not be reached; changes are kept in this browser until it returns."}
         </p>
       )}
       {notice && <Callout tone="success">{notice}</Callout>}
