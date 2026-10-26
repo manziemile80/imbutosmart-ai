@@ -89,6 +89,8 @@ export type AgronomistRecords = RecordList & {
     id?: string | null,
   ) => Promise<SaveResult & { queued?: boolean }>;
   remove: (id: string) => Promise<SaveResult>;
+  /** Remove the offline copy of the records, keeping any change waiting to sync. */
+  clearCache: () => { ok: boolean; pending: number };
 };
 
 export function useAgronomistRecords(): AgronomistRecords {
@@ -134,6 +136,21 @@ export function useAgronomistRecords(): AgronomistRecords {
     },
     [remember],
   );
+
+  // Removing the saved copy must not throw away a change that has not reached
+  // the server yet, so the retry queue is kept and its size is reported back.
+  const clearCache = useCallback(() => {
+    if (typeof window === "undefined") return { ok: false, pending: 0 };
+    try {
+      window.localStorage.removeItem(CACHE_KEY);
+      const waiting = readQueue().length;
+      setLastSavedAt(null);
+      setPending(waiting);
+      return { ok: true, pending: waiting };
+    } catch {
+      return { ok: false, pending: readQueue().length };
+    }
+  }, []);
 
   const flush = useCallback(async () => {
     if (flushing.current) return;
@@ -325,5 +342,6 @@ export function useAgronomistRecords(): AgronomistRecords {
     refresh,
     save,
     remove,
+    clearCache,
   };
 }

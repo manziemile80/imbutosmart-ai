@@ -58,8 +58,15 @@ const PEST_FIELDS: FieldDef[] = [
     help: "Record what the agronomist observed. Do not present a guess as a laboratory diagnosis.",
   },
   {
+    name: "prevention",
+    label: "Prevention advice",
+    type: "textarea",
+    full: true,
+    help: "What should the farmer change to stop this spreading or returning? Cultural measures come first.",
+  },
+  {
     name: "recommendation",
-    label: "Prevention or treatment advice",
+    label: "Treatment advice",
     type: "textarea",
     full: true,
     help: "General integrated pest management first. Any chemical product follows its label and local extension advice.",
@@ -173,9 +180,15 @@ export function PestsSection(props: SectionProps) {
                     {data.possibleCause}
                   </p>
                 )}
+                {data.prevention && (
+                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                    <strong className="text-foreground">Prevention: </strong>
+                    {data.prevention}
+                  </p>
+                )}
                 {data.recommendation && (
                   <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                    <strong className="text-foreground">Advice: </strong>
+                    <strong className="text-foreground">Treatment: </strong>
                     {data.recommendation}
                   </p>
                 )}

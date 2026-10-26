@@ -7,7 +7,12 @@ import { Callout } from "@/components/ui/callout";
 import { useAgronomistAuth } from "@/hooks/use-agronomist-auth";
 import { useAgronomistRecords } from "@/hooks/use-agronomist-records";
 import { useDistrictWeather } from "@/hooks/use-district-weather";
-import { DASHBOARD_TABS, dashboardCopy, type DashboardTab } from "@/lib/agronomist-dashboard";
+import {
+  DASHBOARD_TABS,
+  dashboardCopy,
+  visibleRecords,
+  type DashboardTab,
+} from "@/lib/agronomist-dashboard";
 import type { Stats } from "@/lib/api";
 import { useField } from "@/lib/field";
 import { AuthBar } from "./AuthBar";
@@ -38,8 +43,12 @@ export function AgronomistDashboard({ stats }: { stats: Stats | null }) {
   const records = useAgronomistRecords();
   const { weather, loading: weatherLoading } = useDistrictWeather(field.district);
 
+  // A visitor sees the reference catalogue, never a farmer's stored records,
+  // even when an earlier agronomist left a copy on this device.
+  const shown = visibleRecords(records.records, auth.isAgronomist);
+
   const sectionProps = {
-    records: records.records,
+    records: shown,
     storage: records.storage,
     canEdit: auth.isAgronomist,
     busy: records.busy,
@@ -104,6 +113,13 @@ export function AgronomistDashboard({ stats }: { stats: Stats | null }) {
           </Callout>
         )}
 
+        {!auth.isAgronomist && records.records.length > shown.length && (
+          <Callout tone="info" className="page-section">
+            Farmer records stored on this device are hidden until an agronomist signs in. The
+            reference catalogue and the published figures stay available.
+          </Callout>
+        )}
+
         <nav aria-label="Agronomist dashboard modules" className="page-section">
           <div
             role="tablist"
@@ -155,7 +171,7 @@ export function AgronomistDashboard({ stats }: { stats: Stats | null }) {
           )}
           {tab === "inputs" && <InputsSection {...sectionProps} />}
           {tab === "agronomists" && <AgronomistsSection {...sectionProps} />}
-          {tab === "farmers" && <FarmersSection {...sectionProps} />}
+          {tab === "farmers" && <FarmersSection {...sectionProps} onOpenTab={setTab} />}
           {tab === "recommendations" && (
             <RecommendationsSection
               {...sectionProps}
@@ -196,7 +212,8 @@ export function AgronomistDashboard({ stats }: { stats: Stats | null }) {
               lastSavedAt={records.lastSavedAt}
               pending={records.pending}
               refresh={records.refresh}
-              recordCount={records.records.length}
+              recordCount={shown.length}
+              clearCache={records.clearCache}
             />
           )}
         </div>

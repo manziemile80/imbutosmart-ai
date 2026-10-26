@@ -10,6 +10,8 @@ import {
   isAgronomistClaims,
   overviewCounts,
   parseRecordData,
+  relatedRecordsForFarmer,
+  visibleRecords,
   whatsappLink,
   type AgronomistRecord,
   type RecordData,
@@ -107,6 +109,24 @@ describe("agronomist record schemas", () => {
 
     expect(result.success).toBe(true);
   });
+
+  it("records prevention separately from treatment on a pest report", () => {
+    const result = parseRecordData("pest", {
+      crop: "Maize",
+      district: "Musanze",
+      symptoms: "Holes in young leaves",
+      prevention: "Rotate away from maize and remove crop residue.",
+      recommendation: "Follow the label if a product is justified.",
+    });
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data).toMatchObject({
+        prevention: "Rotate away from maize and remove crop residue.",
+        recommendation: "Follow the label if a product is justified.",
+      });
+    }
+  });
 });
 
 describe("contact filtering", () => {
@@ -151,6 +171,50 @@ describe("contact filtering", () => {
   it("searches every text field of a record", () => {
     expect(filterRecords(contacts, "Busogo")).toHaveLength(1);
     expect(filterRecords(contacts, "missing")).toHaveLength(0);
+  });
+});
+
+describe("record visibility and a farmer's history", () => {
+  const records = [
+    record("farmer", { fullName: "Jean Mukamana", district: "Musanze", soil: "Volcanic" }),
+    record("recommendation", { farmerName: "jean   mukamana", crop: "Maize" }),
+    record("pest", { farmerName: "Jean Mukamana", crop: "Beans" }),
+    record("message", { farmerName: "Jean Mukamana", subject: "Visit" }),
+    record("followUp", { farmerName: "Jean Mukamana" }),
+    record("recommendation", { farmerName: "Claudine", crop: "Potato" }),
+    record("contact", { fullName: "Aline" }),
+    record("product", { name: "Urea" }),
+    record("insurance", { productName: "NAIS" }),
+  ];
+
+  it("shows only reference records to a visitor who is not an agronomist", () => {
+    expect(visibleRecords(records, false).map((item) => item.kind)).toEqual([
+      "contact",
+      "product",
+      "insurance",
+    ]);
+  });
+
+  it("shows every record to a signed-in agronomist", () => {
+    expect(visibleRecords(records, true)).toHaveLength(records.length);
+  });
+
+  it("links records by the farmer's name and ignores case and extra spaces", () => {
+    const linked = relatedRecordsForFarmer(records, " Jean  Mukamana ");
+
+    expect(linked.map((item) => item.kind)).toEqual([
+      "recommendation",
+      "pest",
+      "message",
+      "followUp",
+    ]);
+  });
+
+  it("links nothing when the name is blank or belongs to another farmer", () => {
+    expect(relatedRecordsForFarmer(records, "  ")).toEqual([]);
+    expect(relatedRecordsForFarmer(records, "Claudine").map((item) => item.data["crop"])).toEqual([
+      "Potato",
+    ]);
   });
 });
 

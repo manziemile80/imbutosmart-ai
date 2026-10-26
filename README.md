@@ -124,6 +124,8 @@ update auth.users
 
 The server checks the role on every write as well as the database policy, and the audit table keeps the actor, action and record. If the database is not configured or the migration has not been applied, the page still shows the published figures and the reference catalogue, and says plainly that records cannot be changed. A record edited while the connection is down is kept on the device and retried when the page next reaches the server.
 
+A visitor who is not signed in sees only the reference records the database makes public — input products, agronomist contacts and insurance products. Farmer profiles, recommendations, pest reports, messages and follow-ups stay hidden even when an earlier visit left a copy on the same device. A farmer's profile lists the recommendations, pest reports, messages and follow-ups that carry the same name, and links back to the tab that holds each one. Pest reports keep prevention advice separate from treatment advice, a recommendation can name the farmer it is for, and the knowledge centre can download a guide or the filtered set as plain text for a visit.
+
 ### 12.2 Shared reviewer account
 
 The sign-in form prints one shared account so the workspace can be shown without an invitation:

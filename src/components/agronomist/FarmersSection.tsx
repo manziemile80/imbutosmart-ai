@@ -1,18 +1,25 @@
 import { useState } from "react";
-import { MapPin, Phone, Sprout, UserRound } from "lucide-react";
+import { ArrowRight, MapPin, Phone, Sprout, UserRound } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Panel, PanelBody, PanelHeader } from "@/components/ui/panel";
 import {
   DISTRICT_CHOICES,
+  RECORD_LABEL,
   SEASON_CHOICES,
   SOIL_CHOICES,
   dashboardCopy,
   filterRecords,
+  formatDate,
   formatQuantity,
+  recordTitle,
+  relatedRecordsForFarmer,
   telLink,
+  type AgronomistRecord,
+  type DashboardTab,
   type FarmerData,
+  type RecordKind,
 } from "@/lib/agronomist-dashboard";
 import { EditDelete, RecordManager, RecordMeta, type FieldDef } from "./RecordManager";
 import type { SectionProps } from "./section-types";
@@ -42,7 +49,7 @@ const FARMER_FIELDS: FieldDef[] = [
   },
 ];
 
-export function FarmersSection(props: SectionProps) {
+export function FarmersSection(props: SectionProps & { onOpenTab?: (tab: DashboardTab) => void }) {
   const t = dashboardCopy[props.language];
   const [query, setQuery] = useState("");
   const [district, setDistrict] = useState("");
@@ -142,6 +149,11 @@ export function FarmersSection(props: SectionProps) {
                     {data.previousRecommendation}
                   </p>
                 )}
+                <FarmerHistory
+                  records={relatedRecordsForFarmer(props.records, data.fullName)}
+                  farmerName={data.fullName}
+                  onOpenTab={props.onOpenTab}
+                />
                 <RecordMeta record={record} language={props.language} />
                 <EditDelete actions={actions} language={props.language} />
               </article>
@@ -150,6 +162,82 @@ export function FarmersSection(props: SectionProps) {
         />
       </PanelBody>
     </Panel>
+  );
+}
+
+const FARMER_HISTORY_TABS: { kind: RecordKind; tab: DashboardTab; label: string }[] = [
+  { kind: "recommendation", tab: "recommendations", label: "Open crop advice" },
+  { kind: "pest", tab: "pests", label: "Open pest reports" },
+  { kind: "message", tab: "communication", label: "Open messages" },
+  { kind: "followUp", tab: "reports", label: "Open follow-ups" },
+];
+
+function FarmerHistory({
+  records,
+  farmerName,
+  onOpenTab,
+}: {
+  records: AgronomistRecord[];
+  farmerName: string;
+  onOpenTab?: ((tab: DashboardTab) => void) | undefined;
+}) {
+  return (
+    <section
+      aria-label={`History linked to ${farmerName}`}
+      className="mt-3 rounded-lg border border-border bg-muted/30 p-3"
+    >
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h5 className="text-xs font-semibold text-foreground">Linked history ({records.length})</h5>
+        <span className="text-[11px] text-muted-foreground">
+          Matched by the farmer's name on each record.
+        </span>
+      </div>
+      {records.length === 0 ? (
+        <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">
+          No crop advice, pest report, message or follow-up carries this name yet. Add one from its
+          tab and type the same name to link it here.
+        </p>
+      ) : (
+        <ul className="mt-2 grid gap-1.5">
+          {records.slice(0, 5).map((record) => (
+            <li
+              key={record.id}
+              className="flex flex-wrap items-center justify-between gap-2 text-xs"
+            >
+              <span className="min-w-0 text-foreground">
+                <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                  {RECORD_LABEL[record.kind].one}
+                </span>
+                <span className="block truncate">{recordTitle(record.kind, record.data)}</span>
+              </span>
+              <span className="text-[11px] text-muted-foreground">
+                {String(record.data["status"] ?? "")}
+                {record.data["status"] ? " · " : ""}
+                {formatDate(record.updatedAt)}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+      {onOpenTab && records.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-2">
+          {FARMER_HISTORY_TABS.filter((item) =>
+            records.some((record) => record.kind === item.kind),
+          ).map((item) => (
+            <Button
+              key={item.tab}
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => onOpenTab(item.tab)}
+            >
+              {item.label}
+              <ArrowRight aria-hidden="true" />
+            </Button>
+          ))}
+        </div>
+      )}
+    </section>
   );
 }
 

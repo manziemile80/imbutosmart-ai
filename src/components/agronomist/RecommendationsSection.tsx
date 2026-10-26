@@ -45,6 +45,7 @@ export function RecommendationsSection({
   const [saving, setSaving] = useState<string | null>(null);
   const [notes, setNotes] = useState<Record<string, string>>({});
   const [error, setError] = useState<string | null>(null);
+  const [farmerName, setFarmerName] = useState("");
 
   const climate = weather?.climate ?? null;
   const rainMm = climate && season ? seasonRainMm(climate, season) : null;
@@ -63,6 +64,7 @@ export function RecommendationsSection({
   const recommendations = props.records.filter((record) => record.kind === "recommendation");
   const pending = recommendations.filter((record) => record.data["status"] === "pending");
   const reviewed = recommendations.filter((record) => record.data["status"] !== "pending");
+  const farmers = props.records.filter((record) => record.kind === "farmer");
 
   async function saveEngine(cropIndex: number) {
     const crop = crops[cropIndex];
@@ -73,7 +75,7 @@ export function RecommendationsSection({
     const result = await props.save(
       "recommendation",
       {
-        farmerName: "",
+        farmerName: farmerName.trim(),
         district,
         soil,
         season,
@@ -134,6 +136,8 @@ export function RecommendationsSection({
     const confidence = Number(values.get("confidence") ?? data.confidence);
     const yieldValue = String(values.get("expectedYieldTHa") ?? "").trim();
     const note = String(values.get("decisionNote") ?? "").trim();
+    const benefits = String(values.get("benefits") ?? data.benefits).trim();
+    const risks = String(values.get("risks") ?? data.risks).trim();
     setSaving(record.id);
     setError(null);
     const result = await props.save(
@@ -143,6 +147,8 @@ export function RecommendationsSection({
         crop,
         confidence: Number.isFinite(confidence) ? Math.round(confidence) : data.confidence,
         expectedYieldTHa: yieldValue === "" ? null : Number(yieldValue),
+        benefits,
+        risks,
         status: "modified",
         decisionNote: note,
         source: "agronomist",
@@ -199,6 +205,26 @@ export function RecommendationsSection({
               ? " Loading the district record…"
               : " Source: the district climate record."}
           </p>
+          <label className="mt-3 grid max-w-sm gap-1.5">
+            <span className="field-label">Save the advice for a farmer (optional)</span>
+            <select
+              className="field h-9"
+              value={farmerName}
+              onChange={(event) => setFarmerName(event.target.value)}
+            >
+              <option value="">No farmer selected</option>
+              {farmers.map((record) => (
+                <option key={record.id} value={String(record.data["fullName"] ?? "")}>
+                  {String(record.data["fullName"] ?? "Farmer")} ·{" "}
+                  {String(record.data["district"] ?? "")}
+                </option>
+              ))}
+            </select>
+            <span className="text-[11px] leading-relaxed text-muted-foreground">
+              A selected farmer links the saved advice to that profile's history. Leave it blank
+              when the advice is for a field, not a named farmer.
+            </span>
+          </label>
           <ul className="mt-3 grid gap-2">
             {crops.map((crop, index) => {
               const knowledge = findCrop(crop.crop);
@@ -335,6 +361,24 @@ export function RecommendationsSection({
                             The app engine returns no yield. Enter one only from a measurement or a
                             named model report.
                           </span>
+                        </label>
+                        <label className="grid gap-1.5 sm:col-span-2">
+                          <span className="field-label">Benefits</span>
+                          <Textarea
+                            name="benefits"
+                            rows={3}
+                            defaultValue={data.benefits}
+                            placeholder="What does this advice offer the farmer?"
+                          />
+                        </label>
+                        <label className="grid gap-1.5 sm:col-span-2">
+                          <span className="field-label">Risks and limits</span>
+                          <Textarea
+                            name="risks"
+                            rows={3}
+                            defaultValue={data.risks}
+                            placeholder="What could go wrong, and which factor is missing?"
+                          />
                         </label>
                         <label className="grid gap-1.5 sm:col-span-2">
                           <span className="field-label">Decision note</span>

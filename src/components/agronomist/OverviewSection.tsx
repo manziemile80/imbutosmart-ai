@@ -84,7 +84,7 @@ export function OverviewSection({
             <Stat
               label="Registered agronomists"
               value={counts.agronomists}
-              hint="Contact records with a role"
+              hint="Agronomist contacts on record"
             />
             <Stat
               label="Crop recommendations"

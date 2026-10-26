@@ -85,7 +85,7 @@ export function ReportsSection(props: SectionProps) {
           <Count label="Farmers" value={counts.farmers} />
           <Count label="Agronomists" value={counts.agronomists} />
           <Count label="Recommendations" value={counts.recommendations} />
-          <Count label="Pending review" value={counts.pendingRequests} />
+          <Count label="Pending review" value={counts.pendingRecommendations} />
           <Count label="Advice delivered" value={approved} />
           <Count label="Messages sent" value={sent} />
         </div>

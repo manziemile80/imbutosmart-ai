@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CloudOff, Database, RefreshCw, Trash2, Wifi } from "lucide-react";
+import { CloudOff, Database, ExternalLink, RefreshCw, Trash2, Wifi } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Callout, StatusPill } from "@/components/ui/callout";
@@ -8,6 +8,11 @@ import { dashboardCopy, type StorageState } from "@/lib/agronomist-dashboard";
 import { useNetworkStatus } from "@/hooks/use-network";
 import type { FarmerLanguage } from "@/lib/farmer-language";
 
+// The migration the records tables need. It is public with the repository, so a
+// deployment owner can read and run it without the app holding an admin key.
+const MIGRATION_URL =
+  "https://github.com/manziemile80/imbutosmart-ai/blob/main/supabase/migrations/20261026000000_agronomist_dashboard.sql";
+
 export function OfflineSection({
   language,
   storage,
@@ -15,6 +20,7 @@ export function OfflineSection({
   pending,
   refresh,
   recordCount,
+  clearCache,
 }: {
   language: FarmerLanguage;
   storage: StorageState;
@@ -22,19 +28,11 @@ export function OfflineSection({
   pending: number;
   refresh: () => Promise<void>;
   recordCount: number;
+  clearCache: () => { ok: boolean; pending: number };
 }) {
   const t = dashboardCopy[language];
   const network = useNetworkStatus();
-  const [cleared, setCleared] = useState(false);
-
-  function clearCache() {
-    try {
-      window.localStorage.removeItem("imbutosmart-agronomist-records-v1");
-      setCleared(true);
-    } catch {
-      setCleared(false);
-    }
-  }
+  const [cleared, setCleared] = useState<{ ok: boolean; pending: number } | null>(null);
 
   return (
     <Panel aria-labelledby="agronomist-offline-title">
@@ -67,7 +65,7 @@ export function OfflineSection({
         <dl className="mt-5 grid gap-4 sm:grid-cols-2">
           <div className="rounded-xl border border-border bg-card p-4">
             <dt className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              Records in this copy
+              Records currently loaded
             </dt>
             <dd className="mt-1 text-2xl font-semibold tabular text-foreground">{recordCount}</dd>
           </div>
@@ -105,26 +103,42 @@ export function OfflineSection({
         <div className="mt-5 flex flex-wrap gap-2">
           <Button type="button" variant="outline" onClick={() => void refresh()}>
             <RefreshCw aria-hidden="true" />
-            {t.common.refresh}
+            {pending > 0 ? "Refresh and send waiting changes" : t.common.refresh}
           </Button>
-          <Button type="button" variant="ghost" onClick={clearCache}>
+          <Button type="button" variant="ghost" onClick={() => setCleared(clearCache())}>
             <Trash2 aria-hidden="true" />
             Clear the saved copy
           </Button>
         </div>
 
         {cleared && (
-          <Callout tone="success" className="mt-4">
-            The saved copy has been removed from this browser. The database copy is unchanged.
+          <Callout tone={cleared.ok ? "success" : "warning"} className="mt-4">
+            {!cleared.ok
+              ? "This browser did not allow the saved copy to be removed. Close other tabs using the dashboard and try again."
+              : cleared.pending > 0
+                ? `The saved copy has been removed from this browser. ${cleared.pending} change${
+                    cleared.pending === 1 ? "" : "s"
+                  } still waiting to sync ${
+                    cleared.pending === 1 ? "was" : "were"
+                  } kept, so no work is lost; refresh once the connection returns.`
+                : "The saved copy has been removed from this browser. The database copy is unchanged."}
           </Callout>
         )}
         {storage !== "ready" && (
           <Callout tone="info" className="mt-4">
-            {t.storage[storage]} Apply the migration in{" "}
-            <code className="rounded bg-muted px-1 py-0.5 text-[11px]">
-              supabase/migrations/20261026000000_agronomist_dashboard.sql
-            </code>{" "}
-            and set the Supabase server variables to enable stored records.
+            {t.storage[storage]} The tables come from{" "}
+            <a
+              className="link-quiet inline-flex items-center gap-1"
+              href={MIGRATION_URL}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <ExternalLink className="size-3.5" aria-hidden="true" />
+              the dashboard migration
+            </a>
+            . Run it once in the project's SQL editor, then apply the allowlist migration as well.
+            The public browser key cannot create a table, so this step needs whoever runs the
+            deployment.
           </Callout>
         )}
       </PanelBody>

@@ -66,7 +66,10 @@ function toPayload(fields: FieldDef[], form: HTMLFormElement): Record<string, un
       payload[field.name] = raw === "" ? null : Number(raw);
     } else if (field.type === "date") {
       payload[field.name] = raw === "" ? null : raw;
-    } else if (field.type === "select" && field.name === "season") {
+    } else if (field.type === "select") {
+      // An optional select shows an empty "None" choice. The schema expects null
+      // for a value that was not chosen, not an empty string, which no enum
+      // accepts. Required selects always carry one of their options.
       payload[field.name] = raw === "" ? null : raw;
     } else {
       payload[field.name] = raw;

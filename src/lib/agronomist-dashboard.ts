@@ -195,6 +195,7 @@ export const pestReportSchema = z.object({
   district,
   symptoms: text(1_200).min(1, "Describe what was seen."),
   possibleCause: text(1_200).default(""),
+  prevention: text(1_200).default(""),
   recommendation: text(1_200).default(""),
   severity: z.enum(["low", "medium", "high"]).default("medium"),
   referredTo: text(240).default(""),
@@ -719,6 +720,52 @@ export function filterContacts(
         .includes(needle),
     );
   });
+}
+
+// ------------------------------------------------------- record visibility
+
+// Reference records carry no farmer's private information, so the database lets
+// a visitor read them before signing in. Farmer-linked records are only shown
+// to a signed-in agronomist, even when an earlier visit left a copy of them on
+// this device.
+export const PUBLIC_RECORD_KINDS = ["product", "contact", "insurance"] as const;
+
+export function visibleRecords(
+  records: AgronomistRecord[],
+  isAgronomist: boolean,
+): AgronomistRecord[] {
+  if (isAgronomist) return records;
+  return records.filter((record) =>
+    (PUBLIC_RECORD_KINDS as readonly string[]).includes(record.kind),
+  );
+}
+
+// ------------------------------------------------ a farmer's linked history
+
+// The dashboard has no separate field id, so a recommendation, pest report,
+// message or follow-up is linked to a farmer by the name typed on both records.
+// The match ignores case and extra spaces; the page says so, so nobody assumes
+// two different people with the same name were merged.
+export const FARMER_LINKED_KINDS = ["recommendation", "pest", "message", "followUp"] as const;
+
+function normalizedName(value: unknown): string {
+  return String(value ?? "")
+    .trim()
+    .replace(/\s+/g, " ")
+    .toLowerCase();
+}
+
+export function relatedRecordsForFarmer(
+  records: AgronomistRecord[],
+  farmerName: string,
+): AgronomistRecord[] {
+  const name = normalizedName(farmerName);
+  if (!name) return [];
+  return records.filter(
+    (record) =>
+      (FARMER_LINKED_KINDS as readonly string[]).includes(record.kind) &&
+      normalizedName(record.data["farmerName"]) === name,
+  );
 }
 
 // --------------------------------------------------------------- overview

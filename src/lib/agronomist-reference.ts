@@ -202,6 +202,23 @@ export type KnowledgeGuide = {
   sourceUrl: string;
 };
 
+/**
+ * A guide as plain text, so an extension worker can save or print it for a
+ * visit. Downloading writes only what the page already shows.
+ */
+export function guideAsText(guide: KnowledgeGuide): string {
+  return [
+    guide.title,
+    "",
+    guide.summary,
+    "",
+    ...guide.steps.map((step, index) => `${index + 1}. ${step}`),
+    "",
+    `Source: ${guide.source}`,
+    guide.sourceUrl,
+  ].join("\n");
+}
+
 export const KNOWLEDGE_GUIDES: KnowledgeGuide[] = [
   {
     id: "soil-test",
