@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 
 import {
+  buildPlanDownload,
   buildPlanEmail,
   buildPlanShareText,
   buildPlanSummary,
@@ -161,6 +162,62 @@ describe("plan summary", () => {
 
     expect(text).toContain("No crops have been estimated for this field yet.");
     expect(text).toContain("No input figures have been supplied for this district yet.");
+  });
+});
+
+describe("summary download", () => {
+  const summary = buildPlanSummary({
+    district: "Musanze",
+    soil: "Volcanic",
+    season: "A",
+    crops: [{ crop: "Maize", score: 86 }],
+    profile,
+    climate: { rainMm: 953, tempC: 17.4 },
+    language: "en",
+  });
+
+  it("names the file for the field and holds every section", () => {
+    const file = buildPlanDownload({
+      summary,
+      district: "Musanze",
+      soil: "Volcanic",
+      season: "A",
+      language: "en",
+    });
+
+    expect(file.filename).toBe("imbutosmart-summary-musanze-season-a.txt");
+    expect(file.mime).toBe("text/plain;charset=utf-8");
+    expect(file.text).toContain("Your summary — Musanze");
+    expect(file.text).toContain("Your field: Musanze · Volcanic · Season A");
+    expect(file.text).toContain("Crops for your field");
+    expect(file.text).toContain("Maize — 86%");
+    expect(file.text).toContain("Inputs farmers here use");
+    expect(file.text).toContain("Insurance to ask about");
+    expect(file.text).toContain("Also worth doing");
+  });
+
+  it("leaves the season out of the name when the farmer has not chosen one", () => {
+    const file = buildPlanDownload({
+      summary,
+      district: "Musanze",
+      soil: "Volcanic",
+      season: null,
+      language: "en",
+    });
+
+    expect(file.filename).toBe("imbutosmart-summary-musanze.txt");
+  });
+
+  it("writes a file name a phone and an email attachment both accept", () => {
+    const file = buildPlanDownload({
+      summary,
+      district: "  Kigali City  ",
+      soil: "Volcanic",
+      season: "B",
+      language: "en",
+    });
+
+    expect(file.filename).toBe("imbutosmart-summary-kigali-city-season-b.txt");
   });
 });
 

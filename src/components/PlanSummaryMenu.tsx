@@ -1,110 +1,23 @@
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
-import { useServerFn } from "@tanstack/react-start";
-import { Bell, BellRing, Check, LoaderCircle, Mail, Share2, X } from "lucide-react";
-import { toast } from "sonner";
+import { useEffect, useRef, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { Bell, BellRing, FileText, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { PlanSummaryBody } from "@/components/PlanSummaryBody";
 import { useField } from "@/lib/field";
-import {
-  buildPlanEmail,
-  buildPlanShareText,
-  buildPlanSummary,
-  isValidPlanEmail,
-  isValidPlanName,
-  readStoredPlanEmail,
-  readStoredPlanName,
-  storePlanEmail,
-  storePlanName,
-  summaryCopy,
-} from "@/lib/plan-summary";
-import { sendPlanSummaryEmail } from "@/lib/plan-summary.functions";
-import { engineInput } from "@/lib/recommendation";
-import { recommendOffline } from "@/lib/recommendation-engine";
-import { districtInputs, inputName } from "@/lib/advice";
-import { seasonForMonth, seasonRainMm, seasonTempC } from "@/lib/weather";
-import { useDistrictWeather } from "@/hooks/use-district-weather";
+import { summaryCopy } from "@/lib/plan-summary";
 import type { FarmerLanguage } from "@/lib/farmer-language";
 
-// When the app cannot send mail itself — no provider configured, or the
-// provider failed — the whole message is handed to the farmer's own mail app,
-// so the summary always has a way to be sent.
-function openMailDraft(href: string) {
-  const link = document.createElement("a");
-  link.href = href;
-  link.rel = "noopener";
-  document.body.append(link);
-  link.click();
-  link.remove();
-}
-
-// The farmer's summary, in the header: the bell opens it. It follows the
-// district, soil and season the farmer has chosen anywhere in the app.
+// The bell is the announcement, not the summary itself: it says the summary
+// for the farmer's field is ready and takes them to Summary get, where the
+// whole plan can be read, downloaded, shared or emailed. Keeping the figures
+// on their own page means the header never carries a wall of numbers.
 export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage }) {
   const { field } = useField();
-  const { district, soil, season } = field;
+  const { district } = field;
   const t = summaryCopy[language];
   const [open, setOpen] = useState(false);
-  const [showEmailForm, setShowEmailForm] = useState(false);
-  const [shareState, setShareState] = useState<"idle" | "shared" | "copied" | "failed">("idle");
-  const [name, setName] = useState("");
-  const [nameState, setNameState] = useState<"idle" | "invalid">("idle");
-  const [email, setEmail] = useState("");
-  const [emailState, setEmailState] = useState<"idle" | "ready" | "invalid" | "sending" | "sent">(
-    "idle",
-  );
-  const send = useServerFn(sendPlanSummaryEmail);
   const wrapper = useRef<HTMLDivElement>(null);
-  const emailForm = useRef<HTMLFormElement>(null);
-  const { weather } = useDistrictWeather(district);
-  const climate = weather?.climate ?? null;
-  const profile = districtInputs[district] ?? null;
-
-  const rainMm = climate && season ? seasonRainMm(climate, season) : null;
-  const tempC = climate && season ? seasonTempC(climate, season) : null;
-
-  const summary = useMemo(() => {
-    const crops = recommendOffline(
-      engineInput({ district, soil, language, season, rainfallMm: rainMm, temperatureC: tempC }),
-    );
-    return buildPlanSummary({
-      district,
-      soil,
-      season,
-      crops: [crops.primary, ...crops.alternatives].slice(0, 3).map((crop) => ({
-        crop: crop.crop,
-        score: crop.score,
-      })),
-      profile: profile ?? null,
-      climate: rainMm != null && tempC != null ? { rainMm, tempC } : null,
-      language,
-    });
-  }, [district, soil, season, rainMm, tempC, profile, language]);
-
-  // A new field is a new summary, so the share state starts again.
-  useEffect(() => {
-    setShareState("idle");
-    setEmailState("idle");
-    setNameState("idle");
-  }, [summary]);
-
-  // The short form opens from "Send me this summary": the first field the
-  // farmer needs is focused, so the keyboard is ready to type.
-  useEffect(() => {
-    if (!showEmailForm) return;
-    emailForm.current?.querySelector<HTMLInputElement>("input")?.focus();
-  }, [showEmailForm]);
-
-  // The name and address already used on this device are offered again, so
-  // the farmer does not retype them. They stay in this browser and are used
-  // only to address this farmer's own summary.
-  useEffect(() => {
-    const storedEmail = readStoredPlanEmail();
-    if (storedEmail) setEmail((current) => current || storedEmail);
-    const storedName = readStoredPlanName();
-    if (storedName) setName((current) => current || storedName);
-  }, []);
+  const openLink = useRef<HTMLAnchorElement>(null);
 
   // The panel closes when the farmer clicks away from it.
   useEffect(() => {
@@ -123,82 +36,10 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
     };
   }, [open]);
 
-  // The whole summary goes through the phone's share sheet when the browser
-  // offers one, and to the clipboard when it does not. Either way the farmer
-  // shares every part of the notification, not only the short preview.
-  async function shareSummary() {
-    const text = buildPlanShareText({ summary, district, soil, season, language });
-    const title = `${t.title} — ${district}`;
-
-    if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
-      try {
-        await navigator.share({ title, text });
-        setShareState("shared");
-        return;
-      } catch (error) {
-        // Closing the share sheet is not a failure: the panel stays as it is.
-        if ((error as { name?: string } | null)?.name === "AbortError") return;
-      }
-    }
-
-    try {
-      if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(text);
-        setShareState("copied");
-        return;
-      }
-    } catch {
-      // The message below tells the farmer that sharing is unavailable.
-    }
-    setShareState("failed");
-  }
-
-  // The same complete summary, addressed to the farmer by name and sent from
-  // the app when a mail service is configured. With no service — or a delivery
-  // that fails — their own mail app opens with the same message, so nothing is
-  // lost and the farmer is not shown a dead end.
-  async function emailSummary(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const validName = isValidPlanName(name);
-    const validEmail = isValidPlanEmail(email);
-    setNameState(validName ? "idle" : "invalid");
-    if (!validName || !validEmail) {
-      setEmailState(validEmail ? "idle" : "invalid");
-      return;
-    }
-
-    const draft = buildPlanEmail({
-      summary,
-      district,
-      soil,
-      season,
-      language,
-      to: email,
-      name,
-    });
-    storePlanEmail(draft.to);
-    storePlanName(name);
-    setEmailState("sending");
-
-    try {
-      const result = await send({
-        data: { name: name.trim(), email: draft.to, district, soil, season, language },
-      });
-      if (result.status === "sent") {
-        setEmailState("sent");
-        // A toast confirms the send even when the panel has scrolled the
-        // confirmation out of view.
-        toast.success(t.toastSent.replace("{email}", draft.to));
-        return;
-      }
-    } catch {
-      // The mail service is not reachable from this deployment; the farmer's
-      // own mail app carries the same complete summary instead.
-    }
-
-    openMailDraft(draft.href);
-    setEmailState("ready");
-  }
+  // The announcement has one action, so it is focused when the panel opens.
+  useEffect(() => {
+    if (open) openLink.current?.focus();
+  }, [open]);
 
   return (
     <div className="relative" ref={wrapper}>
@@ -219,13 +60,12 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
         <div
           role="dialog"
           aria-label={t.title}
-          className="absolute right-0 top-full z-30 mt-2 flex max-h-[min(80vh,40rem)] w-[min(92vw,30rem)] flex-col rounded-2xl border border-border bg-card p-5 text-left shadow-pop"
+          className="absolute right-0 top-full z-30 mt-2 flex w-[min(92vw,24rem)] flex-col rounded-2xl border border-border bg-card p-5 text-left shadow-pop"
         >
-          <div className="flex shrink-0 items-start justify-between gap-3">
+          <div className="flex items-start justify-between gap-3">
             <div>
               <p className="eyebrow">{district}</p>
-              <p className="font-display text-lg text-foreground">{t.title}</p>
-              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{t.intro}</p>
+              <p className="mt-1 font-display text-lg text-foreground">{t.announceTitle}</p>
             </div>
             <Button
               type="button"
@@ -239,176 +79,16 @@ export function PlanSummaryMenu({ language = "en" }: { language?: FarmerLanguage
             </Button>
           </div>
 
-          <div className="mt-4 -mr-2 overflow-y-auto pr-2">
-            <PlanSummaryBody summary={summary} language={language} />
-          </div>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            {t.announceBody.replace("{district}", district)}
+          </p>
 
-          <div className="mt-4 flex shrink-0 flex-col gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              className="h-10 w-full"
-              onClick={() => void shareSummary()}
-            >
-              {shareState === "shared" || shareState === "copied" ? (
-                <Check aria-hidden="true" />
-              ) : (
-                <Share2 aria-hidden="true" />
-              )}
-              {shareState === "shared" ? t.shared : shareState === "copied" ? t.copied : t.share}
-            </Button>
-
-            {shareState === "failed" && (
-              <p className="text-xs leading-relaxed text-muted-foreground">{t.shareFailed}</p>
-            )}
-
-            <p role="status" aria-live="polite" className="sr-only">
-              {shareState === "shared"
-                ? t.shared
-                : shareState === "copied"
-                  ? t.copied
-                  : shareState === "failed"
-                    ? t.shareFailed
-                    : ""}
-            </p>
-
-            <Button
-              type="button"
-              variant="default"
-              className="h-10 w-full"
-              aria-expanded={showEmailForm}
-              aria-controls="plan-summary-email-form"
-              onClick={() => setShowEmailForm(true)}
-            >
-              <Mail aria-hidden="true" />
-              {t.notify}
-            </Button>
-
-            {showEmailForm && (
-              <form
-                id="plan-summary-email-form"
-                ref={emailForm}
-                noValidate
-                className="card-quiet grid gap-3"
-                onSubmit={emailSummary}
-              >
-                <div className="flex items-start gap-2">
-                  <Mail className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
-                  <div>
-                    <p className="text-sm font-medium leading-snug text-foreground">
-                      {t.emailTitle}
-                    </p>
-                    <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
-                      {t.emailIntro}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="grid gap-1.5">
-                  <label
-                    htmlFor="plan-summary-name"
-                    className="text-xs font-medium text-foreground"
-                  >
-                    {t.nameLabel}
-                  </label>
-                  <Input
-                    id="plan-summary-name"
-                    type="text"
-                    autoComplete="name"
-                    className="h-10"
-                    placeholder={t.namePlaceholder}
-                    value={name}
-                    disabled={emailState === "sending"}
-                    aria-invalid={nameState === "invalid"}
-                    aria-describedby="plan-summary-name-status"
-                    onChange={(event) => {
-                      setName(event.target.value);
-                      setNameState("idle");
-                      setEmailState("idle");
-                    }}
-                  />
-                  <p
-                    id="plan-summary-name-status"
-                    role={nameState === "invalid" ? "alert" : "status"}
-                    aria-live="polite"
-                    className={
-                      nameState === "invalid"
-                        ? "text-xs leading-relaxed text-destructive"
-                        : "sr-only"
-                    }
-                  >
-                    {nameState === "invalid" ? t.nameInvalid : ""}
-                  </p>
-                </div>
-
-                <div className="grid gap-1.5">
-                  <label
-                    htmlFor="plan-summary-email"
-                    className="text-xs font-medium text-foreground"
-                  >
-                    {t.emailLabel}
-                  </label>
-                  <Input
-                    id="plan-summary-email"
-                    type="email"
-                    autoComplete="email"
-                    inputMode="email"
-                    className="h-10"
-                    placeholder={t.emailPlaceholder}
-                    value={email}
-                    disabled={emailState === "sending"}
-                    aria-invalid={emailState === "invalid"}
-                    aria-describedby="plan-summary-email-hint plan-summary-email-status"
-                    onChange={(event) => {
-                      setEmail(event.target.value);
-                      setEmailState("idle");
-                    }}
-                  />
-                  <p
-                    id="plan-summary-email-hint"
-                    className="text-xs leading-relaxed text-muted-foreground"
-                  >
-                    {t.emailHint}
-                  </p>
-                </div>
-
-                <Button type="submit" className="h-10 w-full" disabled={emailState === "sending"}>
-                  {emailState === "sending" ? (
-                    <LoaderCircle className="animate-spin" aria-hidden="true" />
-                  ) : (
-                    <Mail aria-hidden="true" />
-                  )}
-                  {emailState === "sending" ? t.emailSending : t.emailSend}
-                </Button>
-
-                <p
-                  id="plan-summary-email-status"
-                  role={emailState === "invalid" ? "alert" : "status"}
-                  aria-live="polite"
-                  className={
-                    emailState === "idle" || emailState === "sending"
-                      ? "sr-only"
-                      : emailState === "invalid"
-                        ? "text-xs leading-relaxed text-destructive"
-                        : "flex items-start gap-1.5 text-xs leading-relaxed text-muted-foreground"
-                  }
-                >
-                  {emailState === "sent" && (
-                    <Check className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden="true" />
-                  )}
-                  <span>
-                    {emailState === "sent"
-                      ? t.emailSent.replace("{email}", email.trim())
-                      : emailState === "ready"
-                        ? t.emailReady.replace("{email}", email.trim())
-                        : emailState === "invalid"
-                          ? t.emailInvalid
-                          : ""}
-                  </span>
-                </p>
-              </form>
-            )}
-          </div>
+          <Button asChild className="mt-4 h-10 w-full">
+            <Link ref={openLink} to="/summary" onClick={() => setOpen(false)}>
+              <FileText aria-hidden="true" />
+              {t.openSummary}
+            </Link>
+          </Button>
         </div>
       )}
     </div>

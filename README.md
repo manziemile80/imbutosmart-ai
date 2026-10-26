@@ -60,13 +60,25 @@ The forecast carries the WMO weather code of each day ("Moderate rain showers") 
 
 ## The Advice portal
 
-`/advice` gives a plan a farmer can follow, for the district and soil they choose:- **Crops to plant here** — the agronomic suitability engine, with the district's own climate as the rainfall and temperature.
+`/advice` gives a plan a farmer can follow, for the district and soil they choose:
+
+- **Crops to plant here** — the agronomic suitability engine, with the district's own climate as the rainfall and temperature.
 
 - **Inputs used in your district** — from the Seasonal Agricultural Survey 2025: the share of segments using DAP, NPK, urea, manure, compost and the rest, the rate each input was applied at in kilograms per hectare, plus how many irrigate and how many report soil erosion. `backend/build_district_inputs.py` writes the per-district profile to `src/lib/district-inputs.json` (aggregates only, no household data).
 - **When to act** — the district's usual season rainfall and temperature, and the coming days' forecast.
 - **Your written plan** — the AI writes the steps from those facts alone. A rate, spacing or price the model adds is dropped before the farmer sees it.
-- **Your summary** — the overview the farmer gets as soon as the district and soil are chosen: the crops for the field, the inputs farmers there use **with the rate they applied them at**, the insurance worth asking about, and what else to do. It sits at the top of the Advice page, and the bell in the header (just above the dark-mode toggle) opens the same summary on any page — the field the farmer chose is shared across the app and kept for their next visit. The bell panel can share the whole summary or **email it**: the **Send me this summary** button opens a short form asking for the farmer's name and email address, the app sends the complete summary from its own server and confirms **Summary sent**, and the name and address stay in that browser so the next summary is pre-filled. With no mail service configured, the same complete message opens in the farmer's own mail app instead.
+- **Your summary** — the full overview lives on **Summary get** (`/summary`): the crops for the field, the inputs farmers there use **with the rate they applied them at**, the insurance worth asking about, and what else to do. The bell in the header (just above the dark-mode toggle) is a short announcement that the summary is ready and links there; the field the farmer chose is shared across the app and kept for their next visit. The page can download the whole summary, share it, or **email it**: the **Send me this summary** button opens a short form asking for the farmer's name and email address, the app sends the complete summary from its own server and confirms **Summary sent**, and the name and address stay in that browser so the next summary is pre-filled. With no mail service configured, the same complete message opens in the farmer's own mail app instead.
 - **Assistance** — the plan read aloud, the same plan in simpler words, and a plain explanation of every input name.
+
+## The Summary get portal
+
+`/summary` is where the whole summary lives. It follows the district, soil and season chosen anywhere in the app, and shows every section: the crops, the district's inputs with their application rate, the insurance to ask about, and what else to do. Three actions sit beside it:
+
+- **Download this summary** saves the same text as a file named for the field, for example `imbutosmart-summary-musanze-season-a.txt`, so the farmer can keep it or print it later.
+- **Share all of this** opens the share sheet, or copies the same complete text when the browser has no share sheet.
+- **Send me this summary** emails it from the app, or opens the farmer's own mail app when no mail service is configured.
+
+The header bell only announces that the summary is ready; the figures stay on this page.
 
 ## The Guidance portal
 
@@ -98,7 +110,7 @@ The dashboard imports district aggregate CSVs in the current browser session; th
 
 ## Email the summary
 
-In the bell panel, **Send me this summary** opens a short form asking for the farmer's name and email address, then sends the same complete summary the panel shows and confirms **Summary sent**. The browser sends only the chosen field (district, soil, season, language) and the name and address; the server rebuilds the summary from the published figures and the crop engine, so the endpoint cannot be used to send arbitrary content.
+In Summary get, **Send me this summary** opens a short form asking for the farmer's name and email address, then sends the same complete summary the page shows and confirms **Summary sent**. The browser sends only the chosen field (district, soil, season, language) and the name and address; the server rebuilds the summary from the published figures and the crop engine, so the endpoint cannot be used to send arbitrary content.
 
 Delivery is configured on the host with server-only variables. `EMAIL_FROM` is the sender the chosen service has verified, and each service below is tried in turn until one accepts the farmer's address:
 

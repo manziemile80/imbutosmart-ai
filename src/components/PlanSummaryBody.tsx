@@ -4,9 +4,8 @@ import { knowledgeCropLabel } from "@/lib/crop-knowledge";
 import { summaryCopy, type PlanSummary } from "@/lib/plan-summary";
 import type { FarmerLanguage } from "@/lib/farmer-language";
 
-// The four parts of the farmer's overview. Used by the summary panel on the
-// Advice page and by the summary in the header, so the wording is the same
-// wherever the farmer meets it.
+// The four parts of the farmer's overview. Used by the Summary get page, so the
+// wording is the same wherever the farmer meets the summary.
 
 export function PlanSummaryBody({
   summary,

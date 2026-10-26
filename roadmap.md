@@ -1,4 +1,5 @@
 # Roadmap
+
 - [x] Add and verify selectable insurance coverage types in English, Kinyarwanda and French.
 - [x] Add and verify heavy-rain insurance guidance after district and soil choices in all three farmer languages.
 - [x] Add and verify French alongside English and Kinyarwanda, including AI season advice.
@@ -37,6 +38,9 @@
 - [x] Put the summary in the header, above the theme toggle, and share the farmer's field across every page so the summary follows them.
 - [x] Wait before retrying a chat request that did not reach the backend, so a busy or weak connection still gives the farmer an answer.
 - [x] Deploy the design system and the retry fix, and verify the live app's record, transcribe and answer path.
+- [x] Let the farmer email the whole summary, addressed to the email already used on this device: the address is kept only in the browser, and every section the notification panel shows is carried, with no mail service to configure.
+- [x] Keep the send buttons usable after a summary is sent, so the notification can be sent again and the email can be addressed to someone else.
+- [x] Move the full summary to a Summary get page with a download, and keep the header bell to a short announcement.
 - [ ] Read answers aloud on the deployed app (blocked by accepting the Groq speech model's terms in the provider console — the app-level check now reports this as the refusal reason — or by pointing the host at a speech backend the deployment can reach).
 - [ ] Update `abahinzismart.vercel.app` (a separate Vercel project, outside this workspace's account).
 - [ ] Populate real district land shares (blocked by district crops/pasture/fallow aggregate data; supplied PDF has only national totals).

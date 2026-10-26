@@ -23,6 +23,16 @@ export const summaryCopy: Record<
   {
     title: string;
     intro: string;
+    announceTitle: string;
+    announceBody: string;
+    openSummary: string;
+    pageEyebrow: string;
+    pageTitle: string;
+    pageLede: string;
+    download: string;
+    downloaded: string;
+    downloadFailed: string;
+    downloadNote: string;
     crops: string;
     inputs: string;
     usedBy: string;
@@ -59,6 +69,18 @@ export const summaryCopy: Record<
   en: {
     title: "Your summary",
     intro: "Everything you need to act on, for the field you chose.",
+    announceTitle: "Your summary is ready",
+    announceBody:
+      "The crops, the inputs, the insurance to ask about and what else to do for {district} are in Summary get, ready to read and download.",
+    openSummary: "Open Summary get",
+    pageEyebrow: "Summary get",
+    pageTitle: "Get your summary and keep it",
+    pageLede:
+      "Every part of your plan for the field you chose, in one place. Read it here, download it, share it or send it to your email.",
+    download: "Download this summary",
+    downloaded: "Summary downloaded. It is ready in your downloads.",
+    downloadFailed: "The download did not start. Try again, or use Share all of this.",
+    downloadNote: "The downloaded file holds every section shown below.",
     crops: "Crops for your field",
     inputs: "Inputs farmers here use",
     usedBy: "used by {n}% of the farmers here",
@@ -98,6 +120,19 @@ export const summaryCopy: Record<
   rw: {
     title: "Incamake yawe",
     intro: "Byose ukeneye kugirira kugiramo, ku murima wahisemo.",
+    announceTitle: "Incamake yawe yiteguye",
+    announceBody:
+      "Ibihingwa, ifumbire, ubwishingizi bwo kubaza n’ibindi byo gukora kuri {district} biri muri “Fata incamake”, byiteguye gusomwa no gukururwa.",
+    openSummary: "Fata incamake",
+    pageEyebrow: "Fata incamake",
+    pageTitle: "Fata incamake yawe uyigumane",
+    pageLede:
+      "Buri gice cy’umugambi w’umurima wahisemo, ahantu hamwe. Yisomere hano, uyikurure, uyisangize cyangwa uyoyereze kuri imeyili yawe.",
+    download: "Kurura iyi ncamake",
+    downloaded: "Incamake yakurujwe. Iri mu bwikorezi bwa dosiye zawe.",
+    downloadFailed:
+      "Gukurura ntibyatangira. Ongera ugerageze, cyangwa ukoreshe “Sangiza ibi byose”.",
+    downloadNote: "Dosiye wakuruye irimo buri gice kiri hasi.",
     crops: "Ibihingwa by’umurima wawe",
     inputs: "Ifumbire abahinzi b'aka karere bakoresha",
     usedBy: "abakoresha {n}% by’abahinzi",
@@ -138,6 +173,19 @@ export const summaryCopy: Record<
   fr: {
     title: "Votre récapitulatif",
     intro: "Tout ce qu'il vous faut pour agir, pour le champ que vous avez choisi.",
+    announceTitle: "Votre récapitulatif est prêt",
+    announceBody:
+      "Les cultures, les intrants, l’assurance à demander et les prochaines étapes pour {district} sont dans « Obtenir le récapitulatif », prêts à lire et à télécharger.",
+    openSummary: "Obtenir le récapitulatif",
+    pageEyebrow: "Obtenir le récapitulatif",
+    pageTitle: "Obtenez votre récapitulatif et gardez-le",
+    pageLede:
+      "Toutes les parties de votre plan pour le champ choisi, au même endroit. Lisez-le ici, téléchargez-le, partagez-le ou envoyez-le à votre e-mail.",
+    download: "Télécharger ce récapitulatif",
+    downloaded: "Récapitulatif téléchargé. Il est prêt dans vos téléchargements.",
+    downloadFailed:
+      "Le téléchargement n’a pas démarré. Réessayez ou utilisez « Partager tout ceci ».",
+    downloadNote: "Le fichier téléchargé contient toutes les sections ci-dessous.",
     crops: "Cultures pour votre champ",
     inputs: "Intrants utilisés ici",
     usedBy: "utilisés par {n}% des agriculteurs du district",
@@ -297,6 +345,60 @@ export function buildPlanShareText(input: {
   lines.push("", t.shareFooter);
 
   return lines.join("\n");
+}
+
+// The same complete summary as a file the farmer keeps. It is the share text,
+// so a download is never a shortened version of what the page shows, and the
+// name says which field it belongs to.
+export type PlanDownload = { filename: string; text: string; mime: string };
+
+export function buildPlanDownload(input: {
+  summary: PlanSummary;
+  district: string;
+  soil: string;
+  season: "A" | "B" | "C" | null;
+  language: FarmerLanguage;
+}): PlanDownload {
+  const season = input.season ? `-season-${input.season.toLowerCase()}` : "";
+  return {
+    filename: `imbutosmart-summary-${fileSlug(input.district)}${season}.txt`,
+    text: buildPlanShareText(input),
+    mime: "text/plain;charset=utf-8",
+  };
+}
+
+// A file name a phone, a laptop and an email attachment all accept: lower case,
+// no accents, and only letters, digits and single hyphens.
+function fileSlug(value: string): string {
+  const slug = value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return slug || "field";
+}
+
+// Hand the file to the browser's download. Returns false when the browser
+// cannot make one, so the page can say so and keep the share option in reach.
+export function savePlanDownload(file: PlanDownload): boolean {
+  if (typeof window === "undefined" || typeof document === "undefined") return false;
+  try {
+    const blob = new Blob([file.text], { type: file.mime });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = file.filename;
+    link.rel = "noopener";
+    document.body.append(link);
+    link.click();
+    link.remove();
+    // Some browsers cancel a download if the URL is revoked in the same turn.
+    window.setTimeout(() => URL.revokeObjectURL(url), 0);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 // The farmer's name goes in the greeting of the emailed summary. It is a name,
