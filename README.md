@@ -259,6 +259,8 @@ npm run dev
 
 For a production build, preview with `node .output/server/index.mjs` after `npm run build` rather than `vite preview` (the Nitro output lives in `.output`).
 
+The agronomist records use the server-side `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`, plus the migrations described in section 12.1. Reading and writing a record needs no service-role key: the server forwards the signed-in account's token, and the row-level policies decide what that account may read or write. `SUPABASE_SERVICE_ROLE_KEY` stays on the server for administration only - creating and confirming the shared reviewer account when no Supabase dashboard session is available. When Supabase is not configured, the dashboard falls back to a record store in the browser and the shared reviewer account can still sign in there, so the rest of the app and the workspace stay usable on that device.
+
 ### Dashboard sign-in
 
 Open `/dashboard` (on the deployment: <https://imbutosmart.vercel.app/dashboard>) and sign in with the shared reviewer account:
@@ -267,8 +269,6 @@ Open `/dashboard` (on the deployment: <https://imbutosmart.vercel.app/dashboard>
 - password `Manzi12345`
 
 The same pair is printed on the sign-in form and defined in `src/lib/agronomist-accounts.ts`. The account signs in against the shared Supabase project, so a record saved on one device appears on every device that uses it. Keep it to demonstration records: never enter a real farmer's private data. Section 12.2 explains how the role and the allowlist grant it write access.
-
-The agronomist records use the server-side `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`, plus the migrations described in section 12.1. Reading and writing a record needs no service-role key: the server forwards the signed-in account's token, and the row-level policies decide what that account may read or write. `SUPABASE_SERVICE_ROLE_KEY` stays on the server for administration only — creating and confirming the shared reviewer account when no Supabase dashboard session is available. When Supabase is not configured, the dashboard falls back to a record store in the browser and the shared reviewer account can still sign in there, so the rest of the app and the workspace stay usable on that device.
 
 
 ## 18. Deployment
