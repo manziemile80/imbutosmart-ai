@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { farmerCopy } from "@/lib/farmer-language";
 import { useField } from "@/lib/field";
 import { PlanSummaryMenu } from "@/components/PlanSummaryMenu";
+import { SiteMenu } from "@/components/SiteMenu";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function SiteShell({ children }: { children: ReactNode }) {
@@ -27,51 +28,54 @@ export function SiteShell({ children }: { children: ReactNode }) {
 
         {/* The navigation line, with the language and the theme at the end. */}
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 pb-3 pt-2">
-          <nav
-            className="-mx-1 flex flex-nowrap items-center gap-1 overflow-x-auto px-1 pr-4 text-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden max-sm:[mask-image:linear-gradient(to_right,#000_calc(100%-2rem),transparent)]"
-            aria-label="Primary"
-          >
-            <Link
-              to="/"
-              className="nav-link"
-              activeOptions={{ exact: true }}
-              activeProps={{ className: "nav-link-active" }}
+          <div className="flex min-w-0 items-center gap-2">
+            <SiteMenu language={language} />
+            <nav
+              className="hidden flex-nowrap items-center gap-1 text-sm lg:flex"
+              aria-label="Primary"
             >
-              {t.farmer}
-            </Link>
-            <Link
-              to="/advice"
-              className="nav-link"
-              activeOptions={{ exact: true }}
-              activeProps={{ className: "nav-link-active" }}
-            >
-              {t.advicePage}
-            </Link>
-            <Link
-              to="/summary"
-              className="nav-link"
-              activeOptions={{ exact: true }}
-              activeProps={{ className: "nav-link-active" }}
-            >
-              {t.summaryPage}
-            </Link>
-            <Link
-              to="/guidance"
-              className="nav-link"
-              activeOptions={{ exact: true }}
-              activeProps={{ className: "nav-link-active" }}
-            >
-              {t.guidancePage}
-            </Link>
-            <Link
-              to="/dashboard"
-              className="nav-link"
-              activeOptions={{ exact: true }}
-              activeProps={{ className: "nav-link-active" }}
-            >
-              {t.agronomist}
-            </Link>
-          </nav>
+              <Link
+                to="/"
+                className="nav-link"
+                activeOptions={{ exact: true }}
+                activeProps={{ className: "nav-link-active" }}
+              >
+                {t.farmer}
+              </Link>
+              <Link
+                to="/advice"
+                className="nav-link"
+                activeOptions={{ exact: true }}
+                activeProps={{ className: "nav-link-active" }}
+              >
+                {t.advicePage}
+              </Link>
+              <Link
+                to="/summary"
+                className="nav-link"
+                activeOptions={{ exact: true }}
+                activeProps={{ className: "nav-link-active" }}
+              >
+                {t.summaryPage}
+              </Link>
+              <Link
+                to="/guidance"
+                className="nav-link"
+                activeOptions={{ exact: true }}
+                activeProps={{ className: "nav-link-active" }}
+              >
+                {t.guidancePage}
+              </Link>
+              <Link
+                to="/dashboard"
+                className="nav-link"
+                activeOptions={{ exact: true }}
+                activeProps={{ className: "nav-link-active" }}
+              >
+                {t.agronomist}
+              </Link>
+            </nav>
+          </div>
           <div className="flex shrink-0 items-center gap-2">
             <label className="sr-only" htmlFor="app-language">
               {t.language}

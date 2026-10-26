@@ -419,4 +419,26 @@
   .nav-link-active {
     @apply bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground;
   }
+
+  /* The header menu: one dropdown that holds every page on a narrow screen,
+     where the link row does not fit. */
+  .nav-menu-panel {
+    @apply absolute left-0 top-full z-30 mt-2 w-56 rounded-xl border border-border bg-popover p-1.5 shadow-pop;
+  }
+
+  .nav-menu-item {
+    @apply flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-foreground transition-colors hover:bg-accent hover:text-accent-foreground;
+  }
+
+  .nav-menu-item[data-status="active"] {
+    @apply bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground;
+  }
+
+  .nav-menu-icon {
+    @apply size-4 shrink-0 text-primary-text;
+  }
+
+  .nav-menu-item[data-status="active"] .nav-menu-icon {
+    color: var(--primary-foreground);
+  }
 }
