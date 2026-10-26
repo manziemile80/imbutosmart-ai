@@ -101,6 +101,29 @@ src/components/ui/  reusable Panel, Callout, StatusPill and Stat primitives
 src/styles.css      shared design tokens and light/dark theme values
 ```
 
+### 12.1 Agronomist Dashboard
+
+The `/dashboard` page is the advisory workspace for agricultural officers. It reads the same district, soil and season that the farmer sets on the Farmer page, and it has thirteen modules: overview, manure and fertiliser, agronomist contacts, farmer profiles, crop-advice review, soil and nutrients, weather risk, pests and disease, insurance, farmer messages, the knowledge centre, reports and follow-up, and offline data.
+
+Published figures come from NISR survey aggregates, the district climate record, the live Open-Meteo forecast and the trained-model report. The dashboard does not estimate a missing figure: a price, premium, application rate, eligibility rule or risk score is shown only when an agronomist records a verified value with its supplier or policy, its source and the date it was checked. A price older than 90 days is labelled for re-checking.
+
+Editable records live in Supabase. The app ships the migration in `supabase/migrations/20261026000000_agronomist_dashboard.sql`, which creates `agronomist_records` and `agronomist_audit`, enables row-level security and records who created or changed each record. Apply it with the Supabase CLI or the SQL editor before expecting stored records:
+
+```bash
+supabase db push
+```
+
+Only an account whose **app_metadata** carries `role: "agronomist"` can add, edit or delete a record. `user_metadata` is editable by the account holder, so it is never trusted. Grant the role in the Supabase dashboard (Authentication → Users) or with SQL:
+
+```sql
+update auth.users
+   set raw_app_meta_data = coalesce(raw_app_meta_data, '{}'::jsonb)
+                           || '{"role":"agronomist"}'::jsonb
+ where email = 'officer@example.org';
+```
+
+The server checks the role on every write as well as the database policy, and the audit table keeps the actor, action and record. If the database is not configured or the migration has not been applied, the page still shows the published figures and the reference catalogue, and says plainly that records cannot be changed. A record edited while the connection is down is kept on the device and retried when the page next reaches the server.
+
 ## 13. Technologies Used
 
 ImbutoSmart AI uses a full-stack architecture combining a React-based farmer interface, a FastAPI machine-learning backend, Python data-processing tools, weather services, and optional AI/voice services.
@@ -203,6 +226,9 @@ npm run dev
 ```
 
 For a production build, preview with `node .output/server/index.mjs` after `npm run build` rather than `vite preview` (the Nitro output lives in `.output`).
+
+The agronomist records use the server-side `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`, plus the migration described in section 12.1. No service-role key is needed: the server forwards the signed-in account's token, and the row-level policies decide what that account may read or write. The dashboard's sign-in form, record status and offline notice all stay visible when Supabase is not configured, so the rest of the app still works.
+
 
 ## 18. Deployment
 

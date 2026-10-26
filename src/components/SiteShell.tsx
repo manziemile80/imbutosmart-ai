@@ -63,6 +63,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
             <Link
               to="/dashboard"
               className="nav-link"
+              activeOptions={{ exact: true }}
               activeProps={{ className: "nav-link-active" }}
             >
               {t.agronomist}

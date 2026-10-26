@@ -5,10 +5,10 @@ import { MONTHS } from "./season-guide";
 export const farmerCopy = {
   en: {
     farmer: "Farmer",
-    agronomist: "Agronomist",
     advicePage: "Advice",
     guidancePage: "Guidance",
     summaryPage: "Summary get",
+    agronomist: "Agronomist",
     language: "Language",
     advisory: "Farmer Advisory",
     field: "Your field",
@@ -61,10 +61,10 @@ export const farmerCopy = {
   },
   fr: {
     farmer: "Agriculteur",
-    agronomist: "Agronome",
     advicePage: "Conseils",
     guidancePage: "Orientation",
     summaryPage: "Obtenir le récapitulatif",
+    agronomist: "Agronome",
     language: "Langue",
     advisory: "Conseils agricoles",
     field: "Votre champ",
@@ -118,10 +118,10 @@ export const farmerCopy = {
   },
   rw: {
     farmer: "Umuhinzi",
-    agronomist: "Impuguke",
     advicePage: "Inama",
     guidancePage: "Ubuyobozi",
     summaryPage: "Fata incamake",
+    agronomist: "Impuguke",
     language: "Ururimi",
     advisory: "Inama ku muhinzi",
     field: "Umurima wawe",
