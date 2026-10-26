@@ -316,6 +316,18 @@ export function useAgronomistRecords(
     void refresh();
   }, [refresh]);
 
+  // Signing in or out changes what the database returns: a visitor sees only the
+  // public catalogue, while an agronomist also sees the farmer records. Reload
+  // when the identity changes, so the signed-in dashboard is never left showing
+  // the visitor's list until the page is reloaded by hand.
+  const identity = `${authorId ?? ""}\u0000${authorName ?? ""}`;
+  const signedAs = useRef(identity);
+  useEffect(() => {
+    if (signedAs.current === identity) return;
+    signedAs.current = identity;
+    void refresh();
+  }, [identity, refresh]);
+
   const save = useCallback(
     async (kind: RecordKind, data: unknown, id?: string | null) => {
       setBusy(true);

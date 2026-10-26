@@ -123,4 +123,41 @@ describe("records on this device", () => {
     expect(result.current.records).toHaveLength(1);
     expect(result.current.records[0]?.data["name"]).toBe("Compost");
   });
+
+  it("reloads the records when an agronomist signs in", async () => {
+    // A visitor's request returns only the public catalogue: no farmer records.
+    server.list.mockResolvedValueOnce({ storage: "ready", records: [] });
+    // The signed-in request returns the farmer profiles the account may read.
+    server.list.mockResolvedValue({
+      storage: "ready",
+      records: [
+        {
+          id: "farmer-1",
+          kind: "farmer",
+          data: { fullName: "Alice Mukamana", district: "Nyagatare", soil: "Sandy" },
+          createdBy: null,
+          createdByName: "Sample data",
+          updatedBy: null,
+          updatedByName: "Sample data",
+          createdAt: "2026-10-20T08:00:00.000Z",
+          updatedAt: "2026-10-20T08:00:00.000Z",
+        },
+      ],
+    });
+
+    const { result, rerender } = renderHook(
+      ({ id, name }: { id: string | null; name: string | null }) =>
+        useAgronomistRecords(id, name),
+      { initialProps: { id: null as string | null, name: null as string | null } },
+    );
+
+    await waitFor(() => expect(result.current.storage).toBe("ready"));
+    expect(result.current.records).toHaveLength(0);
+
+    rerender({ id: "8ad9c790-f121-41b6-8db0-b0f2074161c5", name: "manziemile1@gmail.com" });
+
+    await waitFor(() => expect(result.current.records).toHaveLength(1));
+    expect(result.current.records[0]?.data["fullName"]).toBe("Alice Mukamana");
+    expect(server.list).toHaveBeenCalledTimes(2);
+  });
 });
