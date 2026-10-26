@@ -341,6 +341,8 @@ type DashboardCopy = {
     demoUnavailable: string;
   };
   storage: Record<StorageState, string>;
+  /** A short label for a status pill; the sentence above is for the callout. */
+  storageShort: Record<StorageState, string>;
   common: {
     add: string;
     edit: string;
@@ -420,6 +422,12 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
       error:
         "The records database could not be reached. Published figures and the reference catalogue are still shown.",
     },
+    storageShort: {
+      loading: "Loading",
+      ready: "Database ready",
+      unconfigured: "Database not configured",
+      error: "Database unreachable",
+    },
     common: {
       add: "Add",
       edit: "Edit",
@@ -497,6 +505,12 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
       error:
         "La base de dossiers est inaccessible. Les chiffres publiés et le catalogue de référence restent affichés.",
     },
+    storageShort: {
+      loading: "Chargement",
+      ready: "Base prête",
+      unconfigured: "Base non configurée",
+      error: "Base inaccessible",
+    },
     common: {
       add: "Ajouter",
       edit: "Modifier",
@@ -573,6 +587,12 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
         "Ububiko bw’amadosiye ntibwateganyijwe cyangwa imbonerahamwe yabwo ntiyakozwe. Ibipimo byasohotse n’urutonde rw’ubushakashatsi biraboneka; guhindura ntibishoboka.",
       error:
         "Ububiko bw’amadosiye ntibwabonetse. Ibipimo byasohotse n’urutonde rw’ubushakashatsi biracyagaragarira.",
+    },
+    storageShort: {
+      loading: "Biracyashakishwa",
+      ready: "Ububiko bwiteguye",
+      unconfigured: "Ububiko ntibwateganyijwe",
+      error: "Ububiko ntibwabonetse",
     },
     common: {
       add: "Ongeraho",
@@ -784,6 +804,13 @@ export type OverviewCounts = {
   pendingRequests: number;
 };
 
+// A zero is only a fact when the store was actually read. If the table is
+// missing or unreachable, showing "0 records" claims that nothing is stored;
+// the dashboard shows that the figure is not known instead.
+export function recordsWereCounted(storage: StorageState, loaded: number): boolean {
+  return storage === "ready" || loaded > 0;
+}
+
 export function overviewCounts(records: AgronomistRecord[]): OverviewCounts {
   const ofKind = (kind: RecordKind) => records.filter((record) => record.kind === kind);
   const recommendations = ofKind("recommendation");
@@ -970,6 +997,11 @@ export const INPUT_CATEGORY_LABELS: Record<InputCategory, string> = {
 
 export const INSURANCE_OFFICIAL_URL = INSURANCE_SOURCE_URL;
 export const SOURCE_LINKS = AGRONOMIST_SOURCES;
+
+// The migration the records tables need. It ships with the repository, so the
+// page can point a deployment owner at it without the app holding an admin key.
+export const DASHBOARD_MIGRATION_URL =
+  "https://github.com/manziemile80/imbutosmart-ai/blob/main/supabase/migrations/20261026000000_agronomist_dashboard.sql";
 
 export {
   MESSAGE_CATEGORIES,

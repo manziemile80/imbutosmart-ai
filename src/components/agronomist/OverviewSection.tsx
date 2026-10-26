@@ -17,11 +17,13 @@ import { districtInputs } from "@/lib/advice";
 import {
   RECORD_LABEL,
   SOURCE_LINKS,
+  DASHBOARD_MIGRATION_URL,
   dashboardCopy,
   forecastRisks,
   formatDate,
   overviewCounts,
   recordTitle,
+  recordsWereCounted,
   type DashboardTab,
 } from "@/lib/agronomist-dashboard";
 import type { Stats } from "@/lib/api";
@@ -64,6 +66,22 @@ export function OverviewSection({
   const recent = props.records.slice(0, 6);
   const currentRisks = risks.length + counts.highSeverityPests;
 
+  // A count is only a fact once the store has been read. When the table is
+  // missing or unreachable the figure is shown as unknown, never as zero. While
+  // the read is in flight the same dash is used, but the wording stays quiet.
+  const counted = recordsWereCounted(props.storage, props.records.length);
+  const loading = props.storage === "loading";
+  const unavailable = props.storage === "unconfigured" || props.storage === "error";
+  const risksCounted = counted && Boolean(weather?.forecast);
+  const unknown = "—";
+  const figure = (value: number) => (counted ? value : unknown);
+  const countHint = (text: string) =>
+    counted
+      ? text
+      : loading
+        ? "Loading the count…"
+        : "Not counted: the records database was not read";
+
   return (
     <div className="grid gap-5">
       <Panel aria-labelledby="agronomist-overview-title">
@@ -78,30 +96,54 @@ export function OverviewSection({
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
             <Stat
               label="Farmers supported"
-              value={counts.farmers}
-              hint="Farmer profiles on record"
+              value={figure(counts.farmers)}
+              hint={countHint("Farmer profiles on record")}
             />
             <Stat
               label="Registered agronomists"
-              value={counts.agronomists}
-              hint="Agronomist contacts on record"
+              value={figure(counts.agronomists)}
+              hint={countHint("Agronomist contacts on record")}
             />
             <Stat
               label="Crop recommendations"
-              value={counts.recommendations}
-              hint={`${counts.pendingRecommendations} waiting for review`}
+              value={figure(counts.recommendations)}
+              hint={countHint(`${counts.pendingRecommendations} waiting for review`)}
             />
             <Stat
               label="Pending farmer requests"
-              value={counts.pendingRequests}
-              hint="Recommendations and open pest reports"
+              value={figure(counts.pendingRequests)}
+              hint={countHint("Recommendations and open pest reports")}
             />
             <Stat
               label="Current agricultural risks"
-              value={currentRisks}
-              hint="Forecast signals and severe open reports"
+              value={risksCounted ? currentRisks : unknown}
+              hint={
+                risksCounted
+                  ? "Forecast signals and severe open reports"
+                  : loading
+                    ? "Loading the count…"
+                    : "Not counted: the forecast or the records were not available"
+              }
             />
           </div>
+
+          {unavailable && (
+            <Callout tone="warning" className="mt-4">
+              These five counts are not known, because the records database could not be read. They
+              are shown as <strong>—</strong> rather than 0, which would claim that nothing is
+              stored. The published figures and the reference catalogue below still work.{" "}
+              <a
+                className="link-quiet inline-flex items-center gap-1"
+                href={DASHBOARD_MIGRATION_URL}
+                target="_blank"
+                rel="noreferrer"
+              >
+                The dashboard migration
+              </a>{" "}
+              creates the records tables, and the deployment has to carry its Supabase URL and
+              browser key; either step needs whoever runs the deployment.
+            </Callout>
+          )}
 
           <div className="mt-5 grid gap-3 lg:grid-cols-3">
             <button
@@ -111,8 +153,11 @@ export function OverviewSection({
             >
               <span className="flex items-center gap-2 text-sm text-foreground">
                 <ClipboardCheck className="size-4 text-primary-text" aria-hidden="true" />
-                Review {counts.pendingRecommendations} pending recommendation
-                {counts.pendingRecommendations === 1 ? "" : "s"}
+                {counted
+                  ? `Review ${counts.pendingRecommendations} pending recommendation${
+                      counts.pendingRecommendations === 1 ? "" : "s"
+                    }`
+                  : "Open crop advice"}
               </span>
               <ArrowRight className="size-4 text-muted-foreground" aria-hidden="true" />
             </button>
@@ -123,9 +168,17 @@ export function OverviewSection({
             >
               <span className="flex items-center gap-2 text-sm text-foreground">
                 <Bug className="size-4 text-primary-text" aria-hidden="true" />
-                {counts.openPestReports} open pest report
-                {counts.openPestReports === 1 ? "" : "s"}
-                {counts.highSeverityPests > 0 ? ` · ${counts.highSeverityPests} high severity` : ""}
+                {counted ? (
+                  <>
+                    {counts.openPestReports} open pest report
+                    {counts.openPestReports === 1 ? "" : "s"}
+                    {counts.highSeverityPests > 0
+                      ? ` · ${counts.highSeverityPests} high severity`
+                      : ""}
+                  </>
+                ) : (
+                  "Open pest reports"
+                )}
               </span>
               <ArrowRight className="size-4 text-muted-foreground" aria-hidden="true" />
             </button>
@@ -136,7 +189,9 @@ export function OverviewSection({
             >
               <span className="flex items-center gap-2 text-sm text-foreground">
                 <CloudRain className="size-4 text-primary-text" aria-hidden="true" />
-                {risks.length} weather signal{risks.length === 1 ? "" : "s"} to check
+                {weather?.forecast
+                  ? `${risks.length} weather signal${risks.length === 1 ? "" : "s"} to check`
+                  : "Open weather and climate risk"}
               </span>
               <ArrowRight className="size-4 text-muted-foreground" aria-hidden="true" />
             </button>
@@ -346,21 +401,31 @@ export function OverviewSection({
         <PanelHeader
           icon={<ClipboardCheck className="size-5" aria-hidden="true" />}
           eyebrow="Recent activity"
-          title={`Last changes (${props.records.length} records)`}
+          title={counted ? `Last changes (${props.records.length} records)` : "Recent activity"}
           titleId="overview-recent-title"
           description="The most recently stored records, with who changed them. A record's author and time are kept by the database, not typed by the page."
           meta={
             <StatusPill tone={props.storage === "ready" ? "success" : "warning"}>
-              {props.storage === "ready" ? "Database ready" : t.storage[props.storage]}
+              {t.storageShort[props.storage]}
             </StatusPill>
           }
         />
         <PanelBody>
           {recent.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              No record has been stored yet. Add a farmer, a product or a recommendation and it will
-              appear here.
-            </p>
+            counted ? (
+              <p className="text-sm text-muted-foreground">
+                No record has been stored yet. Add a farmer, a product or a recommendation and it
+                will appear here.
+              </p>
+            ) : loading ? (
+              <p className="text-sm text-muted-foreground">Loading the stored records…</p>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                The records database could not be read, so no stored change can be listed here. This
+                is not the same as an empty record set, and the count stays unknown until the table
+                is available.
+              </p>
+            )
           ) : (
             <ul className="grid gap-2">
               {recent.map((record) => (

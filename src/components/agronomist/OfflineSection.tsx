@@ -4,14 +4,13 @@ import { CloudOff, Database, ExternalLink, RefreshCw, Trash2, Wifi } from "lucid
 import { Button } from "@/components/ui/button";
 import { Callout, StatusPill } from "@/components/ui/callout";
 import { Panel, PanelBody, PanelHeader } from "@/components/ui/panel";
-import { dashboardCopy, type StorageState } from "@/lib/agronomist-dashboard";
+import {
+  DASHBOARD_MIGRATION_URL,
+  dashboardCopy,
+  type StorageState,
+} from "@/lib/agronomist-dashboard";
 import { useNetworkStatus } from "@/hooks/use-network";
 import type { FarmerLanguage } from "@/lib/farmer-language";
-
-// The migration the records tables need. It is public with the repository, so a
-// deployment owner can read and run it without the app holding an admin key.
-const MIGRATION_URL =
-  "https://github.com/manziemile80/imbutosmart-ai/blob/main/supabase/migrations/20261026000000_agronomist_dashboard.sql";
 
 export function OfflineSection({
   language,
@@ -55,7 +54,7 @@ export function OfflineSection({
           </StatusPill>
           <StatusPill tone={storage === "ready" ? "success" : "warning"}>
             <Database className="size-3.5" aria-hidden="true" />
-            {storage === "ready" ? "Records database ready" : t.storage[storage]}
+            {t.storageShort[storage]}
           </StatusPill>
           <StatusPill tone={pending > 0 ? "warning" : "neutral"}>
             {pending} change{pending === 1 ? "" : "s"} waiting to sync
@@ -129,7 +128,7 @@ export function OfflineSection({
             {t.storage[storage]} The tables come from{" "}
             <a
               className="link-quiet inline-flex items-center gap-1"
-              href={MIGRATION_URL}
+              href={DASHBOARD_MIGRATION_URL}
               target="_blank"
               rel="noreferrer"
             >

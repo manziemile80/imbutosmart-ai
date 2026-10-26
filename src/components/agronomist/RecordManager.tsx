@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   dashboardCopy,
   parseRecordData,
+  recordsWereCounted,
   type AgronomistRecord,
   type RecordKind,
   type SaveResult,
@@ -107,6 +108,22 @@ export function RecordManager({
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+
+  // A list of zero only means "nothing is stored" once the database has been
+  // read. When it could not be read, the title and the empty line say so rather
+  // than reporting a count of 0.
+  const counted = recordsWereCounted(storage, records.length);
+  const loading = storage === "loading";
+  const shownTitle = counted
+    ? listTitle
+    : loading
+      ? listTitle.replace(/\s*\(\d+\)/, "")
+      : listTitle.replace(/\(\d+\)/, "(not counted)");
+  const shownEmpty = counted
+    ? empty
+    : loading
+      ? "Loading the records…"
+      : "The records database could not be read, so this list is not known to be empty. The reference catalogue and the published figures still work.";
 
   function startAdd() {
     setEditing(null);
@@ -291,10 +308,10 @@ export function RecordManager({
         <Callout tone="info">{t.readOnlyNotice}</Callout>
       )}
 
-      <section aria-label={listTitle}>
-        <h3 className="text-sm font-semibold text-foreground">{listTitle}</h3>
+      <section aria-label={shownTitle}>
+        <h3 className="text-sm font-semibold text-foreground">{shownTitle}</h3>
         {records.length === 0 ? (
-          <p className="mt-2 text-sm text-muted-foreground">{empty}</p>
+          <p className="mt-2 text-sm text-muted-foreground">{shownEmpty}</p>
         ) : (
           <ul className="mt-3 grid gap-3">
             {records.map((record) => (

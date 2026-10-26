@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildActivityCsv,
   contactSpecializations,
+  dashboardCopy,
   filterContacts,
   filterRecords,
   forecastRisks,
@@ -10,6 +11,7 @@ import {
   isAgronomistClaims,
   overviewCounts,
   parseRecordData,
+  recordsWereCounted,
   relatedRecordsForFarmer,
   visibleRecords,
   whatsappLink,
@@ -244,6 +246,25 @@ describe("overview counts", () => {
     expect(counts.highSeverityPests).toBe(1);
     expect(counts.products).toBe(1);
     expect(counts.insuranceProducts).toBe(1);
+  });
+
+  it("never presents a count as zero when the database was not read", () => {
+    // A missing table and an empty table are different facts. Only a read
+    // store, or a copy already in hand, may be counted.
+    expect(recordsWereCounted("ready", 0)).toBe(true);
+    expect(recordsWereCounted("unconfigured", 0)).toBe(false);
+    expect(recordsWereCounted("error", 0)).toBe(false);
+    expect(recordsWereCounted("loading", 0)).toBe(false);
+    expect(recordsWereCounted("error", 3)).toBe(true);
+  });
+
+  it("keeps every status pill to a short label rather than a sentence", () => {
+    for (const copy of Object.values(dashboardCopy)) {
+      for (const state of ["loading", "ready", "unconfigured", "error"] as const) {
+        expect(copy.storageShort[state].length).toBeLessThan(40);
+        expect(copy.storageShort[state]).not.toMatch(/\.\s/);
+      }
+    }
   });
 });
 
