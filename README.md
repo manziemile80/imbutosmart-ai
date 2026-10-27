@@ -307,15 +307,39 @@ The documented deployment architecture uses **Render** for the FastAPI backend a
 - Deeper agricultural-insurance integration.
 - Mobile and SMS delivery for farmers.
 
-## 20. NST2 Alignment
+## 20. Hybrid and Offline AI Capability
+
+ImbutoSmart AI is designed to support farmers both when an internet connection is available and when there is limited or no internet connectivity. This hybrid approach is important because some farmers may live or work in areas where internet connectivity is unreliable, expensive, or completely unavailable.
+
+The app therefore has two paths to the same advice. It takes the richer one when it can reach the server and falls back to the one on the device when it cannot, without asking the farmer to choose a mode or to notice that anything changed.
+
+| Capability | With a connection | Without a connection |
+| --- | --- | --- |
+| Crop advice | The trained model served by the backend, with the browser ranking engine beside it | The ranking engine in `src/lib/recommendation-engine.ts` and the model bundled in `src/lib/local-model.ts` |
+| District climate and weather | The app's weather function: the published district climate record plus the live Open-Meteo forecast | No weather figure is shown rather than one being estimated |
+| Season guidance | The AI season explanation, grounded in the shared season guide | The deterministic reference summary for the chosen month |
+| Questions and voice | The farmer Q&A assistant, speech playback and transcription | The assistant says it could not answer just now, the spoken controls are not offered, and the written guidance stays on the page |
+| Plan and PDF | The whole summary on the File page, downloaded as a PDF | The summary and its PDF built in the browser; a section whose source is unavailable is left out rather than estimated |
+| Navigation | Every menu page preloaded in the background | The pages already warmed stay available between visits |
+| Agronomist records | Written to the shared Supabase database | Kept on the device with a `device-` id and retried when the server is next reachable |
+
+Three rules keep the offline path trustworthy:
+
+- **A figure is never invented to fill a gap.** The engine records which factors it was given, and a missing one is named rather than estimated; where a number cannot be sourced, the app says so.
+- **Deterministic guidance is always on the page.** The season reference, the agronomic rules and the plan read the same without the AI, so an unavailable service costs the farmer an explanation, never the advice itself.
+- **A failure stays quiet.** A page that cannot be preloaded, a forecast that does not arrive or a speech backend that cannot answer is retried or left unwritten, not shown as an error the farmer cannot act on.
+
+Section 12.3 describes the offline behaviour module by module. What is still missing is a packaged offline install: the app shell is preloaded in memory, but with no service worker a full page reload still needs the network.
+
+## 21. NST2 Alignment
 
 ImbutoSmart AI supports NST2 priorities related to agricultural productivity through data-driven crop selection, higher potential yield per hectare, climate-resilient decision-making and agricultural extension services.
 
-## 21. AI Disclosure
+## 22. AI Disclosure
 
 AI assistants were used to architect the ML pipeline, generate UI components and debug code. The core data strategy, NISR data preprocessing logic and system design were implemented by the team.
 
-## 22. Project Vision
+## 23. Project Vision
 
 > "From agricultural data to better decisions, from better decisions to better harvests."
 
