@@ -10,6 +10,8 @@ Repository: [github.com/manziemile80/imbutosmart-ai](https://github.com/manziemi
 
 ImbutoSmart AI turns NISR agricultural survey data into practical planting advice. A Random Forest classifier estimates the probability that a crop will succeed under a farmer's district, soil and forecast-weather conditions, while a Random Forest regressor estimates expected yield in tonnes per hectare (t/ha). Crops are ranked by expected value. The platform extends these predictions with district climate, weather, agronomic suitability, soil/input guidance, seasonal advice, insurance awareness, and AI assistance.
 
+The app is also built for offline use. The crop ranking, the bundled local model and every menu page live on the device, so a farmer can still get a recommendation, a plan and its PDF with no connection; only the live forecast, the AI assistants and the shared database need the network. See [12.3 Offline mode](#123-offline-mode).
+
 **NST2 alignment:** supports agricultural productivity, raising yields per hectare, climate-resilient crop choice, and data-driven extension services.
 
 ## 2. Problem Statement
@@ -156,6 +158,25 @@ The password is public: it is in this repository and on the page. Use the accoun
 
 Supabase must have the **Email** provider enabled (Authentication → Sign In / Providers). When it is disabled, or when the deployment has no Supabase configuration at all, the same printed credentials open a reviewer session that lives in the browser; the page says so, and the records it writes stay on that device. No other address gets that path, and every write to a shared database still checks the agronomist role on the server. A confirmed email is not required when "Confirm email" is off; when it is on, the first sign-in creates the account and asks for the address to be confirmed before the next sign-in. As soon as the cloud sign-in works, it replaces the device session, and the form no longer offers the device path.
 
+### 12.3 Offline mode
+
+ImbutoSmart AI runs on the farmer's device, not only on a server, so a recommendation is still available when the connection is weak, expensive or absent. This is how the app behaves with no network:
+
+- **The crop ranking is computed in the browser.** `src/lib/recommendation-engine.ts` scores every crop from the district, the soil and the season, so the ranked list on the Farmer page, the Advice page and the File page comes from the device. Each factor records whether it was supplied, and the result names the ones it could not fill instead of guessing them.
+- **The trained-model answer falls back to a bundled model.** When `VITE_API_URL` is not set, or no season is chosen (September belongs to two), `predict` uses the browser model in `src/lib/local-model.ts` instead of calling the backend. The same inputs give an answer with the server unreachable.
+- **The district figures are a bundled record, not a guess.** `src/lib/district-climate.json` (NASA POWER, 2001–2020) ships inside the build and is read by the app's own weather function, so the district climate is a published file rather than a third-party estimate made on demand. A figure the farmer typed is never overwritten by a fetched one.
+- **Every menu page is warmed in memory.** After the first paint, and again each time the connection returns, `useRouteWarmup` fetches the five menu pages in the background. Moving between them afterwards keeps working offline, and a page that cannot be fetched is retried quietly rather than reported.
+- **The plan and its PDF stay on the device.** The File page builds the summary and writes the PDF in the browser with the standard Helvetica faces, so the plan can be read and kept with no download service and no PDF dependency.
+- **Dashboard changes are queued, not lost.** A record written while the connection is down is kept on the device and retried when the page next reaches the server. When the deployment has no shared database at all, the workspace falls back to a device store with the same printed reviewer account, and the records carry a `device-` id so they are never mistaken for a database row.
+
+What still needs the network is named rather than faked:
+
+- **The weather answer and the live forecast.** The district climate and the forecast arrive through the app's own weather function, and the forecast itself is a fetch from Open-Meteo. Without a connection neither reaches the page, so no figure is shown rather than a figure being estimated.
+- **The AI assistants** (season explanation, farmer Q&A, voice) and **speech playback and transcription** run on the server, so they are unavailable offline; the deterministic reference guidance stays on the page beside them.
+- **The shared database** is only reachable through the server. A count is shown as `—` when the store could not be read, and a missing figure is named as missing instead of being estimated.
+
+Nothing offline is invented to fill a gap: the app keeps working on the figures and rules it carries, and leaves the rest clearly unavailable.
+
 ## 13. Technologies Used
 
 ImbutoSmart AI uses a full-stack architecture combining a React-based farmer interface, a FastAPI machine-learning backend, Python data-processing tools, weather services, and optional AI/voice services.
@@ -277,7 +298,7 @@ The documented deployment architecture uses **Render** for the FastAPI backend a
 
 ## 19. Future Development
 
-- Offline/hybrid farmer recommendations for limited-connectivity areas.
+- Packaged offline install (service worker and app shell) so the offline mode also survives a full page reload with no connection.
 - Reliable Kinyarwanda speech-to-text and text-to-speech.
 - More detailed soil and agronomic datasets.
 - Additional real-time meteorological sources.
