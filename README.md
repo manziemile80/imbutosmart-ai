@@ -313,6 +313,8 @@ ImbutoSmart AI is designed to support farmers both when an internet connection i
 
 The app therefore has two paths to the same advice. It takes the richer one when it can reach the server and falls back to the one on the device when it cannot, without asking the farmer to choose a mode or to notice that anything changed.
 
+The full design note — online mode, offline mode, local AI, synchronization, and the limits of each — is in [`docs/hybrid-and-offline-ai.md`](docs/hybrid-and-offline-ai.md). The table below summarises it.
+
 | Capability | With a connection | Without a connection |
 | --- | --- | --- |
 | Crop advice | The trained model served by the backend, with the browser ranking engine beside it | The ranking engine in `src/lib/recommendation-engine.ts` and the model bundled in `src/lib/local-model.ts` |
@@ -341,6 +343,8 @@ AI assistants were used to architect the ML pipeline, generate UI components and
 
 ## 23. Project Vision
 
-> "From agricultural data to better decisions, from better decisions to better harvests."
+ImbutoSmart AI aims to bridge the gap between Rwanda's agricultural and meteorological data and the everyday decisions made by farmers. It transforms complex agricultural information into practical, localized and understandable guidance while ensuring that farmers can continue accessing essential recommendations even when internet connectivity is unavailable.
 
-ImbutoSmart AI aims to bridge the gap between Rwanda's agricultural and meteorological data and the everyday decisions made by farmers, turning complex data into practical, localized and understandable agricultural guidance.
+The long-term vision is to provide a **hybrid AI agricultural assistant** that combines machine learning, agricultural statistics, weather information, agronomic knowledge, local AI and offline technology to support better crop decisions, better farm management and more climate-resilient agriculture.
+
+> **"From agricultural data to better decisions, from better decisions to better harvests — online or offline."**
