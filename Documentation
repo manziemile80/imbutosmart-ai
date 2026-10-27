@@ -1,0 +1,140 @@
+# ImbutoSmart AI
+
+## NISR 2026 Big Data Hackathon
+
+### Complete Project Documentation and Technical Overview
+
+**Repository:** github.com/manziemile80/imbutosmart-ai
+
+---
+
+# 1. Project Overview
+
+ImbutoSmart AI is an intelligent agricultural decision-support platform designed to transform Rwanda's agricultural and meteorological data into practical, localized and understandable advice for farmers.
+
+The system uses agricultural survey data, district climate information, weather forecasts, machine-learning models and agronomic knowledge to help farmers make better decisions about what to grow, when to act and how to manage their crops.
+
+A Random Forest classifier estimates the probability that a crop will succeed under the selected district, soil and seasonal/weather conditions, while a Random Forest regressor estimates expected yield in tonnes per hectare (t/ha). Crops are ranked according to estimated success and expected yield.
+
+The platform extends these predictions with:
+
+- District climate information.
+- Coming-days weather forecasts.
+- Soil and crop suitability.
+- Fertilizer, manure and input guidance.
+- Seasonal agricultural advice.
+- Agricultural risk information.
+- Insurance awareness.
+- Agronomist assistance.
+- AI-powered farmer questions and answers.
+- Voice assistance.
+- English, Kinyarwanda and French text support.
+- Hybrid online/offline agricultural recommendations.
+
+The system is designed to remain useful whether the farmer has an internet connection or not.
+
+### NST2 Alignment
+
+ImbutoSmart AI supports agricultural productivity, improved potential yield per hectare, climate-resilient crop selection, data-driven decision-making and agricultural extension services.
+
+---
+
+# 2. Problem Statement
+
+Rwandan farmers need clear and localized information to decide what to plant and how to manage production under different soil, seasonal and weather conditions.
+
+Agricultural, weather and agronomic information can be difficult to combine into one practical decision. Farmers may have access to individual pieces of information but lack a system that brings these sources together and translates them into simple recommendations.
+
+Connectivity is also an important challenge. Some farmers may experience unreliable, expensive or unavailable internet connectivity. A system that depends completely on continuous internet access may therefore become unavailable exactly when a farmer needs agricultural guidance.
+
+ImbutoSmart AI addresses these challenges by combining NISR agricultural survey information with district climate, forecast weather, machine-learning models and a separate agronomic suitability engine.
+
+The system provides farmer-facing recommendations rather than simply displaying raw datasets or machine-learning outputs.
+
+Its hybrid architecture also allows essential agricultural recommendations to continue working when there is no internet connection, using locally stored agricultural information, models and cached data.
+
+---
+
+# 3. Main Purpose
+
+The purpose of ImbutoSmart AI is to transform agricultural and meteorological data into simple, localized and actionable advice that helps farmers:
+
+- Choose suitable crops.
+- Understand the probability of crop success.
+- Estimate potential yield.
+- Understand rainfall and seasonal conditions.
+- Manage soil and agricultural inputs.
+- Understand manure and fertilizer options.
+- Decide when to act based on seasonal and weather conditions.
+- Understand agricultural risks.
+- Make informed insurance decisions.
+- Ask agricultural questions using AI.
+- Receive assistance in understandable languages.
+- Continue receiving essential recommendations even when internet connectivity is unavailable.
+
+---
+
+# 4. Core Farmer Questions
+
+ImbutoSmart AI is designed to answer questions such as:
+
+- Which crops are suitable for my district and soil?
+- What is the estimated probability that each crop will succeed?
+- What yield can I expect in tonnes per hectare?
+- What are the usual rainfall and temperature conditions in my district?
+- What weather is expected in the coming days?
+- What agricultural inputs are commonly used in my district?
+- What are the observed application rates of these inputs?
+- What type of manure or fertilizer may be appropriate?
+- When should I act based on seasonal and forecast conditions?
+- What insurance should I ask about when production risk is high?
+- Can I receive advice in simple language?
+- Can I receive information in Kinyarwanda, English or French?
+- Can I still receive crop recommendations when there is no internet?
+
+---
+
+# 5. Data and Evidence
+
+## 5.1 NISR Seasonal Agricultural Survey 2025
+
+The training data come from NISR Seasonal Agricultural Survey 2025 microdata covering Seasons A, B and C.
+
+The prepared training table contains:
+
+- 51,225 crop observations.
+- 30 districts.
+- 12 crops.
+- 3 agricultural seasons.
+
+The crop names are mapped to the crop categories offered by the application.
+
+The survey records district, crop, area, harvest information and sampling weight.
+
+The microdata and trained models remain outside the public repository and are built locally.
+
+---
+
+## 5.2 District Climate and Weather
+
+Because the survey does not record plot-level soil type or plot-level weather, machine-learning training rows use district climate for the relevant season.
+
+The project builds district climate using the published 2001–2020 record from NASA POWER and MERRA-2 at district-centre locations, together with weather information from the 2025 survey year.
+
+The farmer interface separates:
+
+**Usual district climate**
+
+from
+
+**Coming-days weather forecast.**
+
+Historical climate information comes from NASA POWER, while coming-days forecasts come from Open-Meteo.
+
+---
+
+# 6. Machine-Learning Models
+
+## 6.1 Crop Success Classifier
+
+A Random Forest classifier estimates the probability that a crop will succeed under district
