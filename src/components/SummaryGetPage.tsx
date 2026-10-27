@@ -19,7 +19,7 @@ import { districtInputs } from "@/lib/advice";
 import { seasonRainMm, seasonTempC } from "@/lib/weather";
 import { useDistrictWeather } from "@/hooks/use-district-weather";
 
-// Summary get is where the whole plan lives: every section in one place, ready
+// File is where the whole plan lives: every section in one place, ready
 // to read and to keep as a PDF. The bell only carries announcements and points
 // back here; the field controls stay on the Farmer page.
 

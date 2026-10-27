@@ -47,7 +47,7 @@ export const summaryCopy: Record<
   en: {
     title: "Your summary",
     intro: "Everything you need to act on, for the field you chose.",
-    pageEyebrow: "Summary get",
+    pageEyebrow: "File",
     pageTitle: "Get your summary and keep it",
     pageLede:
       "Every part of your plan for the field you chose, in one place. Read it here, then download it as a PDF to keep or print.",
@@ -71,33 +71,33 @@ export const summaryCopy: Record<
   },
   rw: {
     title: "Incamake yawe",
-    intro: "Byose ukeneye kugirira kugiramo, ku murima wahisemo.",
-    pageEyebrow: "Fata incamake",
-    pageTitle: "Fata incamake yawe uyigumane",
+    intro: "Byose ukeneye gukora ku murima wahisemo.",
+    pageEyebrow: "Dosiye",
+    pageTitle: "Bona incamake yawe uyigumane",
     pageLede:
       "Buri gice cy’umugambi w’umurima wahisemo, ahantu hamwe. Yisomere hano, hanyuma uyikurure nka PDF ushobora kugumana cyangwa gucapa.",
     download: "Kurura iyi ncamake",
-    downloaded: "Incamake yakurujwe. Iri mu bwikorezi bwa dosiye zawe.",
+    downloaded: "Incamake yakurujwe. Uyisanga mu dosiye zikururwa.",
     downloadFailed: "Gukurura ntibyatangira. Ongera ugerageze.",
-    downloadNote: "PDF wakuruye irimo buri gice kiri hasi.",
+    downloadNote: "PDF wakuruye irimo buri gice kiri kuri iyi paji.",
     crops: "Ibihingwa by’umurima wawe",
-    inputs: "Ifumbire abahinzi b'aka karere bakoresha",
-    usedBy: "abakoresha {n}% by’abahinzi",
-    rate: "kuri {n} kg ku/hektari, nk’ibabakoresha hano mu 2025",
-    insurance: "Ubwishingizi bw'imvura nyinshi n'umwuzure",
+    inputs: "Ifumbire abahinzi b’aka karere bakoresha",
+    usedBy: "abahinzi {n}% bayikoresha",
+    rate: "hafi ya {n} kg kuri hekitare, nk’uko byakoreshwaga hano mu 2025",
+    insurance: "Ubwishingizi bw’imvura nyinshi n’umwuzure",
     insuranceNote:
-      "Ubwishingizi bw’imvura nyinshi n’umwuzure ni bwinyabazwe wabagoyeza. Nimba ukeneye cyangwa icyakubitirwa, byerekana n’amasezerano y’ikigo, si kuri iyi porogaramu.",
-    advice: "Ibindi byakora",
-    noInputs: "Nta mafishi y’ifumbire abatariwa kuri karere aka.",
+      "Ubwishingizi bw’imvura nyinshi n’umwuzure ni ibyo ugomba kubaza ikigo cy’ubwishingizi. Niba ubukeneye n’uko bwakwishyura bishingiye ku masezerano, si iyi porogaramu.",
+    advice: "Ibindi byakorwa",
+    noInputs: "Nta mibare y’ifumbire yaratangwa kuri aka karere.",
     noCrops: "Nta bihingwa byagereranyijwe kuri uyu murima.",
     field: "Umurima wawe",
     documentFooter:
-      "Byateguwe na ImbutoSmart AI. Imibare iva mu bushakashatsi bwa NISR n'inyandiko z'ikirere z'akarere.",
+      "Byateguwe na ImbutoSmart AI. Imibare iva mu bushakashatsi bwa NISR n’amakuru y’ikirere y’akarere.",
   },
   fr: {
     title: "Votre récapitulatif",
     intro: "Tout ce qu'il vous faut pour agir, pour le champ que vous avez choisi.",
-    pageEyebrow: "Obtenir le récapitulatif",
+    pageEyebrow: "Fichier",
     pageTitle: "Obtenez votre récapitulatif et gardez-le",
     pageLede:
       "Toutes les parties de votre plan pour le champ choisi, au même endroit. Lisez-le ici, puis téléchargez-le en PDF pour le garder ou l'imprimer.",
@@ -145,7 +145,7 @@ export function buildPlanSummary(input: {
   const advice: string[] = [];
   advice.push(
     input.language === "rw"
-      ? "Hingira ku ntambwe y’imvura yizewe y’igihe, wirinde guhinga nyuma y’imvura nyinshi yarangiye."
+      ? "Hingira ku mvura yizewe ya mbere y’igihembwe, kandi wirinde guhinga nyuma y’imvura nyinshi yarangiye."
       : input.language === "fr"
         ? "Plantez avec les premières pluies fiables de la saison et évitez de planter après les fortes pluies."
         : "Plant with the first reliable rains of the season, and avoid planting after heavy rain has passed.",
@@ -153,7 +153,7 @@ export function buildPlanSummary(input: {
   if (profile && profile.irrigatedShare < 0.2) {
     advice.push(
       input.language === "rw"
-        ? `Abahinzi b’aka karere ni ${Math.round(profile.irrigatedShare * 100)}% gusa bahuza amazi; igihembwe gisanzwe gikwiye imvura.`
+        ? `Abahinzi b’aka karere ni ${Math.round(profile.irrigatedShare * 100)}% gusa bahira; igihembwe gishingiye ahanini ku mvura.`
         : input.language === "fr"
           ? `Seuls ${Math.round(profile.irrigatedShare * 100)}% des agriculteurs du district irriguent : la saison dépend surtout de la pluie.`
           : `Only ${Math.round(profile.irrigatedShare * 100)}% of the farmers here irrigate, so the season leans on the rain.`,
@@ -162,7 +162,7 @@ export function buildPlanSummary(input: {
   if (profile && profile.erodedShare > 0.15) {
     advice.push(
       input.language === "rw"
-        ? `${Math.round(profile.erodedShare * 100)}% by’umurima hano binyereka isuri: ubutaka burashobora gukubikwa ibimera cyangwa imiganda.`
+        ? `${Math.round(profile.erodedShare * 100)}% by’imirima hano bigaragaza isuri: kingira ubutaka ibimera.`
         : input.language === "fr"
           ? `${Math.round(profile.erodedShare * 100)}% des champs du district signalent de l'érosion : gardez le sol couvert.`
           : `${Math.round(profile.erodedShare * 100)}% of the fields here report soil erosion: keep the soil covered.`,
@@ -170,7 +170,7 @@ export function buildPlanSummary(input: {
   }
   advice.push(
     input.language === "rw"
-      ? "Gukora igipimusho ry’ubutaka ni icyo wumenya niba ubutaka bw’akazi gushimishije."
+      ? "Isuzuma ry’ubutaka ni ryo rikubwira icyo ubutaka bwawe bubura."
       : input.language === "fr"
         ? "Une analyse de sol est ce qui vous dit ce qui manque à votre champ."
         : "A soil test is what tells you what your field is short of.",

@@ -42,8 +42,8 @@ const inputNames: Record<string, { en: string; rw: string; fr: string }> = {
   Chaux: { en: "Lime", rw: "Ibunyanga", fr: "Chaux" },
   Manure: { en: "Manure", rw: "Ifumbire y'amatungo", fr: "Fumier" },
   Compost: { en: "Compost", rw: "Ifumbire y'ibimera", fr: "Compost" },
-  "Green manure": { en: "Green manure", rw: "Ifumbire y'ibimera bigerwa", fr: "Engrais vert" },
-  Biogas: { en: "Biogas slurry", rw: "Amashyamba ava kuri biogas", fr: "Lisier de biogaz" },
+  "Green manure": { en: "Green manure", rw: "Ifumbire ibisi", fr: "Engrais vert" },
+  Biogas: { en: "Biogas slurry", rw: "Amazi ava kuri biogas", fr: "Lisier de biogaz" },
 };
 
 // The name of an input in the farmer's language.
@@ -55,42 +55,42 @@ export function inputName(name: string, language: FarmerLanguage): string {
 const glossary: Record<string, { en: string; rw: string; fr: string }> = {
   DAP: {
     en: "A mineral fertiliser that gives the plant phosphorus and nitrogen.",
-    rw: "Ifumbire mubisi itanga fosforu na nitrojeni ku mubira.",
+    rw: "Ifumbire itanga fosifore na azote ku bimera.",
     fr: "Un engrais minéral qui apporte du phosphore et de l’azote à la plante.",
   },
   Urea: {
     en: "A nitrogen fertiliser. It makes plants grow green and leafy.",
-    rw: "Ifumbire mubisi rikora ko butabita bishingushya ibimera bigereye.",
+    rw: "Ifumbire irimo azote. Ituma ibimera bikura bibisi kandi bifite amababi menshi.",
     fr: "Un engrais azoté. Il fait pousser des plantes vertes et feuillues.",
   },
   "NPK 17-17-17": {
     en: "A balanced fertiliser with nitrogen, phosphorus and potassium.",
-    rw: "Ifumbire mubisi rifite azote, fosforu na potasiye.",
+    rw: "Ifumbire iringaniye irimo azote, fosifore na potasiyumu.",
     fr: "Un engrais complet avec azote, phosphore et potasse.",
   },
   Chaux: {
     en: "Lime. It is used on acid soils to make them less sour.",
-    rw: "Ibunyanga: ikurikira ku butaka bw’umun acidity kurugabanya.",
+    rw: "Ibunyanga: bikoreshwa ku butaka bukaze kugira ngo bigabanye ubukaze bwabwo.",
     fr: "Chaux. Elle s’utilise sur les sols acides pour les rendre moins acides.",
   },
   Manure: {
     en: "Farmyard manure: animal waste, spread on the field before planting.",
-    rw: "Ifumbire y’amatungo: ibisomero by’amatungo, bigishyikirizwa ku murima mbere yo guhinga.",
+    rw: "Ifumbire y’amatungo: amase y’amatungo n’ibindi bisigazwa byayo, bishyirwa ku murima mbere yo guhinga.",
     fr: "Fumier : déjections animales, épandues sur le champ avant le semis.",
   },
   Compost: {
     en: "Compost: plant and kitchen waste left to rot into a rich soil improver.",
-    rw: "Ifumbire y’ibimera: ibisukura n’ibikoresho byo mu gikoni bigatandukira, bigishimishije ubutaka.",
+    rw: "Ifumbire y’ibimera: ibisigazwa by’ibimera n’ibyo mu gikoni birekwa bishinduka, bigatuma ubutaka burumbuka.",
     fr: "Compost : déchets de plantes et de cuisine décomposés pour enrichir le sol.",
   },
   "Green manure": {
     en: "Green manure: plants grown on the field and dug in to feed the soil.",
-    rw: "Ifumbire y’ibimera bigerwa: ibihingwa ku murima bikahingurwa mu butaka.",
+    rw: "Ifumbire ibisi: ibihingwa bihingwa ku murima hanyuma bikahingurwa mu butaka kugira ngo bongere imbaraga z’ubutaka.",
     fr: "Engrais vert : plantes cultivées puis enfouies pour nourrir le sol.",
   },
   Biogas: {
     en: "Slurry from a biogas digester, used as a liquid manure.",
-    rw: "Amashyamba ava ku gikoresho cya biogas, bikoreshwa nk’ifumbire.",
+    rw: "Amazi ava mu gikoresho cya biogas, akoreshwa nk’ifumbire y’amazi.",
     fr: "Lisier de digesteur de biogaz, utilisé comme fumier liquide.",
   },
 };
@@ -154,29 +154,30 @@ export const adviceCopy: Record<
     },
   },
   rw: {
-    eyebrow: "Inama ku buhinzi",
+    eyebrow: "Inama z’ubuhinzi",
     title: "Inama ushobora gukurikiza",
-    lede: "Gahunda ikurikiza umurima wagennye ku rupapuro rw’Umuhinzi. Uyu urubuga rugaragaza ibihingwa bikwiye ako gihembwe, ifumbire abahinzi bakoresha hafi yawe, n’igihe cyo gukora. Nta kigizeho umuziki: amafishi ava mu survey na seriveri y’ikirere.",
+    lede: "Gahunda ikurikiza umurima wagenwe ku rupapuro rw’Umuhinzi. Iyi paji igaragaza ibihingwa bikwiye aho hantu, ifumbire abahinzi bakoresha hafi yawe, n’igihe cyo gukora. Nta kintu cyahimbwe: imibare iva mu bushakashatsi no mu serivisi y’ikirere.",
     planTitle: "Gahunda yawe",
-    cropsTitle: "Ibihingwa wibishobora guhinga hano",
+    cropsTitle: "Ibihingwa byo guhinga hano",
     inputsTitle: "Ifumbire zikoreshwa mu karere kawe",
     whenTitle: "Igihe cyo gukora",
-    writtenPlan: "Gahunda yawe y’ubwandishi",
-    writingPlan: "Turasyandika gahunda…",
+    writtenPlan: "Gahunda yawe yanditse",
+    writingPlan: "Turi kwandika gahunda…",
     assistanceTitle: "Ubufasha",
-    assistanceIntro: "Soma gahunda ijwi, cyangwa uyigeze mu nsi. Amaze y’ifumbire asobanurwa hasi.",
-    listen: "Soma gahunda ijwi",
+    assistanceIntro:
+      "Soma gahunda mu ijwi, cyangwa uyisobanure mu magambo yoroshye. Amazina y’ifumbire asobanurwa hasi.",
+    listen: "Soma gahunda mu ijwi",
     stop: "Hagarika",
-    simple: "Mu nsi",
-    simpleTitle: "Gahunda imwe mu nsi",
-    glossaryTitle: "Ibintu bisobanura amazina",
-    noInputs: "Nta mafishi y’ifumbire abatariwa kuri karere aka.",
+    simple: "Mu magambo yoroshye",
+    simpleTitle: "Gahunda imwe mu magambo yoroshye",
+    glossaryTitle: "Ibisobanuro by’amazina",
+    noInputs: "Nta mibare y’ifumbire yaratangwa kuri aka karere.",
     disclaimer:
-      "Uyu mwandishi ni inama rusange iva mu survey na seriveri y’ikirere. Si igisobanuro cy’ubutaka: emeza n’impuguke na Meteo Rwanda mbere yo kugura cyangwa gushyiramo ikintu.",
+      "Iyi gahunda ni inama rusange iva mu bushakashatsi no mu serivisi y’ikirere. Si isuzuma ry’ubutaka: emeza n’impuguke y’ubuhinzi yo hafi yawe na Meteo Rwanda mbere yo kugura cyangwa gukoresha ikintu.",
     errors: {
       unconfigured:
-        "Gahunda y’ubwandishi ifite gukenera seriveri ya AI. Am facts ari ku ruge ruwome ari gahenduye.",
-      failed: "Gahunda y’ubwandishi ntitabonekaga. Ongera ugerageze.",
+        "Gahunda yanditse ikenera serivisi ya AI. Amakuru ari kuri iyi paji aracyaboneka.",
+      failed: "Gahunda yanditse ntiyashobotse ubu. Ongera ugerageze.",
       empty: "Umufasha nta gahunda yatanze. Ongera ugerageze.",
     },
   },

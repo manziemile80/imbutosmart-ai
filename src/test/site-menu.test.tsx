@@ -58,15 +58,12 @@ describe("the header menu", () => {
 
     const nav = open();
 
-    expect(screen.getByRole("button", { name: /menu/i })).toHaveAttribute(
-      "aria-expanded",
-      "true",
-    );
+    expect(screen.getByRole("button", { name: /menu/i })).toHaveAttribute("aria-expanded", "true");
     const links = within(nav).getAllByRole("link");
     expect(links.map((link) => link.textContent)).toEqual([
       "Farmer",
       "Advice",
-      "Summary get",
+      "File",
       "Guidance",
       "Agronomist",
     ]);
@@ -84,13 +81,11 @@ describe("the header menu", () => {
     render(<SiteMenu language="en" />);
 
     const nav = open();
-    const current = within(nav).getByRole("link", { name: "Summary get" });
+    const current = within(nav).getByRole("link", { name: "File" });
 
     expect(current).toHaveAttribute("aria-current", "page");
     expect(current).toHaveAttribute("data-status", "active");
-    expect(within(nav).getByRole("link", { name: "Advice" })).not.toHaveAttribute(
-      "aria-current",
-    );
+    expect(within(nav).getByRole("link", { name: "Advice" })).not.toHaveAttribute("aria-current");
   });
 
   it("closes on Escape and on a click away", () => {
@@ -114,4 +109,3 @@ describe("the header menu", () => {
     expect(within(nav).getByRole("link", { name: "Impuguke" })).toBeInTheDocument();
   });
 });
-

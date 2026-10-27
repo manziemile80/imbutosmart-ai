@@ -71,7 +71,7 @@ async function ready() {
   );
 }
 
-describe("Summary get page", () => {
+describe("File page", () => {
   it("points back to the Farmer page instead of repeating the field controls", async () => {
     renderPage();
 

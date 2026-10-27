@@ -597,9 +597,9 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
     },
   },
   rw: {
-    eyebrow: "Imbonerahamwe y’impuguke",
-    title: "Ubuhinzi mu Rwanda — aho inama zikorera",
-    lede: "Ahantu hamwe ku murima, umuhinzi, ifumbire n’icyemezo. Imibare iva mu ibarurisho ryasohotse, raporo y’icyitegererezo n’ubugenzuzi bw’ikirere; ibyo impuguke yandika bigumana uwabihinduye n’itariki.",
+    eyebrow: "Ikibaho cy’impuguke",
+    title: "Ubuhinzi mu Rwanda — aho inama zikorwa",
+    lede: "Ahantu hamwe ku murima, umuhinzi, ifumbire n’ibyemezo. Imibare iva mu ibarurisho ryasohotse, raporo y’icyitegererezo n’ubugenzuzi bw’ikirere; ibyo impuguke yandika bigumana uwabihinduye n’itariki.",
     fieldNote: "Akarere, ubutaka n’igihembwe bikurikiza umurima wagenwe ku rupapuro rw’Umuhinzi.",
     changeField: "Hindura umurima",
     tabs: {
@@ -623,13 +623,13 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
       email: "Imeyili",
       password: "Ijambo ry’ibanga",
       signIn: "Injira",
-      signingIn: "Turacyinjira…",
+      signingIn: "Turakwinjiza…",
       signOut: "Sohoka",
       signedInAs: "Winjiye nka",
       notAgronomist:
         "Iyi konti yinjiye ariko nta ruhushya rw’impuguke ifite. Umuyobozi agomba kuyiha uruhushya mbere yo guhindura amadosiye.",
       unavailable:
-        "Kwinjira mu bicumbi ntibyateganyijwe kuri iyi serivisi. Konti y’urugero isangiwe ishobora kwinjira kuri iyi mudasobwa, kandi ibipimo byasohotse n’urutonde rw’ubushakashatsi biraboneka.",
+        "Kwinjira mu konti ntibyateganyijwe kuri iyi serivisi. Konti y’urugero isangiwe ishobora kwinjira kuri iyi mudasobwa, kandi ibipimo byasohotse n’urutonde rw’ubushakashatsi biraboneka.",
       roleHint:
         "Konti zifite uruhushya rw’impuguke gusa zishobora kongera, guhindura cyangwa gusiba. Seriveri igenzura uruhushya buri gihe.",
       readOnly: "Gusoma gusa",
@@ -640,18 +640,18 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
       demoUnavailable:
         "Kwinjira n’imeyili ntibyashyizweho kuri iyi serivisi, bityo iyi konti ntishobora kwinjira hano. Umuyobozi abishyira mu bikorwa muri Authentication → Sign In / Providers.",
       deviceSession:
-        "Winjiye kuri iyi mudasobwa ukoresheje konti y’urugero isangiwe. Iyi serivisi iguma muri iyi mushakisha, bityo amadosiye aguma hano kandi ntasangizwa n’izindi mudasobwa.",
+        "Winjiye kuri iyi mudasobwa ukoresheje konti y’urugero isangiwe. Iyi serivisi iguma kuri iyi mudasobwa, bityo amadosiye aguma hano kandi ntasangizwa n’izindi mudasobwa.",
     },
     storage: {
       loading: "Turashakisha amadosiye…",
       ready:
-        "Amadosiye abitswe mu bubiko busangiwe, bityo buri mudasobwa winjiye ibona urutonde rumwe.",
+        "Amadosiye abitswe mu bubiko busangiwe, bityo buri mudasobwa yinjiye ibona urutonde rumwe.",
       device:
-        "Amadosiye abikwa muri iyi mushakisha kuri iyi mudasobwa. Nta bubiko busangiwe bukoreshwa hano, bityo amadosiye aguma kuri iyi mudasobwa.",
+        "Amadosiye abikwa muri iyi mudasobwa gusa. Nta bubiko busangiwe bukoreshwa hano, bityo amadosiye aguma kuri iyi mudasobwa.",
       unconfigured:
-        "Imbonerahamwe isangiwe y’amadosiye ntaboneka kuri iyi serivisi. Ibipimo byasohotse n’urutonde rw’ubushakashatsi biraboneka; guhindura bibikwa kuri iyi mudasobwa.",
+        "Imbonerahamwe isangiwe y’amadosiye ntaboneka kuri iyi serivisi. Ibipimo byasohotse n’urutonde rw’ubushakashatsi biraboneka; impinduka zibikwa kuri iyi mudasobwa.",
       error:
-        "Ububiko bw’amadosiye ntibwabonetse. Ibipimo byasohotse n’urutonde rw’ubushakashatsi biracyagaragarira, kandi kopi y’amadosiye igumishwa kuri iyi mudasobwa.",
+        "Ububiko bw’amadosiye ntibwabonetse. Ibipimo byasohotse n’urutonde rw’ubushakashatsi biracyagaragarira, kandi kopi y’amadosiye iguma kuri iyi mudasobwa.",
     },
     storageShort: {
       loading: "Biracyashakishwa",
@@ -666,7 +666,7 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
       delete: "Siba",
       save: "Bika",
       saving: "Turabika…",
-      cancel: "Hagarika",
+      cancel: "Reka",
       search: "Shakisha",
       all: "Byose",
       none: "Nta na kimwe",
@@ -680,7 +680,7 @@ export const dashboardCopy: Record<FarmerLanguage, DashboardCopy> = {
       refresh: "Ongera ushakishe",
       clear: "Siba",
       required: "Bisabwa",
-      deleteConfirm: "Gusiba iyi dosiye? Ntibishobora gusubizwa.",
+      deleteConfirm: "Gusiba iyi dosiye? Ntishobora gusubizwa.",
       noRecords: "Nta dosiye ihari.",
       readOnlyNotice: "Injira nka impuguke kugira ngo uhindure amadosiye.",
     },

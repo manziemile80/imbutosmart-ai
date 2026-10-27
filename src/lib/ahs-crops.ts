@@ -72,49 +72,66 @@ export function monthToAhsSeason(month: number): AhsSeason | null {
   return "C";
 }
 
-export const ahsCopy: Record<FarmerLanguage, {
-  title: string;
-  seasonNote: string;
-  source: string;
-  label: string;
-  unavailable: string;
-  transition: string;
-  note: string;
-  methodology: string;
-}> = {
+export const ahsCopy: Record<
+  FarmerLanguage,
+  {
+    title: string;
+    seasonNote: string;
+    source: string;
+    label: string;
+    unavailable: string;
+    transition: string;
+    note: string;
+    methodology: string;
+  }
+> = {
   en: {
     title: "What farming households grew",
-    seasonNote: "Share of farming households nationally who grew each crop in {season}, per the national survey.",
+    seasonNote:
+      "Share of farming households nationally who grew each crop in {season}, per the national survey.",
     source: "Source",
     label: "{share}% of farming households grew {crop} in {season}.",
     unavailable: "The survey does not report this crop for {season}.",
-    transition: "September is the transition between Season C and Season A. The survey reports crop prevalence separately for each.",
+    transition:
+      "September is the transition between Season C and Season A. The survey reports crop prevalence separately for each.",
     note: "This shows how widespread the crop was among farming households nationally — not a yield, a probability, or a guarantee for your field.",
-    methodology: "NISR measures each season through its Seasonal Agriculture Survey, using GPS point-sampling of mapped segments across the country.",
+    methodology:
+      "NISR measures each season through its Seasonal Agriculture Survey, using GPS point-sampling of mapped segments across the country.",
   },
   rw: {
-    title: "Ibyo abaturage b'ubuhinzi bahingye",
-    seasonNote: "Umubare w'abaturage b'ubuhinzi b'igihugu bahingye buriya igihingwa muri {season}, bitewe n'ibarurisho ry'igihugu.",
+    title: "Ibyo abahinzi bahingye",
+    seasonNote:
+      "Umubare w’abahinzi mu gihugu hose bahingye buri gihingwa muri {season}, nk’uko ibarurisho ry’igihugu ribivuga.",
     source: "Inkomoko",
-    label: "{share}% y'abaturage b'ubuhinzi bahingye {crop} muri {season}.",
-    unavailable: "Ibarurisho ridashyira ruriya igihingwa muri {season}.",
-    transition: "Mutaganda ni gahunda yihuta ry'igihembwe C n'igihembwe A. Ibarurisho rigura kimwe n'igindi.",
-    note: "ni uko igihingwa cyayizanye cyane mu buhinzi bw'igihugu — si ibicuruzwa, si ibizera, cyangwa isezerano ry'umurima wawe.",
-    methodology: "NISR igura igihembwe buri gihe n'Ibarurisho ry'Ubuhinzi ry'igihe, ishyingira GPS ku birombe byanditswe kuri maruru yose mu Rwanda.",
+    label: "{share}% by’abahinzi mu gihugu hose bahingye {crop} muri {season}.",
+    unavailable: "Ibarurisho ntirivuga kuri iki gihingwa muri {season}.",
+    transition:
+      "Nzeri ni igihe cy’inzibacyuho hagati y’igihembwe C n’igihembwe A. Ibarurisho ritanga umubare w’ibihingwa kuri buri gihembwe ukwako.",
+    note: "Ibi bigaragaza uko igihingwa cyari cyiganje mu bahinzi mu gihugu hose — si umusaruro, si amahirwe, kandi si isezerano ku murima wawe.",
+    methodology:
+      "NISR ipima buri gihembwe mu Ibarurisho ry’Ubuhinzi ry’Igihe, ikoresheje ugereranyo rwa GPS ku turere twanditswe mu gihugu hose.",
   },
   fr: {
     title: "Ce que les ménages agricoles ont cultivé",
-    seasonNote: "Part des ménages agricoles au niveau national ayant cultivé chaque culture pendant {season}, selon l'enquête nationale.",
+    seasonNote:
+      "Part des ménages agricoles au niveau national ayant cultivé chaque culture pendant {season}, selon l'enquête nationale.",
     source: "Source",
     label: "{share}% des ménages agricoles ont cultivé {crop} pendant {season}.",
     unavailable: "L'enquête ne rapporte pas cette culture pour {season}.",
-    transition: "Septembre est la transition entre la saison C et la saison A. L'enquête rapporte la prévalence de chaque culture séparément.",
+    transition:
+      "Septembre est la transition entre la saison C et la saison A. L'enquête rapporte la prévalence de chaque culture séparément.",
     note: "Cela indique à quelle échelle cette culture était répandue chez les ménages agricoles au niveau national — ce n'est ni un rendement, ni une probabilité, ni une garantie pour votre champ.",
-    methodology: "L'INRS mesure chaque saison grâce à son Enquête agricole saisonnière, par échantillonnage GPS de segments cartographiés dans tout le pays.",
+    methodology:
+      "L'INRS mesure chaque saison grâce à son Enquête agricole saisonnière, par échantillonnage GPS de segments cartographiés dans tout le pays.",
   },
 };
 
-export function ahsShareLine(language: FarmerLanguage, crop: string, season: AhsSeason, seasonLabel: string): string {
+export function ahsShareLine(
+  language: FarmerLanguage,
+  crop: string,
+  season: AhsSeason,
+  seasonLabel: string,
+): string {
   const share = ahsCropShare(crop, season);
   const template = share === null ? ahsCopy[language].unavailable : ahsCopy[language].label;
   return template

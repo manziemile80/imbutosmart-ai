@@ -40,7 +40,7 @@
 - [x] Deploy the design system and the retry fix, and verify the live app's record, transcribe and answer path.
 - [x] Keep the summary to one action: a PDF named for the field, carrying every section the page shows.
 - [x] Make the header bell an announcement feed about the app and the season, with no summary figures and no email form.
-- [x] Give each feature one menu: the field controls on the Farmer page, every assistant in Guidance, the summary on Summary get, announcements in the bell, and one language selector in the header.
+- [x] Give each feature one menu: the field controls on the Farmer page, every assistant in Guidance, the summary on File, announcements in the bell, and one language selector in the header.
 - [x] Rebuild the Agronomist Dashboard as a thirteen-module advisory workspace over the shared field, with a Supabase record store, row-level access, an audit trail and an offline retry queue.
 - [x] Keep the dashboard usable without a shared database: a missing table falls back to a record store in the browser, the shared reviewer account signs in on the device, and one calm strip says the records stay there instead of refusing every change.
 - [x] Show a price, premium, rate or coverage only when an agronomist records the source and date, and label anything unverified instead of inventing it.
@@ -51,6 +51,11 @@
 - [x] Replace the header typeface with Bricolage Grotesque for display and keep Manrope for body text, so the brand and page titles read sharper.
 - [x] Add a header **Menu** dropdown for narrow screens, marking the page you are on, instead of a clipped row of scrolling links.
 - [x] Ship six sample farmer profiles in `20261026020000_agronomist_sample_farmers.sql`, authored by **Sample data**, so the Farmers tab shows real-looking records on every device.
+- [x] Name the summary menu **File** in every language, so the page that holds the whole plan and its PDF reads as one short word.
+- [x] Show the language in use as its own flag and short code in the header, with a small panel that names English, Kinyarwanda and Français in their own words, instead of a bare drop-down.
+- [x] Warm every menu page in memory after the first paint, so moving between the Farmer page, Advice, File, Guidance and the dashboard keeps working when the connection drops.
+- [x] Rewrite the word-for-word Kinyarwanda in every farmer panel — season, weather, inputs, insurance, plan and File — so each line reads as Kinyarwanda, and update the tests to the new wording.
+- [x] Cap the test run at four workers, so a jsdom copy per core no longer starves this machine's memory and times a slow page test out.
 - [ ] Keep the `supabase-chestnut-pebble` project on a paid plan or claim it into an owned Supabase account if the free plan's limits are reached.
 - [ ] Read answers aloud on the deployed app (blocked by accepting the Groq speech model's terms in the provider console — the app-level check now reports this as the refusal reason — or by pointing the host at a speech backend the deployment can reach).
 - [ ] Update `abahinzismart.vercel.app` (a separate Vercel project, outside this workspace's account).

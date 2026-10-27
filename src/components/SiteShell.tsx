@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { farmerCopy } from "@/lib/farmer-language";
 import { useField } from "@/lib/field";
+import { LanguagePicker } from "@/components/LanguagePicker";
 import { PlanSummaryMenu } from "@/components/PlanSummaryMenu";
 import { SiteMenu } from "@/components/SiteMenu";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -77,24 +78,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
             </nav>
           </div>
           <div className="flex shrink-0 items-center gap-2">
-            <label className="sr-only" htmlFor="app-language">
-              {t.language}
-            </label>
-            <select
-              id="app-language"
-              aria-label={t.language}
-              className="field h-8 w-[4.6rem] shrink-0 px-2 py-1 text-xs"
-              value={language}
-              onChange={(event) =>
-                setLanguage(
-                  event.target.value === "fr" ? "fr" : event.target.value === "rw" ? "rw" : "en",
-                )
-              }
-            >
-              <option value="en">EN</option>
-              <option value="rw">RW</option>
-              <option value="fr">FR</option>
-            </select>
+            <LanguagePicker language={language} onChange={setLanguage} label={t.language} />
             <ThemeToggle language={language} />
           </div>
         </div>

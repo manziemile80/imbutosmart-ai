@@ -78,30 +78,30 @@ export type RecommendationResult = {
 const WATER_TEXT: Record<1 | 2 | 3, { en: string; rw: string; fr: string }> = {
   1: {
     en: "Low water need. Rain-fed farming is usually enough.",
-    rw: "Amazi make. Guhinga bishingikirwa ku mwijuka bisanzwe bihagije.",
+    rw: "Amazi make. Guhinga gishingiye ku mvura ni byo bihagije.",
     fr: "Faible besoin en eau. La pluie suffit généralement.",
   },
   2: {
     en: "Moderate water need. Steady rain or light watering helps.",
-    rw: "Amazi mezi. Imvura ikomeje cyangwa guhingira amazi gafite uruhare.",
+    rw: "Amazi ari hagati. Imvura ihoraho cyangwa kuhira gake birafasha.",
     fr: "Besoin modéré en eau. Pluie régulière ou arrosage léger.",
   },
   3: {
     en: "High water need. Regular watering or irrigation is important.",
-    rw: "Amazi mensi meza. Guhahanira amazi buri gihe ni ngombwa.",
+    rw: "Amazi menshi. Kuhira buri gihe cyangwa kuhira mu nzira ni ngombwa.",
     fr: "Fort besoin en eau. L’arrosage régulier ou l’irrigation est important.",
   },
 };
 
 const SEASON_TEXT: Record<"en" | "rw" | "fr", string> = {
   en: "Plant with the first reliable rains of the season, and avoid planting after heavy rain has already passed.",
-  rw: "Hingira ku ntambwe y’imbura yizewe y’igihe, kandi wirinde guhinga nyuma y’imvura nyinshi yarangiye.",
+  rw: "Hingira ku mvura yizewe ya mbere y’igihembwe, kandi wirinde guhinga nyuma y’imvura nyinshi yarangiye.",
   fr: "Plantez avec les premières pluies fiables de la saison et évitez de planter après les fortes pluies.",
 };
 
 const RAINFED_NOTE: Record<"en" | "rw" | "fr", string> = {
   en: "You rely on rain: plant soon after rain arrives and keep soil moisture where possible.",
-  rw: "Uri kishingikira ku mwijuka: hinga vuba nyuma y’imvura, kandi ubone uwo kugumana ubushyuhe bw’ubutaka.",
+  rw: "Wishingikira ku mvura: hinga vuba nyuma y’imvura, kandi ugumane ubuhehere bw’ubutaka aho bishoboka.",
   fr: "Vous dépendez de la pluie : plantez vite après la pluie et gardez l’humidité du sol possible.",
 };
 
@@ -113,7 +113,7 @@ const FACTOR_LABEL: Record<FactorScore["id"], Record<"en" | "rw" | "fr", string>
   rainfall: { en: "rainfall", rw: "imvura", fr: "pluie" },
   season: { en: "planting season", rw: "igihe cyo guhinga", fr: "saison de plantation" },
   water: { en: "water availability", rw: "amazi", fr: "eau disponible" },
-  location: { en: "your district", rw: "akarere ka wowe", fr: "votre district" },
+  location: { en: "your district", rw: "akarere kawe", fr: "votre district" },
 };
 
 // Growing periods live in the knowledge base in English ("90–120 days") and
@@ -123,7 +123,7 @@ const PERIOD_WORDS: Record<
   { days: string; months: string; firstHarvest: string }
 > = {
   en: { days: "days", months: "months", firstHarvest: "to first harvest" },
-  rw: { days: "iminsi", months: "amezi", firstHarvest: "kugeza ku gushyingura" },
+  rw: { days: "iminsi", months: "amezi", firstHarvest: "kugeza ku isarura rya mbere" },
   fr: { days: "jours", months: "mois", firstHarvest: "jusqu’à la première récolte" },
 };
 
@@ -156,7 +156,7 @@ export function buildLocalExplanation(
   if (good("soil")) {
     reasons.push(
       lang === "rw"
-        ? `Ubutaka bwa ${input.soil} bukuyeho neza kuri ${crop}.`
+        ? `Ubutaka bwa ${input.soil} bukwiriye neza ${crop}.`
         : lang === "fr"
           ? `Votre sol ${input.soil} convient bien à ${crop}.`
           : `Your ${input.soil.toLowerCase()} soil is a good match for ${crop}.`,
@@ -165,7 +165,7 @@ export function buildLocalExplanation(
   if (good("season") && input.season) {
     reasons.push(
       lang === "rw"
-        ? `${crop} gihingwa neza mu gihe cya ${input.season}.`
+        ? `${crop} gihingwa cyane mu gihembwe ${input.season}.`
         : lang === "fr"
           ? `${crop} se plante bien en saison ${input.season}.`
           : `${crop} is commonly planted in Season ${input.season}.`,
@@ -174,7 +174,7 @@ export function buildLocalExplanation(
   if (good("rainfall") && input.rainfallMm != null) {
     reasons.push(
       lang === "rw"
-        ? `Imvura wanditse (${input.rainfallMm} mm) ihuye n'ibyo ${crop} gikeneye.`
+        ? `Imvura wanditse (${input.rainfallMm} mm) ihuye n’ibyo ${crop} gikeneye.`
         : lang === "fr"
           ? `La pluie que vous avez saisie (${input.rainfallMm} mm) correspond aux besoins de ${crop}.`
           : `The rainfall you entered (${input.rainfallMm} mm) matches what ${crop} needs.`,
@@ -192,7 +192,7 @@ export function buildLocalExplanation(
   if (good("location") && input.district) {
     reasons.push(
       lang === "rw"
-        ? `${input.district} ni ahantu ${crop} giterwa gahuzwa.`
+        ? `${input.district} ni ahantu ${crop} gihingwa cyane.`
         : lang === "fr"
           ? `${input.district} se trouve dans une zone où ${crop} est souvent cultivé.`
           : `${input.district} lies in an area where ${crop} is commonly grown.`,
@@ -201,7 +201,7 @@ export function buildLocalExplanation(
   if (reasons.length === 0) {
     reasons.push(
       lang === "rw"
-        ? `${crop} gihawe urwego rwo hejuru ku bikurikijwa washatse.`
+        ? `${crop} ni cyo cyahawe urwego rwo hejuru ku makuru watanze.`
         : lang === "fr"
           ? `${crop} a le meilleur score parmi les informations que vous avez fournies.`
           : `${crop} scored highest on the information you provided.`,
@@ -227,7 +227,7 @@ export function buildLocalExplanation(
   if (input.experience === "new") {
     considerations.push(
       lang === "rw"
-        ? "Igihingwa gishya: reba inama y'umuhinzi w'akarere mbere yo guhinga igihingwa gishya."
+        ? "Igihingwa gishya: baza impuguke y’ubuhinzi yo hafi yawe mbere yo guhinga igihingwa utarigeze guhinga."
         : lang === "fr"
           ? "Culture nouvelle : demandez l’avis d’un expert local avant d’essayer une nouvelle culture."
           : "New crop: ask a local agricultural expert before trying a crop you have not grown before.",
@@ -239,7 +239,7 @@ export function buildLocalExplanation(
     if (f.supplied && f.weight > 0 && f.score / f.weight < 0.5) {
       risks.push(
         lang === "rw"
-          ? `${FACTOR_LABEL[f.id][lang]} ntigihuye neza n'ibyo ${crop} gikeneye.`
+          ? `Ikintu cyo mu murima (${FACTOR_LABEL[f.id][lang]}) ntigihuye neza n’ibyo ${crop} gikeneye.`
           : lang === "fr"
             ? `La ${FACTOR_LABEL[f.id][lang]} ne correspond pas bien aux besoins de ${crop}.`
             : `Your ${FACTOR_LABEL[f.id][lang]} does not match what ${crop} prefers.`,
@@ -249,7 +249,7 @@ export function buildLocalExplanation(
   if (missing.length > 0) {
     risks.push(
       lang === "rw"
-        ? `Amakuru atariho (${missing.join(", ")}) bishobora guhindura iri mibere.`
+        ? `Amakuru atariho (${missing.join(", ")}) ashobora guhindura iki gisubizo.`
         : lang === "fr"
           ? `Certaines informations manquent (${missing.join(", ")}), ce qui peut changer ce résultat.`
           : `Some information is missing (${missing.join(", ")}), which could change this result.`,
@@ -272,7 +272,7 @@ export function buildLocalExplanation(
     reasons,
     soilConditions:
       (lang === "rw"
-        ? `Ubutaka bukuyeho: ${soilNames}. `
+        ? `Ubutaka bukwiriye: ${soilNames}. `
         : lang === "fr"
           ? `Sols favorables : ${soilNames}. `
           : `Best soils: ${soilNames}. `) + phText,
@@ -281,7 +281,7 @@ export function buildLocalExplanation(
     plantingSeason:
       (input.season
         ? lang === "rw"
-          ? `Igihe wanditse: ${input.season}. `
+          ? `Igihembwe wanditse: ${input.season}. `
           : lang === "fr"
             ? `Votre saison : ${input.season}. `
             : `Your season: ${input.season}. `

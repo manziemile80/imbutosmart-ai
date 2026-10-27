@@ -80,7 +80,8 @@ export const chatCopy: Record<
 > = {
   en: {
     heading: "Ask about your farm",
-    intro: "Ask a question about your crops, soil or season. Answers use the district and soil you selected and general agronomic knowledge — always confirm important decisions with a local agronomist.",
+    intro:
+      "Ask a question about your crops, soil or season. Answers use the district and soil you selected and general agronomic knowledge — always confirm important decisions with a local agronomist.",
     placeholder: "Type your question…",
     send: "Send",
     thinking: "Thinking…",
@@ -88,18 +89,21 @@ export const chatCopy: Record<
     clear: "Clear chat",
     you: "You",
     assistant: "AI assistant",
-    disclaimer: "General guidance only — not live weather, a diagnosis, or a guarantee. Confirm with a local agronomist and Meteo Rwanda before acting.",
+    disclaimer:
+      "General guidance only — not live weather, a diagnosis, or a guarantee. Confirm with a local agronomist and Meteo Rwanda before acting.",
     empty: "Type a question before sending.",
     tooLong: `Keep each question under ${MAX_QUESTION_LENGTH} characters.`,
     errors: {
-      unconfigured: "AI assistance is not configured yet. Crop estimates and the season guide remain available.",
+      unconfigured:
+        "AI assistance is not configured yet. Crop estimates and the season guide remain available.",
       failed: "The assistant could not answer just now. Please try again.",
       empty: "The assistant returned no answer. Please try rephrasing your question.",
     },
   },
   rw: {
     heading: "Baza ku murima wawe",
-    intro: "Baza ikibazo ku bihingwa, ubutaka cyangwa igihembwe. Ibisubizo bikoresha akarere n’ubutaka wahisemo hamwe n’ubumenyi rusange bw’ubuhinzi — ibyemezo by’ingirakamaro buri gihe bijyane n’impuguke mu buhinzi.",
+    intro:
+      "Baza ikibazo ku bihingwa, ubutaka cyangwa igihembwe. Ibisubizo bikoresha akarere n’ubutaka wahisemo hamwe n’ubumenyi rusange bw’ubuhinzi — ibyemezo by’ingirakamaro buri gihe bijyane n’impuguke y’ubuhinzi yo hafi yawe.",
     placeholder: "Andika ikibazo cyawe…",
     send: "Ohereza",
     thinking: "Turatekereza…",
@@ -107,18 +111,21 @@ export const chatCopy: Record<
     clear: "Gusiba ikiganiro",
     you: "Wowe",
     assistant: "Umufasha wa AI",
-    disclaimer: "Ni inama rusange gusa — si amakuru y’ikirere ariho, isuzuma, cyangwa isezerano. Emeza n’impuguke mu buhinzi na Meteo Rwanda mbere yo kubikora.",
+    disclaimer:
+      "Ni inama rusange gusa — si amakuru y’ikirere ariho, isuzuma, cyangwa isezerano. Emeza n’impuguke y’ubuhinzi yo hafi yawe na Meteo Rwanda mbere yo kubikora.",
     empty: "Andika ikibazo mbere yo kohereza.",
     tooLong: `Koresha inyuguti zitarenze ${MAX_QUESTION_LENGTH} kuri buri kibazo.`,
     errors: {
-      unconfigured: "Umufasha wa AI ntarasakazwa. Ibigereranyo by’ibihingwa n’amakuru y’ibihembwe biracyaboneka.",
+      unconfigured:
+        "Umufasha wa AI ntarashyirwaho kuri seriveri. Ibigereranyo by’ibihingwa n’amakuru y’ibihembwe biracyaboneka.",
       failed: "Umufasha ntiyashoboye gusubiza ubu. Ongera ugerageze.",
       empty: "Umufasha nta gisubizo yatanze. Ongera ugerageze uhindure ikibazo.",
     },
   },
   fr: {
     heading: "Posez une question sur votre exploitation",
-    intro: "Posez une question sur vos cultures, votre sol ou la saison. Les réponses utilisent le district et le sol sélectionnés ainsi que des connaissances agronomiques générales — confirmez toujours les décisions importantes avec un agronome local.",
+    intro:
+      "Posez une question sur vos cultures, votre sol ou la saison. Les réponses utilisent le district et le sol sélectionnés ainsi que des connaissances agronomiques générales — confirmez toujours les décisions importantes avec un agronome local.",
     placeholder: "Écrivez votre question…",
     send: "Envoyer",
     thinking: "Réflexion…",
@@ -126,19 +133,30 @@ export const chatCopy: Record<
     clear: "Effacer la discussion",
     you: "Vous",
     assistant: "Assistant IA",
-    disclaimer: "Conseils généraux uniquement — pas de météo en direct, de diagnostic ni de garantie. Confirmez avec un agronome local et Meteo Rwanda avant d’agir.",
+    disclaimer:
+      "Conseils généraux uniquement — pas de météo en direct, de diagnostic ni de garantie. Confirmez avec un agronome local et Meteo Rwanda avant d’agir.",
     empty: "Écrivez une question avant d’envoyer.",
     tooLong: `Gardez chaque question sous ${MAX_QUESTION_LENGTH} caractères.`,
     errors: {
-      unconfigured: "L’assistance IA n’est pas encore configurée. Les estimations de cultures et le guide des saisons restent disponibles.",
+      unconfigured:
+        "L’assistance IA n’est pas encore configurée. Les estimations de cultures et le guide des saisons restent disponibles.",
       failed: "L’assistant n’a pas pu répondre pour l’instant. Veuillez réessayer.",
       empty: "L’assistant n’a renvoyé aucune réponse. Reformulez votre question.",
     },
   },
 };
 
-export function buildSystemPrompt(language: "en" | "rw" | "fr", district: string, soil: string): string {
-  const languageName = language === "rw" ? "Kinyarwanda (write the entire answer in Kinyarwanda)" : language === "fr" ? "French (write the entire answer in French)" : "English";
+export function buildSystemPrompt(
+  language: "en" | "rw" | "fr",
+  district: string,
+  soil: string,
+): string {
+  const languageName =
+    language === "rw"
+      ? "Kinyarwanda (write the entire answer in Kinyarwanda)"
+      : language === "fr"
+        ? "French (write the entire answer in French)"
+        : "English";
   return [
     `You are the farming assistant of ImbutoSmart AI, helping smallholder farmers in Rwanda.`,
     `Answer in simple ${languageName}. Keep answers under 180 words, practical, and easy to read. No markdown tables or headings.`,

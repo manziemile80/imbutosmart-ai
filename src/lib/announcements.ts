@@ -47,13 +47,13 @@ export const announcementCopy: Record<
     intro: "Amatangazo magufi ku murima wawe. Ibisobanuro birambuye biri ku rupapuro rwabyo.",
     system: {
       title: "Ubufasha bwose ahantu hamwe",
-      body: "Ubuyobozi bw’igihembwe, igisubizo cy’ijwi, ibibazo byawe n’impuguke mu buhinzi biri kuri paji y’Ubuyobozi, mu rurimi wahisemo.",
+      body: "Ubuyobozi bw’igihembwe, igisubizo cy’ijwi, ibibazo byawe n’impuguke y’ubuhinzi biri kuri paji y’Ubuyobozi, mu rurimi wahisemo.",
       link: "Fungura Ubuyobozi",
     },
     manure: {
-      title: "Igiciro cy'ifumbire y'ubworozi",
-      body: "Ibiciro bitandukanya ku iduka no mu gihe. Baza umucuruzi w'ifumbire hafi yawe igiciro cy'uyu munsi mbere yo kugura; iyi porogaramu ntibika ibiciro.",
-      link: "Reba ifumbire abahinzi bakoresha",
+      title: "Igiciro cy’ifumbire y’amatungo",
+      body: "Ibiciro bitandukana ku iduka no mu gihe. Baza umucuruzi w’ifumbire hafi yawe igiciro cy’uyu munsi mbere yo kugura; iyi porogaramu nta biciro ibika.",
+      link: "Reba ifumbire abahinzi bakoresha hano",
     },
     season: {
       title: "Reba igihembwe mbere yo guhinga",

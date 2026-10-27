@@ -132,7 +132,8 @@
 
   /* Elevation */
   --elevation-card: 0 1px 2px oklch(0.24 0.018 264 / 0.05), 0 1px 3px oklch(0.24 0.018 264 / 0.04);
-  --elevation-panel: 0 1px 2px oklch(0.24 0.018 264 / 0.04), 0 8px 24px -12px oklch(0.24 0.018 264 / 0.12);
+  --elevation-panel:
+    0 1px 2px oklch(0.24 0.018 264 / 0.04), 0 8px 24px -12px oklch(0.24 0.018 264 / 0.12);
   --elevation-pop: 0 10px 30px -10px oklch(0.24 0.018 264 / 0.25);
 
   /* Charts */
@@ -440,5 +441,51 @@
 
   .nav-menu-item[data-status="active"] .nav-menu-icon {
     color: var(--primary-foreground);
+  }
+
+  /* The language selector: the flag and short code of the language in use,
+     and a small panel that names every language in its own words. */
+  .language-picker {
+    @apply relative shrink-0;
+  }
+
+  .language-trigger {
+    @apply flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-2 text-xs font-medium text-foreground transition-colors hover:border-primary-text hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40;
+  }
+
+  .language-flag {
+    @apply h-4 w-6 shrink-0 overflow-hidden rounded-[3px] ring-1 ring-black/10;
+  }
+
+  .language-code {
+    @apply tabular;
+  }
+
+  .language-chevron {
+    @apply size-3.5 shrink-0 text-muted-foreground transition-transform motion-reduce:transition-none;
+  }
+
+  .language-chevron[data-open="true"] {
+    @apply rotate-180;
+  }
+
+  .language-panel {
+    @apply absolute right-0 top-full z-30 mt-2 w-48 rounded-xl border border-border bg-popover p-1.5 shadow-pop;
+  }
+
+  .language-option {
+    @apply flex cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm text-foreground outline-none transition-colors hover:bg-accent focus-visible:bg-accent;
+  }
+
+  .language-option[aria-selected="true"] {
+    @apply bg-accent text-accent-foreground;
+  }
+
+  .language-name {
+    @apply flex-1;
+  }
+
+  .language-check {
+    @apply size-4 shrink-0 text-primary-text;
   }
 }

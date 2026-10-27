@@ -73,29 +73,29 @@ export const insuranceCopy: Record<FarmerLanguage, InsuranceCopy> = {
       "Point de départ : Tekana, le régime national d’assurance agricole du Rwanda. Vérifiez la couverture actuelle pour votre culture et votre district ; ce n’est pas une recommandation de contrat vérifié.",
   },
   rw: {
-    title: "Rinda umusaruro wawe imvura nyinshi",
+    title: "Rinda umusaruro wawe ku mvura nyinshi",
     suggested:
-      "Tekereza ku bwishingizi bw’ibihingwa burinda ibyangizwa n’imvura nyinshi n’umwuzure",
+      "Tekereza ku bwishingizi bw’ibihingwa bukubiyemo mu buryo bugaragara imvura nyinshi n’umwuzure",
     summary:
-      "Saba ikigo cy’ubwishingizi cyemewe cyangwa koperative yawe inyandiko igaragaza igiciro n’ibishingirwa ku gihingwa no ku murima wawe. Menya niba amazi areka mu murima n’umwuzure birimo, atari amapfa gusa.",
+      "Saba ikigo cy’ubwishingizi cyemewe cyangwa koperative yawe inyandiko y’igiciro n’ibyo ubwishingizi bukubamo ku gihingwa no ku murima wawe. Menya niba umwuzure n’amazi areka mu murima birimo, atari amapfa gusa.",
     context: "Umurima wahisemo",
     disclaimer:
-      "Izi ni inama rusange, si igiciro cy’ubwishingizi cyangwa iteganyagihe ry’imvura nyinshi. Akarere n’ubutaka byonyine ntibyemeza ibyago, kwemerewa cyangwa ikigo cyiza kurusha ibindi. Kurindwa no kwishyurwa bishingira ku masezerano.",
-    compare: "Ibyo kugenzura mbere yo kwishingira",
+      "Izi ni inama rusange, si igiciro cy’ubwishingizi cyangwa iteganyagihe ry’imvura nyinshi. Akarere n’ubutaka byonyine ntibyemeza ibyago, kwemererwa cyangwa ikigo cyiza kurusha ibindi. Kurindwa no kwishyurwa bishingiye ku masezerano.",
+    compare: "Ibyo kugenzura mbere yo kwiyandikisha",
     hide: "Hisha urutonde",
     checklist: [
       "Menya ko ikigo cyemewe kandi ko akarere, igihingwa n’igihembwe cyawe byemerewe.",
-      "Saba inyandiko yemeza ibishingirwa: imvura nyinshi, umwuzure, amazi areka n’isuri. Reba ibitemewe mu masezerano.",
-      "Gereranya ikiguzi, igice cy’igihombo wishyura ubwawe, agaciro kishingiwe n’amafaranga ntarengwa y’indishyi ku bwishingizi bumwe.",
-      "Reba igihe ubwishingizi butangirira, igihe cyo gutegereza n’itariki ntarengwa yo kwiyandikisha. Ntukibwire ko ibyangiritse mbere bizishyurwa.",
-      "Ku bwishingizi bushingiye ku bipimo by’imvura, baza igipimo gituma wishyurwa n’aho amakuru ava. Umurima ushobora kwangirika ariko igipimo ntigitume wishyurwa.",
-      "Ku bwishingizi busuzuma ibyangiritse, baza uko isuzuma rikorwa. Kuri byombi, menya igihe cyo kumenyesha igihombo, ibimenyetso bisabwa n’uburyo bwo gutanga ikirego.",
+      "Saba inyandiko yemeza ibishingirwaho: imvura nyinshi, umwuzure, amazi areka n’isuri. Reba ibitishyurwa mu masezerano.",
+      "Gereranya igiciro, umugabane w’igihombo wishyura ubwawe, agaciro kishingiwe n’umubare ntarengwa w’indishyi ku bwishingizi bumwe.",
+      "Reba igihe ubwishingizi butangirira, igihe cyo gutegereza n’itariki ntarengwa yo kwiyandikisha. Ntutekereze ko ibyangiritse mbere bizishyurwa.",
+      "Ku bwishingizi bushingiye ku bipimo by’imvura, baza urugero rw’imvura rutuma wishyurwa n’aho amakuru ava. Umurima ushobora kwangirika ariko urugero ntiruzatume wishyurwa.",
+      "Ku bwishingizi busuzuma ibyangiritse, baza uko isuzuma rikorwa. Kuri byombi, menya igihe cyo kumenyesha igihombo, inyandiko zisabwa n’uburyo bwo gutanga ikirego.",
     ],
     damage:
-      "Iyo habaye ibyangiritse: irinde amazi y’umwuzure, fata ibimenyetso gusa igihe nta kaga, kandi menyesha ikigo vuba ukurikije amategeko y’amasezerano.",
+      "Niba hari ibyangijwe: irinde amazi y’umwuzure, fata amafoto y’ibyangijwe gusa igihe nta kaga, kandi menyesha ikigo vuba ukurikije amategeko y’amasezerano.",
     source: "Reba Tekana / NAIS",
-    sourceHint: "Ifungura urupapuro rwa MINAGRI mu idirishya rishya.",
+    sourceHint: "Rifungura urupapuro rwa MINAGRI mu idirishya rishya.",
     program:
-      "Aho watangirira: Tekana, gahunda y’igihugu y’ubwishingizi bw’ubuhinzi mu Rwanda. Baza ibishingirwa ubu ku gihingwa no mu karere kawe; iyi si inama y’amasezerano yagenzuwe.",
+      "Aho utangirira: Tekana, gahunda y’igihugu y’ubwishingizi bw’ubuhinzi mu Rwanda. Baza ibishingirwaho ubu ku gihingwa no mu karere kawe; iyi si inama y’amasezerano yagenzuwe.",
   },
 };

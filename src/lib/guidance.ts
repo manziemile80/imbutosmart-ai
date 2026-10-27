@@ -62,8 +62,8 @@ export const guidanceCopy: Record<
   },
   rw: {
     eyebrow: "Ubuyobozi",
-    title: "Byose ubufasha ahurintanye ahantu kumwe",
-    lede: "Uburyo butumwa ImbutoSmart AI bishobora kugufasha: ubaza ikibazo, uvugire, usome ibyerekeranye igihembwe, cyangwa ubone gahunda y'umurima wawe. Hitamo ibyo ukeneye.",
+    title: "Ubufasha bwose ahantu hamwe",
+    lede: "Uburyo bwose ImbutoSmart AI ishobora kugufashamo: baza ikibazo, vuga, soma ku gihembwe, cyangwa ubone gahunda y’umurima wawe. Hitamo ibyo ukeneye.",
     modes: {
       question: {
         label: "Baza ikibazo",
@@ -71,32 +71,32 @@ export const guidanceCopy: Record<
       },
       voice: {
         label: "Vuga ikibazo cyawe",
-        blurb: "Yiga kwandika, hanyuma wumve igisubizo cyasomwa.",
+        blurb: "Vuga, hanyuma wumve igisubizo gisomwa.",
       },
       season: {
         label: "Uyu gihembwe",
-        blurb: "Amazina y'ibihembwe, imvura isanzwe, n'ibihingwa bisanzwe bikorwa.",
+        blurb: "Amazina y’ibihembwe, imvura isanzwe, n’ibihingwa bikunze guhingwa.",
       },
       plan: {
         label: "Gahunda yanjye",
-        blurb: "Icyo guhinga ku murima wawe, n'ifumbire abahinzi bakoresha hafi yawe.",
+        blurb: "Icyo guhinga ku murima wawe, n’ifumbire abahinzi bakoresha hafi yawe.",
       },
     },
-    guideTitle: "Uko unshobora kubona igisubizo cyiza",
+    guideTitle: "Uko wabona igisubizo cyiza",
     guide: [
-      "Bwira aho umurima wawe uri: akarere, kandi ubutaka niba ubukazi.",
-      "Baza ikibazo kimwe. Ikibazo gito gishobora igisubizo gikwiye.",
-      "Bwira ibyo wagiye ugakora, n'ibyo washobora kwishyuza.",
-      "Umufasha akoresha ubumenyi rusange: emeza ibintu bikennye n'impuguke na Meteo Rwanda.",
+      "Bwira aho umurima wawe uherereye: akarere, n’ubutaka niba ubizi.",
+      "Baza ikibazo kimwe gusa. Ikibazo kigufi gitanga igisubizo gisobanutse.",
+      "Bwira ibyo wamaze kugerageza, n’ibyo ushobora kwishyura.",
+      "Umufasha akoresha ubumenyi rusange: emeza ibyemezo by’ingirakamaro n’impuguke y’ubuhinzi yo hafi yawe na Meteo Rwanda.",
     ],
     planLink: "Fungura gahunda yose",
     planContains: {
-      crops: "Ibihingwa bikwiye akarere n'ubutaka wawe, n'ubukere bw'ibyo byose.",
-      inputs: "Ifumbire abahinzi bakoresha hafi yawe, n'ubunini bwabakoresha.",
-      when: "Imvura n'ubushyuhe busanzwe bw'igihembwe, n'iminsi izoze.",
+      crops: "Ibihingwa bikwiye akarere n’ubutaka wawe, n’uko buri kimwe gikwiye.",
+      inputs: "Ifumbire abahinzi bakoresha hafi yawe, n’ingano bakoresha.",
+      when: "Imvura n’ubushyuhe bisanzwe muri iki gihembwe, n’iminsi iri imbere.",
     },
     planBlurb:
-      "Uruhande rw'Inama ruzabikora: ibihingwa, ifumbire abahinzi mu karere kawe bakoreseye, n'igihe cyo gukora.",
+      "Urupapuro rw’Inama rufite gahunda yose: ibihingwa, ifumbire abahinzi mu karere kawe bakoresha, n’igihe cyo gukora.",
   },
   fr: {
     eyebrow: "Orientation",

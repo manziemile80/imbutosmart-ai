@@ -8,7 +8,7 @@ import { announcementCopy, buildAnnouncements } from "@/lib/announcements";
 
 // The bell is the app's announcement feed, not the summary itself: each notice
 // says what changed or what to check, and links to the one page that holds the
-// detail. The figures stay on Summary get, Advice and the Farmer page.
+// detail. The figures stay on File, Advice and the Farmer page.
 export function PlanSummaryMenu() {
   const { field, language } = useField();
   const { district } = field;

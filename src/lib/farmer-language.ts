@@ -7,7 +7,7 @@ export const farmerCopy = {
     farmer: "Farmer",
     advicePage: "Advice",
     guidancePage: "Guidance",
-    summaryPage: "Summary get",
+    summaryPage: "File",
     agronomist: "Agronomist",
     menu: "Menu",
     language: "Language",
@@ -64,7 +64,7 @@ export const farmerCopy = {
     farmer: "Agriculteur",
     advicePage: "Conseils",
     guidancePage: "Orientation",
-    summaryPage: "Obtenir le récapitulatif",
+    summaryPage: "Fichier",
     agronomist: "Agronome",
     menu: "Menu",
     language: "Langue",
@@ -122,33 +122,33 @@ export const farmerCopy = {
     farmer: "Umuhinzi",
     advicePage: "Inama",
     guidancePage: "Ubuyobozi",
-    summaryPage: "Fata incamake",
+    summaryPage: "Dosiye",
     agronomist: "Impuguke",
     menu: "Menyu",
     language: "Ururimi",
-    advisory: "Inama ku muhinzi",
+    advisory: "Inama z’ubuhinzi",
     field: "Umurima wawe",
-    fieldFrom: "Umurima wawe ugenwa ku rupapuro rw'Umuhinzi.",
+    fieldFrom: "Umurima wawe ushyirwaho ku rupapuro rw’Umuhinzi.",
     changeField: "Hindura",
-    switchToDark: "Hindura kuri murongo umuhondo",
-    switchToLight: "Hindura kuri murongo umuhite",
+    switchToDark: "Hindura mu buryo bw’umwijima",
+    switchToLight: "Hindura mu buryo bw’urumuri",
     title: "Nahinga iki muri iki gihembwe?",
     intro:
-      "Ibigereranyo by’ibihingwa bishingiye ku bumenyi rusange bw’ubuhinzi kugeza seriveri yatojwe ihujwe. Andika imvura n’ubushyuhe byitezwe; si amakuru y’ikirere y’ako kanya.",
+      "Ibigereranyo by’ibihingwa bishingiye ku bumenyi rusange bw’ubuhinzi kugeza igihe moderi yatojwe izahuzwa. Andika imvura n’ubushyuhe biteganyijwe; si amakuru y’ikirere y’ako kanya.",
     district: "Akarere",
     soil: "Ubwoko bw’ubutaka",
     rain: "Imvura y’igihembwe (mm)",
     temp: "Ubushyuhe busanzwe (°C)",
     analysing: "Turasesengura…",
-    recommended: "Igihingwa gisabwa",
-    confidence: "Ikigereranyo cyo kuberanya",
+    recommended: "Igihingwa gikwiriye",
+    confidence: "Ikigereranyo cy’uko gihuye n’umurima",
     yield: "Umusaruro ugereranyijwe",
     alternatives: "Ibindi bihingwa",
     invalid:
       "Andika imvura kuva kuri 0 kugeza kuri 5.000 mm n’ubushyuhe kuva kuri −5 kugeza kuri 45 °C.",
     failed: "Inama ntiyashoboye kuvugururwa. Ongera ugerageze.",
     localNote:
-      "Ibi ni ibigereranyo rusange, si amahirwe yapimwe cyangwa isezerano ry’umusaruro. Amakuru yo gutoza kuri buri karere ntarahuzwa; guhindura akarere bishobora gutanga ikigereranyo kimwe.",
+      "Ibi ni ibigereranyo rusange, si amahirwe yapimwe cyangwa isezerano ry’umusaruro. Amakuru y’akarere ntarahujwe muri moderi; guhindura akarere bishobora gutanga ikigereranyo kimwe.",
     assistant: "Umufasha wa AI ku bihembwe",
     seasons: "Ibihembwe n’imvura",
     month: "Ukwezi",
@@ -160,21 +160,22 @@ export const farmerCopy = {
     seasonNote:
       "Ibi ni uko imvura isanzwe igwa mu bihembwe, si imvura yapimwe cyangwa iteganyagihe. Ingano ihinduka bitewe n’akarere n’umwaka.",
     aiUnavailable: "Umufasha wa AI ntabonetse. Amakuru asanzwe y’ibihembwe aracyaboneka.",
-    weatherTitle: "Ikirere c'akarere",
+    weatherTitle: "Ikirere cy’akarere",
     climateTypical:
-      "Bisanzwe muri {district} ({period}): {season}, imvura {rain} mm, ubushyuhe {temp} °C",
-    forecastOutlook: "Iminsi {days} ({source}): {rain} mm biteganyijwe, {min}–{max} °C",
-    rainLikely: "imvura igaragara ku {from}–{to}",
-    weatherUnavailable: "Ikirere c'akarere ntikaboneka ubu, andika ibiranganyo byawe.",
+      "Ibisanzwe muri {district} ({period}): {season}, imvura {rain} mm, ubushyuhe {temp} °C",
+    forecastOutlook:
+      "Mu minsi {days} ({source}): imvura {rain} mm iteganyijwe, ubushyuhe {min}–{max} °C",
+    rainLikely: "imvura ishobora kugwa {from}–{to}",
+    weatherUnavailable: "Ikirere cy’akarere nticyaboneka ubu, andika imibare yawe.",
     weatherAuto:
-      "Imvura n'ubushyuhe biva mu nyandiko y'ikirere y'akarere ka {district} ({period}), ku gihembwe wahisemo. Hindura kimwe muri byo niba ufite ibyawe.",
+      "Imvura n’ubushyuhe biva mu makuru y’ikirere y’akarere ka {district} ({period}), ku gihembwe wahisemo. Hindura kimwe muri byo niba ufite ibyawe.",
     useDistrictFigures: "Ongera ukoreshe imibare y'akarere",
-    observations: "bishingiye ku miryango {n} y'abimurimuriro",
+    observations: "bishingiye ku bahinzi {n} babajijwe",
     meteo: "Ikirere cya Rwanda — Meteo Rwanda",
     calendar: "Kalendari y’ibihembwe — NISR",
     disclosure: "Ikoreshwa rya AI",
     disclosureText:
-      "Ibikoresho bya AI byafashije gukora ImbutoSmart AI. Ibigereranyo by’ibihingwa ntibisimbura inama z’impuguke mu buhinzi yo hafi yawe.",
+      "Ibikoresho bya AI byafashije gukora ImbutoSmart AI. Ibigereranyo by’ibihingwa ntibisimbura inama z’impuguke y’ubuhinzi yo hafi yawe.",
   },
 };
 
@@ -352,13 +353,12 @@ export function localizedSeason(
   const notes: Record<string, string> = {
     Itumba:
       "Werurwe–Gicurasi ni igihe imvura ikunze kugwa. Ingano ihinduka bitewe n’ahantu n’umwaka.",
-    Umuhindo:
-      "Ukwakira–Ukuboza ni igihe imvura ikunze kugwa; igihe itangirira n’ingano birahinduka.",
+    Umuhindo: "Ukwakira–Ukuboza ni igihe imvura ikunze kugwa; igihe itangira n’ingano birahinduka.",
     "Toward Umuhindo":
-      "Muri Nzeri, ibihembwe A na C birahurirana. Tegereza ko imvura yemezwa aho uri mbere yo guhinga wishingikirije ku mvura.",
+      "Muri Nzeri, ibihembwe A na C birahurirana. Tegereza ko imvura yemezwa aho uri mbere yo guhinga udafite uburyo bwo kuhira.",
     Urugaryi: "Ni igihe cy’imvura nke; imvura ishobora kugwa rimwe na rimwe.",
     Impeshyi:
-      "Akenshi ni igihe cy’izuba; guhinga wishingikirije ku mvura birashobora guteza igihombo udafite amazi ahagije.",
+      "Akenshi ni igihe cy’izuba; guhinga udafite uburyo bwo kuhira birashobora guteza igihombo.",
   };
   return {
     ...guide,
@@ -393,7 +393,7 @@ export function seasonReferenceSummary(
     return `Ce mois appartient à ${article}${lowerFirst(local.farming)} (${local.period}). La saison climatique est la ${lowerFirst(local.name)} (${local.local}) : ${lowerFirst(local.rain)}. ${local.note} Vérifiez Meteo Rwanda et un agronome local avant de planter.`;
   }
   if (language === "rw") {
-    return `Uyu munsi ukaba mu ${local.farming} (${local.period}). Igihe cy’ikirere ni ${local.name} (${local.local}) : ${lowerFirst(local.rain)}. ${local.note} Reba Meteo Rwanda n’impuguke yo hafi mbere yo guhinga.`;
+    return `Uku kwezi kuri mu ${local.farming} (${local.period}). Igihe cy’ikirere ni ${local.name} (${local.local}): ${lowerFirst(local.rain)}. ${local.note} Reba Meteo Rwanda n’impuguke yo hafi mbere yo guhinga.`;
   }
   return `This month falls in ${local.farming} (${local.period}). The climatic season is the ${local.name} (${local.local}): ${lowerFirst(local.rain)}. ${local.note} Check Meteo Rwanda and a local agronomist before planting.`;
 }

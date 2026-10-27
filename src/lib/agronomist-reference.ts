@@ -526,7 +526,7 @@ export const MESSAGE_TEMPLATES: Record<FarmerLanguage, TemplateCopy> = {
     },
     reminder: {
       subject: "Icyibutso cyo guhinga",
-      body: "Muraho. Icyi ni icyibutso cyo kureba umurima wawe n’iteganyagihe ry’iminsi iri imbere mbere yo guhinga. Tegereza imvura yemejwe mu gace kawe niba umurima wawe ukoresha imvura gusa. Mpamagare niba ukeneye ubufasha.",
+      body: "Muraho. Iki ni icyibutso cyo kureba umurima wawe n’iteganyagihe ry’iminsi iri imbere mbere yo guhinga. Tegereza imvura yemejwe mu gace kawe niba umurima wawe ukoresha imvura gusa. Mpamagare niba ukeneye ubufasha.",
     },
     weather: {
       subject: "Imenyesha ry’ikirere",
@@ -534,7 +534,7 @@ export const MESSAGE_TEMPLATES: Record<FarmerLanguage, TemplateCopy> = {
     },
     input: {
       subject: "Inama ku ifumbire",
-      body: "Muraho. Mbere yo kugura ifumbire, reba igicuruzwa, uwugurisha, igiciro n’itariki yavuguruwe. Saba etiketi kandi ukurikize isuzuma ry’ubutaka cyangwa inama y’umujyanama ku kigero cyo gushyiramo. Ntukoreshe igiciro cyangwa igipimo bitemejwe.",
+      body: "Muraho. Mbere yo kugura ifumbire, reba igicuruzwa, uwugurisha, igiciro n’itariki yavuguruwe. Saba etiketi kandi ukurikize isuzuma ry’ubutaka cyangwa inama y’umujyanama ku kigero cyo gushyiramo. Ntukoreshe igiciro cyangwa igipimo bitagenzuwe.",
     },
     "follow-up": {
       subject: "Isura ryo gukurikirana",

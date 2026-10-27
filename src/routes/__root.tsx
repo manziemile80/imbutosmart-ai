@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportAppError } from "../lib/error-reporting";
 import { FieldProvider } from "../lib/field-context";
+import { useRouteWarmup } from "../hooks/use-route-warmup";
 import { Toaster } from "../components/ui/sonner";
 
 function NotFoundComponent() {
@@ -123,6 +124,10 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  // Keep every menu page ready in memory, so the farmer can move between them
+  // with no connection.
+  useRouteWarmup();
 
   return (
     <QueryClientProvider client={queryClient}>

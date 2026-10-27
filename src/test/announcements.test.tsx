@@ -132,7 +132,7 @@ describe("announcements in the header", () => {
 
     const panel = screen.getByRole("dialog");
     expect(panel).toHaveTextContent("Ubufasha bwose ahantu hamwe");
-    expect(panel).toHaveTextContent("Igiciro cy'ifumbire y'ubworozi");
+    expect(panel).toHaveTextContent("Igiciro cy’ifumbire y’amatungo");
   });
 
   it("closes when the farmer presses Escape", () => {
