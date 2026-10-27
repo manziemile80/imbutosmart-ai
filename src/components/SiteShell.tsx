@@ -11,10 +11,10 @@ export function SiteShell({ children }: { children: ReactNode }) {
   const { language, setLanguage } = useField();
   const t = farmerCopy[language];
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <header className="sticky top-0 z-20 border-b border-border bg-background/85 backdrop-blur">
+    <div className="flex min-h-dvh flex-col bg-background">
+      <header className="site-header">
         {/* The title line: the brand, and the farmer's summary at the far end. */}
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 pt-3.5">
+        <div className="app-gutter mx-auto flex max-w-6xl items-center justify-between gap-3 pt-3.5">
           <Link
             to="/"
             className="flex items-center gap-2.5 font-display text-xl text-foreground sm:text-[1.35rem]"
@@ -28,11 +28,11 @@ export function SiteShell({ children }: { children: ReactNode }) {
         </div>
 
         {/* The navigation line, with the language and the theme at the end. */}
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 pb-3 pt-2">
+        <div className="app-gutter mx-auto flex max-w-6xl items-center justify-between gap-3 pb-3 pt-2">
           <div className="flex min-w-0 items-center gap-2">
             <SiteMenu language={language} />
             <nav
-              className="hidden flex-nowrap items-center gap-1 text-sm lg:flex"
+              className="hidden flex-nowrap items-center gap-1 text-sm md:flex"
               aria-label="Primary"
             >
               <Link
@@ -85,7 +85,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
       </header>
       <main className="flex-1">{children}</main>
       <footer className="mt-12 border-t border-border bg-muted">
-        <div className="mx-auto max-w-6xl px-5 py-8 text-xs leading-relaxed text-muted-foreground">
+        <div className="app-footer">
           <p>
             <strong className="text-foreground">{t.disclosure}:</strong> {t.disclosureText}
           </p>

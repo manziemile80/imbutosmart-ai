@@ -57,12 +57,12 @@ export function SiteMenu({ language }: { language: FarmerLanguage }) {
   }, [open]);
 
   return (
-    <div className="relative lg:hidden" ref={wrapper}>
+    <div className="relative md:hidden" ref={wrapper}>
       <Button
         ref={trigger}
         type="button"
         variant="outline"
-        className="h-9 gap-1.5 px-3 text-sm"
+        className="h-9 gap-1.5 px-3 text-sm pointer-coarse:h-11"
         aria-expanded={open}
         aria-controls="site-menu-panel"
         onClick={() => setOpen((current) => !current)}

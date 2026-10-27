@@ -92,7 +92,7 @@ export function OverviewSection({
           description="Every count below comes from the records stored for this deployment. Published figures are named with their source. Nothing is filled in when the database or a source is unavailable."
         />
         <PanelBody>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
+          <div className="grid grid-cols-1 gap-3 min-[22rem]:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
             <Stat
               label="Farmers supported"
               value={figure(counts.farmers)}

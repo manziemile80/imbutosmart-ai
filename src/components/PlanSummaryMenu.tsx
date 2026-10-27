@@ -46,7 +46,7 @@ export function PlanSummaryMenu() {
         type="button"
         variant="ghost"
         size="icon"
-        className="size-9 shrink-0 text-muted-foreground hover:text-foreground"
+        className="size-9 shrink-0 text-muted-foreground hover:text-foreground pointer-coarse:size-11"
         aria-label={t.label}
         aria-expanded={open}
         title={t.label}
@@ -71,7 +71,7 @@ export function PlanSummaryMenu() {
               type="button"
               variant="ghost"
               size="icon"
-              className="size-8 shrink-0"
+              className="size-8 shrink-0 pointer-coarse:size-11"
               aria-label="Close"
               onClick={() => setOpen(false)}
             >

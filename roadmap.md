@@ -56,6 +56,7 @@
 - [x] Warm every menu page in memory after the first paint, so moving between the Farmer page, Advice, File, Guidance and the dashboard keeps working when the connection drops.
 - [x] Rewrite the word-for-word Kinyarwanda in every farmer panel — season, weather, inputs, insurance, plan and File — so each line reads as Kinyarwanda, and update the tests to the new wording.
 - [x] Cap the test run at four workers, so a jsdom copy per core no longer starves this machine's memory and times a slow page test out.
+- [x] Make every page comfortable on a phone: one notch-safe gutter shared by the header, pages and footer, finger-sized controls on a touch screen, fluid titles and stat labels that wrap, and the full menu from tablet width up.
 - [ ] Keep the `supabase-chestnut-pebble` project on a paid plan or claim it into an owned Supabase account if the free plan's limits are reached.
 - [ ] Read answers aloud on the deployed app (blocked by accepting the Groq speech model's terms in the provider console — the app-level check now reports this as the refusal reason — or by pointing the host at a speech backend the deployment can reach).
 - [ ] Update `abahinzismart.vercel.app` (a separate Vercel project, outside this workspace's account).

@@ -83,6 +83,13 @@
   --font-display: "Bricolage Grotesque", "Manrope", system-ui, sans-serif;
   --font-body: "Manrope", system-ui, sans-serif;
 
+  /* The page frame. A phone keeps a 1rem gutter, a tablet has room for the
+     design's 1.25rem, and neither side ever comes closer than the notch or the
+     rounded corner of the device the farmer is holding. */
+  --gutter: 1rem;
+  --edge-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  --edge-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+
   /* Surfaces */
   --background: oklch(0.978 0.006 264);
   --foreground: oklch(0.24 0.018 264);
@@ -215,6 +222,13 @@
   --sidebar-ring: var(--ring);
 }
 
+/* A tablet and a desktop have room for a wider frame than a phone. */
+@media (min-width: 40rem) {
+  :root {
+    --gutter: 1.25rem;
+  }
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
@@ -222,6 +236,9 @@
 
   html {
     -webkit-text-size-adjust: 100%;
+    /* A focused link or a jumped-to section lands below the sticky header
+       instead of underneath it. */
+    scroll-padding-top: 8rem;
   }
 
   body {
@@ -231,6 +248,9 @@
     font-feature-settings: "cv02", "cv03", "cv04";
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+    /* A long word — a place name, an input name, a pasted link — breaks at the
+       edge instead of pushing the page sideways on a narrow screen. */
+    overflow-wrap: break-word;
   }
 
   h1,
@@ -265,16 +285,42 @@
 
 @layer components {
   /* ---------------------------------------------------------------- layout */
+  /* The frame shared by the header, the footer and every page. */
+  .app-gutter {
+    padding-left: var(--edge-left);
+    padding-right: var(--edge-right);
+  }
+
+  .app-footer {
+    @apply mx-auto max-w-6xl py-8 text-xs leading-relaxed text-muted-foreground;
+    padding-left: var(--edge-left);
+    padding-right: var(--edge-right);
+    padding-bottom: max(2rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  /* The header keeps clear of a notch when the app runs without browser chrome,
+     and still sits at the top of the page everywhere else. */
+  .site-header {
+    @apply sticky top-0 z-20 border-b border-border bg-background/85 backdrop-blur;
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
   .page {
-    @apply mx-auto w-full max-w-6xl px-5 py-8 sm:py-10;
+    @apply mx-auto w-full max-w-6xl py-6 sm:py-10;
+    padding-left: var(--edge-left);
+    padding-right: var(--edge-right);
   }
 
   .page-header {
     @apply flex flex-col gap-4 border-b border-border pb-8 sm:flex-row sm:items-end sm:justify-between;
   }
 
+  /* The title grows with the screen instead of jumping at a breakpoint, and a
+     long word in any language wraps rather than running past the frame. */
   .page-title {
-    @apply font-display text-3xl leading-tight text-foreground sm:text-4xl;
+    @apply font-display leading-tight text-foreground;
+    font-size: clamp(1.75rem, 1.1rem + 3.2vw, 2.25rem);
+    overflow-wrap: break-word;
   }
 
   .page-lede {
@@ -286,7 +332,9 @@
   }
 
   .section-title {
-    @apply font-display text-2xl leading-snug text-foreground;
+    @apply font-display leading-snug text-foreground;
+    font-size: clamp(1.3rem, 1.05rem + 1.2vw, 1.5rem);
+    overflow-wrap: break-word;
   }
 
   .section-lede {
@@ -384,7 +432,10 @@
   }
 
   .stat-label {
-    @apply text-xs font-medium uppercase tracking-wider text-muted-foreground;
+    /* Sentence case reads better than tracked capitals on a phone, where a
+       long word has to fit in half the card. */
+    @apply text-xs font-medium text-muted-foreground;
+    overflow-wrap: break-word;
   }
 
   .stat-value {
@@ -443,6 +494,20 @@
     color: var(--primary-foreground);
   }
 
+  /* The dashboard's module strip: one small tab per workspace, wrapping onto
+     another line rather than scrolling sideways like a mystery. */
+  .tab-list {
+    @apply flex flex-wrap gap-1.5 rounded-xl border border-border bg-muted/30 p-1.5;
+  }
+
+  .tab {
+    @apply inline-flex items-center justify-center rounded-lg px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-card hover:text-foreground;
+  }
+
+  .tab[aria-selected="true"] {
+    @apply bg-card font-semibold text-foreground shadow-sm;
+  }
+
   /* The language selector: the flag and short code of the language in use,
      and a small panel that names every language in its own words. */
   .language-picker {
@@ -487,5 +552,31 @@
 
   .language-check {
     @apply size-4 shrink-0 text-primary-text;
+  }
+
+  /* A finger needs a bigger target than a mouse. On a touch screen the small
+     choices grow to a comfortable height, while a desktop keeps its density. */
+  @media (pointer: coarse) {
+    .nav-link,
+    .nav-menu-item,
+    .language-option,
+    .tab {
+      min-height: 2.75rem;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.5rem;
+    }
+
+    .language-trigger {
+      height: 2.75rem;
+      padding-inline: 0.65rem;
+    }
+
+    .language-panel {
+      width: 13rem;
+    }
   }
 }

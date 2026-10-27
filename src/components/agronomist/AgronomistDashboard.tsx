@@ -163,11 +163,7 @@ export function AgronomistDashboard({ stats }: { stats: Stats | null }) {
         )}
 
         <nav aria-label="Agronomist dashboard modules" className="page-section">
-          <div
-            role="tablist"
-            aria-label="Agronomist dashboard modules"
-            className="flex flex-wrap gap-1.5 rounded-xl border border-border bg-muted/30 p-1.5"
-          >
+          <div role="tablist" aria-label="Agronomist dashboard modules" className="tab-list">
             {DASHBOARD_TABS.map((value) => {
               const selected = value === tab;
               return (
@@ -179,11 +175,7 @@ export function AgronomistDashboard({ stats }: { stats: Stats | null }) {
                   aria-controls={`agronomist-panel-${value}`}
                   id={`agronomist-tab-${value}`}
                   onClick={() => setTab(value)}
-                  className={
-                    selected
-                      ? "rounded-lg bg-card px-3 py-1.5 text-xs font-semibold text-foreground shadow-sm"
-                      : "rounded-lg px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-card hover:text-foreground"
-                  }
+                  className="tab"
                 >
                   {t.tabs[value]}
                 </button>

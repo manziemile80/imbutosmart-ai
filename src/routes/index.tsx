@@ -75,7 +75,10 @@ function Advisory() {
           <Panel aria-labelledby="field-panel-title">
             <PanelHeader title={t.field} titleId="field-panel-title" />
             <PanelBody>
-              <form onSubmit={(event) => event.preventDefault()} className="grid gap-5">
+              <form
+                onSubmit={(event) => event.preventDefault()}
+                className="grid gap-5 md:grid-cols-3"
+              >
                 <Field label={t.district}>
                   <select
                     className="field"
@@ -116,7 +119,7 @@ function Advisory() {
                     <option value="C">{seasonName(language, "C")}</option>
                   </select>
                 </Field>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4 md:col-span-2">
                   <Field label={t.rain}>
                     <input
                       className="field"
@@ -144,7 +147,7 @@ function Advisory() {
                   </Field>
                 </div>
                 {climate && (
-                  <p className="text-xs leading-relaxed text-muted-foreground">
+                  <p className="text-xs leading-relaxed text-muted-foreground md:col-span-3">
                     {t.weatherAuto
                       .replace("{district}", district)
                       .replace("{period}", climate.period)}
@@ -153,7 +156,7 @@ function Advisory() {
                 {climate && (rainEdited || tempEdited) && (
                   <button
                     type="button"
-                    className="link-quiet justify-self-start text-xs"
+                    className="link-quiet justify-self-start text-xs md:col-span-3"
                     onClick={useDistrictFigures}
                   >
                     {t.useDistrictFigures}
@@ -187,16 +190,16 @@ function Advisory() {
                   <p className="font-display mt-1 break-words text-4xl leading-tight text-foreground sm:text-5xl">
                     {cropLabel(result.recommended_crop, language)}
                   </p>
-                  <div className="mt-6 grid grid-cols-2 gap-4">
+                  <div className="mt-6 grid grid-cols-1 gap-4 min-[22rem]:grid-cols-2">
                     <div>
                       <p className="text-sm text-muted-foreground">{t.confidence}</p>
-                      <p className="tabular mt-1 text-3xl font-semibold text-foreground">
+                      <p className="tabular mt-1 text-2xl font-semibold text-foreground sm:text-3xl">
                         {Math.round(result.confidence * 100)}%
                       </p>
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">{t.yield}</p>
-                      <p className="tabular mt-1 text-3xl font-semibold text-foreground">
+                      <p className="tabular mt-1 text-2xl font-semibold text-foreground sm:text-3xl">
                         {result.expected_yield_t_ha.toFixed(1)} t/ha
                       </p>
                     </div>
