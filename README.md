@@ -6,6 +6,8 @@
 
 Repository: [github.com/manziemile80/imbutosmart-ai](https://github.com/manziemile80/imbutosmart-ai)
 
+Full documentation: [`docs/project-documentation.md`](docs/project-documentation.md) · Hybrid and offline design note: [`docs/hybrid-and-offline-ai.md`](docs/hybrid-and-offline-ai.md)
+
 ## 1. Project Overview
 
 ImbutoSmart AI turns NISR agricultural survey data into practical planting advice. A Random Forest classifier estimates the probability that a crop will succeed under a farmer's district, soil and forecast-weather conditions, while a Random Forest regressor estimates expected yield in tonnes per hectare (t/ha). Crops are ranked by expected value. The platform extends these predictions with district climate, weather, agronomic suitability, soil/input guidance, seasonal advice, insurance awareness, and AI assistance.
