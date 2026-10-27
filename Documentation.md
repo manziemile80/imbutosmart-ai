@@ -38,7 +38,7 @@ The app takes the richer path when it can reach the server, and falls back to th
 | Questions and voice | The farmer Q&A assistant, speech playback and transcription | The assistant says it could not answer just now, the spoken controls are not offered, and the written guidance stays on the page |
 | Plan and PDF | The whole summary on the File page, downloaded as a PDF | The summary and its PDF built in the browser; a section whose source is unavailable is left out rather than estimated |
 | Navigation | Every menu page preloaded in the background | The pages already warmed stay available between visits |
-| Agronomist records | Written to the shared Supabase database | Kept on the device with a `device-` id and retried when the server is next reachable |
+| Agronomist records | Written to the shared Supabase database | Kept on the device with a `devices-` id and retried when the server is next reachable |
 
 A few details make the hybrid path trustworthy:
 
