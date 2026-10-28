@@ -47,6 +47,7 @@ The microdata and trained models remain outside the repository and are built loc
 ### 5.2 District Climate and Weather
 
 Because the survey does not record plot-level soil type or plot-level weather, ML training rows use district climate for the relevant season. The project builds district climate from the published **2001–2020 record using NASA POWER and MERRA-2** at district-centre locations, together with weather from the 2025 survey year.
+Datasets google driver link https://drive.google.com/drive/folders/1PwrEQlzfzYYXOVrZ_jUIdZXJW7VBfhpn?usp=sharing
 
 The farmer interface separates usual district climate from the coming-days forecast. Climate comes from NASA POWER and the forecast comes from Open-Meteo; both are fetched server-side and their sources are shown.
 
